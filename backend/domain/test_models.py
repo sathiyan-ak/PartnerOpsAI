@@ -15,10 +15,16 @@ from .feedback import DesignFeedback, FeedbackCluster
 from .recommendation import ProductRecommendation
 from .audit import SecurityAuditRecord, PolicyDecision
 from .enums import (
-    OpportunityStatus, ICPAlignment, MaturityLevel,
-    DesignPartnerStatus, PartnerHealth,
-    FeedbackCategory, FeedbackStatus, ReleaseTarget,
-    AuditAction, PolicyResult,
+    OpportunityStatus,
+    ICPAlignment,
+    MaturityLevel,
+    DesignPartnerStatus,
+    PartnerHealth,
+    FeedbackCategory,
+    FeedbackStatus,
+    ReleaseTarget,
+    AuditAction,
+    PolicyResult,
 )
 
 

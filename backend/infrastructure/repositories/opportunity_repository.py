@@ -28,7 +28,12 @@ class OpportunityRepositoryImpl(OpportunityRepository):
 
     def find_by_id(self, opportunity_id: UUID) -> Optional[Opportunity]:
         """Find opportunity by ID."""
-        response = db.get_table("opportunities").select("*").eq("id", str(opportunity_id)).execute()
+        response = (
+            db.get_table("opportunities")
+            .select("*")
+            .eq("id", str(opportunity_id))
+            .execute()
+        )
 
         if not response.data:
             return None

@@ -27,7 +27,9 @@ class PolicyDecisionRepositoryImpl(PolicyDecisionRepository):
             "reasoning": policy.reasoning,
             "recommendation": policy.recommendation,
             "status": policy.status,
-            "assigned_to_id": str(policy.assigned_to_id) if policy.assigned_to_id else None,
+            "assigned_to_id": (
+                str(policy.assigned_to_id) if policy.assigned_to_id else None
+            ),
             "due_date": policy.due_date.isoformat() if policy.due_date else None,
         }
         if policy.version > 0:
@@ -38,10 +40,17 @@ class PolicyDecisionRepositoryImpl(PolicyDecisionRepository):
         return UUID(response.data[0]["id"])
 
     def find_by_id(self, policy_id: UUID) -> Optional[PolicyDecision]:
-        response = db.get_table("policy_decisions").select("*").eq("id", str(policy_id)).execute()
+        response = (
+            db.get_table("policy_decisions")
+            .select("*")
+            .eq("id", str(policy_id))
+            .execute()
+        )
         return PolicyDecision.from_dict(response.data[0]) if response.data else None
 
-    def find_by_opportunity_id(self, opportunity_id: UUID, limit: int = 100) -> List[PolicyDecision]:
+    def find_by_opportunity_id(
+        self, opportunity_id: UUID, limit: int = 100
+    ) -> List[PolicyDecision]:
         response = (
             db.get_table("policy_decisions")
             .select("*")
@@ -52,7 +61,13 @@ class PolicyDecisionRepositoryImpl(PolicyDecisionRepository):
         return [PolicyDecision.from_dict(row) for row in response.data]
 
     def find_open(self, limit: int = 100) -> List[PolicyDecision]:
-        response = db.get_table("policy_decisions").select("*").eq("status", "open").limit(limit).execute()
+        response = (
+            db.get_table("policy_decisions")
+            .select("*")
+            .eq("status", "open")
+            .limit(limit)
+            .execute()
+        )
         return [PolicyDecision.from_dict(row) for row in response.data]
 
     def list_all(self, limit: int = 100) -> List[PolicyDecision]:

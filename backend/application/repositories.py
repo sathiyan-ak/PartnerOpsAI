@@ -8,8 +8,13 @@ from abc import ABC, abstractmethod
 from typing import Optional, List
 from uuid import UUID
 from backend.domain import (
-    Opportunity, DesignPartner, DesignFeedback, FeedbackCluster,
-    ProductRecommendation, PolicyDecision, SecurityAuditRecord,
+    Opportunity,
+    DesignPartner,
+    DesignFeedback,
+    FeedbackCluster,
+    ProductRecommendation,
+    PolicyDecision,
+    SecurityAuditRecord,
 )
 
 
@@ -75,7 +80,9 @@ class DesignFeedbackRepository(ABC):
         pass
 
     @abstractmethod
-    def find_by_design_partner_id(self, design_partner_id: UUID, limit: int = 100) -> List[DesignFeedback]:
+    def find_by_design_partner_id(
+        self, design_partner_id: UUID, limit: int = 100
+    ) -> List[DesignFeedback]:
         """Find all feedback from a design partner."""
         pass
 
@@ -99,7 +106,9 @@ class FeedbackClusterRepository(ABC):
         pass
 
     @abstractmethod
-    def find_by_primary_feedback_id(self, feedback_id: UUID) -> Optional[FeedbackCluster]:
+    def find_by_primary_feedback_id(
+        self, feedback_id: UUID
+    ) -> Optional[FeedbackCluster]:
         """Find cluster by primary feedback ID."""
         pass
 
@@ -152,7 +161,9 @@ class PolicyDecisionRepository(ABC):
         pass
 
     @abstractmethod
-    def find_by_opportunity_id(self, opportunity_id: UUID, limit: int = 100) -> List[PolicyDecision]:
+    def find_by_opportunity_id(
+        self, opportunity_id: UUID, limit: int = 100
+    ) -> List[PolicyDecision]:
         """Find all policies for an opportunity."""
         pass
 
@@ -181,12 +192,16 @@ class SecurityAuditRepository(ABC):
         pass
 
     @abstractmethod
-    def find_by_resource_id(self, resource_id: UUID, limit: int = 100) -> List[SecurityAuditRecord]:
+    def find_by_resource_id(
+        self, resource_id: UUID, limit: int = 100
+    ) -> List[SecurityAuditRecord]:
         """Find all audit records for a resource."""
         pass
 
     @abstractmethod
-    def find_by_actor_id(self, actor_id: UUID, limit: int = 100) -> List[SecurityAuditRecord]:
+    def find_by_actor_id(
+        self, actor_id: UUID, limit: int = 100
+    ) -> List[SecurityAuditRecord]:
         """Find all audit records by an actor."""
         pass
 

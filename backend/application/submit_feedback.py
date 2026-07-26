@@ -39,7 +39,9 @@ class SubmitFeedbackUseCase:
         self.audit_repo = audit_repository
         self.actor_id = actor_id
 
-    def execute(self, design_partner_id: UUID, input_data: SubmitFeedbackInput) -> SubmitFeedbackOutput:
+    def execute(
+        self, design_partner_id: UUID, input_data: SubmitFeedbackInput
+    ) -> SubmitFeedbackOutput:
         """Execute feedback submission."""
 
         # Create feedback

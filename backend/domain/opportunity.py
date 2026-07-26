@@ -19,6 +19,7 @@ class Opportunity:
     - Security/compliance posture
     - Design partner potential
     """
+
     id: UUID = field(default_factory=uuid4)
     created_by: UUID = field(default_factory=uuid4)
     updated_by: UUID = field(default_factory=uuid4)
@@ -43,7 +44,9 @@ class Opportunity:
 
     # Security & compliance posture
     security_maturity: MaturityLevel = MaturityLevel.NONE
-    security_certifications: List[str] = field(default_factory=list)  # SOC2, ISO27001, etc.
+    security_certifications: List[str] = field(
+        default_factory=list
+    )  # SOC2, ISO27001, etc.
     compliance_needs: List[str] = field(default_factory=list)  # GDPR, HIPAA, etc.
 
     # Design partner readiness
@@ -108,7 +111,9 @@ class Opportunity:
 
         dp_points = self.design_partner_potential * 0.1
 
-        total = int(min(100, max(0, icp_points + ai_points + security_points + dp_points)))
+        total = int(
+            min(100, max(0, icp_points + ai_points + security_points + dp_points))
+        )
         return total
 
     def is_qualified_for_design_partner(self) -> bool:
@@ -122,28 +127,60 @@ class Opportunity:
     def to_dict(self) -> Dict[str, Any]:
         """Serialize to dictionary."""
         data = asdict(self)
-        data['id'] = str(self.id)
-        data['created_by'] = str(self.created_by)
-        data['updated_by'] = str(self.updated_by)
-        data['status'] = self.status.value
-        data['icp_alignment'] = self.icp_alignment.value
-        data['ai_maturity'] = self.ai_maturity.value
-        data['security_maturity'] = self.security_maturity.value
-        data['created_at'] = self.created_at.isoformat()
-        data['updated_at'] = self.updated_at.isoformat()
+        data["id"] = str(self.id)
+        data["created_by"] = str(self.created_by)
+        data["updated_by"] = str(self.updated_by)
+        data["status"] = self.status.value
+        data["icp_alignment"] = self.icp_alignment.value
+        data["ai_maturity"] = self.ai_maturity.value
+        data["security_maturity"] = self.security_maturity.value
+        data["created_at"] = self.created_at.isoformat()
+        data["updated_at"] = self.updated_at.isoformat()
         return data
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'Opportunity':
+    def from_dict(cls, data: Dict[str, Any]) -> "Opportunity":
         """Deserialize from dictionary."""
         data = data.copy()
-        data['id'] = UUID(data['id']) if isinstance(data['id'], str) else data['id']
-        data['created_by'] = UUID(data['created_by']) if isinstance(data['created_by'], str) else data['created_by']
-        data['updated_by'] = UUID(data['updated_by']) if isinstance(data['updated_by'], str) else data['updated_by']
-        data['status'] = OpportunityStatus(data['status']) if isinstance(data['status'], str) else data['status']
-        data['icp_alignment'] = ICPAlignment(data['icp_alignment']) if isinstance(data['icp_alignment'], str) else data['icp_alignment']
-        data['ai_maturity'] = MaturityLevel(data['ai_maturity']) if isinstance(data['ai_maturity'], str) else data['ai_maturity']
-        data['security_maturity'] = MaturityLevel(data['security_maturity']) if isinstance(data['security_maturity'], str) else data['security_maturity']
-        data['created_at'] = datetime.fromisoformat(data['created_at']) if isinstance(data['created_at'], str) else data['created_at']
-        data['updated_at'] = datetime.fromisoformat(data['updated_at']) if isinstance(data['updated_at'], str) else data['updated_at']
+        data["id"] = UUID(data["id"]) if isinstance(data["id"], str) else data["id"]
+        data["created_by"] = (
+            UUID(data["created_by"])
+            if isinstance(data["created_by"], str)
+            else data["created_by"]
+        )
+        data["updated_by"] = (
+            UUID(data["updated_by"])
+            if isinstance(data["updated_by"], str)
+            else data["updated_by"]
+        )
+        data["status"] = (
+            OpportunityStatus(data["status"])
+            if isinstance(data["status"], str)
+            else data["status"]
+        )
+        data["icp_alignment"] = (
+            ICPAlignment(data["icp_alignment"])
+            if isinstance(data["icp_alignment"], str)
+            else data["icp_alignment"]
+        )
+        data["ai_maturity"] = (
+            MaturityLevel(data["ai_maturity"])
+            if isinstance(data["ai_maturity"], str)
+            else data["ai_maturity"]
+        )
+        data["security_maturity"] = (
+            MaturityLevel(data["security_maturity"])
+            if isinstance(data["security_maturity"], str)
+            else data["security_maturity"]
+        )
+        data["created_at"] = (
+            datetime.fromisoformat(data["created_at"])
+            if isinstance(data["created_at"], str)
+            else data["created_at"]
+        )
+        data["updated_at"] = (
+            datetime.fromisoformat(data["updated_at"])
+            if isinstance(data["updated_at"], str)
+            else data["updated_at"]
+        )
         return cls(**data)

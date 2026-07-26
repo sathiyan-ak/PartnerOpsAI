@@ -5,6 +5,7 @@ from enum import Enum
 
 class OpportunityStatus(str, Enum):
     """Lifecycle status for enterprise opportunities."""
+
     PROSPECT = "prospect"
     QUALIFIED = "qualified"
     CONVERTED = "converted"
@@ -14,6 +15,7 @@ class OpportunityStatus(str, Enum):
 
 class ICPAlignment(str, Enum):
     """Ideal Customer Profile alignment."""
+
     PERFECT = "perfect"
     STRONG = "strong"
     MODERATE = "moderate"
@@ -22,6 +24,7 @@ class ICPAlignment(str, Enum):
 
 class MaturityLevel(str, Enum):
     """AI/Security/Product maturity assessment."""
+
     ADVANCED = "advanced"
     INTERMEDIATE = "intermediate"
     BEGINNER = "beginner"
@@ -30,6 +33,7 @@ class MaturityLevel(str, Enum):
 
 class DesignPartnerStatus(str, Enum):
     """Onboarding/implementation status of design partner."""
+
     ONBOARDING = "onboarding"
     ACTIVE = "active"
     IN_IMPLEMENTATION = "in_implementation"
@@ -39,6 +43,7 @@ class DesignPartnerStatus(str, Enum):
 
 class PartnerHealth(str, Enum):
     """Health score of design partner relationship."""
+
     EXCELLENT = "excellent"
     GOOD = "good"
     AT_RISK = "at_risk"
@@ -47,6 +52,7 @@ class PartnerHealth(str, Enum):
 
 class FeedbackCategory(str, Enum):
     """Types of customer feedback."""
+
     FEATURE_REQUEST = "feature_request"
     BUG = "bug"
     ENHANCEMENT = "enhancement"
@@ -57,6 +63,7 @@ class FeedbackCategory(str, Enum):
 
 class FeedbackStatus(str, Enum):
     """Lifecycle status for feedback items."""
+
     SUBMITTED = "submitted"
     REVIEWED = "reviewed"
     APPROVED = "approved"
@@ -67,6 +74,7 @@ class FeedbackStatus(str, Enum):
 
 class ReleaseTarget(str, Enum):
     """Suggested release timing."""
+
     UPCOMING = "upcoming"
     NEXT_MINOR = "next_minor"
     NEXT_MAJOR = "next_major"
@@ -75,6 +83,7 @@ class ReleaseTarget(str, Enum):
 
 class PolicyDecisionStatus(str, Enum):
     """Lifecycle status for governance decisions."""
+
     OPEN = "open"
     IN_REVIEW = "in_review"
     RESOLVED = "resolved"
@@ -83,6 +92,7 @@ class PolicyDecisionStatus(str, Enum):
 
 class AuditAction(str, Enum):
     """Type of action in security audit record."""
+
     CREATED = "created"
     UPDATED = "updated"
     DELETED = "deleted"
@@ -95,6 +105,7 @@ class AuditAction(str, Enum):
 
 class PolicyResult(str, Enum):
     """Result of policy evaluation."""
+
     APPROVED = "approved"
     REJECTED = "rejected"
     REVIEW_REQUIRED = "review_required"

@@ -18,6 +18,7 @@ class DesignPartner:
     Converted from Opportunity when qualification_score >= 60 and
     other conditions met.
     """
+
     id: UUID = field(default_factory=uuid4)
     opportunity_id: UUID = field(default_factory=uuid4)
     created_by: UUID = field(default_factory=uuid4)
@@ -55,7 +56,9 @@ class DesignPartner:
     last_feedback_date: Optional[datetime] = None
 
     # Product involvement
-    features_influenced: List[str] = field(default_factory=list)  # Features this partner influenced
+    features_influenced: List[str] = field(
+        default_factory=list
+    )  # Features this partner influenced
     roadmap_review_frequency: str = "monthly"  # monthly, quarterly, ad_hoc
     product_review_dates: List[datetime] = field(default_factory=list)
 
@@ -104,56 +107,100 @@ class DesignPartner:
     def to_dict(self) -> Dict[str, Any]:
         """Serialize to dictionary."""
         data = asdict(self)
-        data['id'] = str(self.id)
-        data['opportunity_id'] = str(self.opportunity_id)
-        data['created_by'] = str(self.created_by)
-        data['updated_by'] = str(self.updated_by)
-        data['converted_by'] = str(self.converted_by)
-        data['onboarding_status'] = self.onboarding_status.value
-        data['implementation_status'] = self.implementation_status.value
-        data['health'] = self.health.value
-        data['converted_at'] = self.converted_at.isoformat()
-        if data['onboarding_started_at']:
-            data['onboarding_started_at'] = data['onboarding_started_at'].isoformat()
-        if data['onboarding_completed_at']:
-            data['onboarding_completed_at'] = data['onboarding_completed_at'].isoformat()
-        if data['implementation_started_at']:
-            data['implementation_started_at'] = data['implementation_started_at'].isoformat()
-        if data['implementation_completed_at']:
-            data['implementation_completed_at'] = data['implementation_completed_at'].isoformat()
-        if data['last_engagement_at']:
-            data['last_engagement_at'] = data['last_engagement_at'].isoformat()
-        if data['last_feedback_date']:
-            data['last_feedback_date'] = data['last_feedback_date'].isoformat()
-        data['product_review_dates'] = [d.isoformat() for d in self.product_review_dates]
-        data['created_at'] = self.created_at.isoformat()
-        data['updated_at'] = self.updated_at.isoformat()
+        data["id"] = str(self.id)
+        data["opportunity_id"] = str(self.opportunity_id)
+        data["created_by"] = str(self.created_by)
+        data["updated_by"] = str(self.updated_by)
+        data["converted_by"] = str(self.converted_by)
+        data["onboarding_status"] = self.onboarding_status.value
+        data["implementation_status"] = self.implementation_status.value
+        data["health"] = self.health.value
+        data["converted_at"] = self.converted_at.isoformat()
+        if data["onboarding_started_at"]:
+            data["onboarding_started_at"] = data["onboarding_started_at"].isoformat()
+        if data["onboarding_completed_at"]:
+            data["onboarding_completed_at"] = data[
+                "onboarding_completed_at"
+            ].isoformat()
+        if data["implementation_started_at"]:
+            data["implementation_started_at"] = data[
+                "implementation_started_at"
+            ].isoformat()
+        if data["implementation_completed_at"]:
+            data["implementation_completed_at"] = data[
+                "implementation_completed_at"
+            ].isoformat()
+        if data["last_engagement_at"]:
+            data["last_engagement_at"] = data["last_engagement_at"].isoformat()
+        if data["last_feedback_date"]:
+            data["last_feedback_date"] = data["last_feedback_date"].isoformat()
+        data["product_review_dates"] = [
+            d.isoformat() for d in self.product_review_dates
+        ]
+        data["created_at"] = self.created_at.isoformat()
+        data["updated_at"] = self.updated_at.isoformat()
         return data
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'DesignPartner':
+    def from_dict(cls, data: Dict[str, Any]) -> "DesignPartner":
         """Deserialize from dictionary."""
         data = data.copy()
-        data['id'] = UUID(data['id']) if isinstance(data['id'], str) else data['id']
-        data['opportunity_id'] = UUID(data['opportunity_id']) if isinstance(data['opportunity_id'], str) else data['opportunity_id']
-        data['created_by'] = UUID(data['created_by']) if isinstance(data['created_by'], str) else data['created_by']
-        data['updated_by'] = UUID(data['updated_by']) if isinstance(data['updated_by'], str) else data['updated_by']
-        data['converted_by'] = UUID(data['converted_by']) if isinstance(data['converted_by'], str) else data['converted_by']
-        data['onboarding_status'] = DesignPartnerStatus(data['onboarding_status']) if isinstance(data['onboarding_status'], str) else data['onboarding_status']
-        data['implementation_status'] = DesignPartnerStatus(data['implementation_status']) if isinstance(data['implementation_status'], str) else data['implementation_status']
-        data['health'] = PartnerHealth(data['health']) if isinstance(data['health'], str) else data['health']
+        data["id"] = UUID(data["id"]) if isinstance(data["id"], str) else data["id"]
+        data["opportunity_id"] = (
+            UUID(data["opportunity_id"])
+            if isinstance(data["opportunity_id"], str)
+            else data["opportunity_id"]
+        )
+        data["created_by"] = (
+            UUID(data["created_by"])
+            if isinstance(data["created_by"], str)
+            else data["created_by"]
+        )
+        data["updated_by"] = (
+            UUID(data["updated_by"])
+            if isinstance(data["updated_by"], str)
+            else data["updated_by"]
+        )
+        data["converted_by"] = (
+            UUID(data["converted_by"])
+            if isinstance(data["converted_by"], str)
+            else data["converted_by"]
+        )
+        data["onboarding_status"] = (
+            DesignPartnerStatus(data["onboarding_status"])
+            if isinstance(data["onboarding_status"], str)
+            else data["onboarding_status"]
+        )
+        data["implementation_status"] = (
+            DesignPartnerStatus(data["implementation_status"])
+            if isinstance(data["implementation_status"], str)
+            else data["implementation_status"]
+        )
+        data["health"] = (
+            PartnerHealth(data["health"])
+            if isinstance(data["health"], str)
+            else data["health"]
+        )
 
         # Parse datetime fields
-        for field_name in ['converted_at', 'onboarding_started_at', 'onboarding_completed_at',
-                          'implementation_started_at', 'implementation_completed_at',
-                          'last_engagement_at', 'last_feedback_date', 'created_at', 'updated_at']:
+        for field_name in [
+            "converted_at",
+            "onboarding_started_at",
+            "onboarding_completed_at",
+            "implementation_started_at",
+            "implementation_completed_at",
+            "last_engagement_at",
+            "last_feedback_date",
+            "created_at",
+            "updated_at",
+        ]:
             if data.get(field_name) and isinstance(data[field_name], str):
                 data[field_name] = datetime.fromisoformat(data[field_name])
 
-        if data.get('product_review_dates'):
-            data['product_review_dates'] = [
+        if data.get("product_review_dates"):
+            data["product_review_dates"] = [
                 datetime.fromisoformat(d) if isinstance(d, str) else d
-                for d in data['product_review_dates']
+                for d in data["product_review_dates"]
             ]
 
         return cls(**data)

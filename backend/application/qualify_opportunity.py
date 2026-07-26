@@ -16,6 +16,7 @@ from ..domain.enums import AuditAction, PolicyResult
 @dataclass
 class QualifyOpportunityInput:
     """Input: opportunity data to qualify."""
+
     company_name: str
     company_size_employees: int
     industry: str
@@ -39,6 +40,7 @@ class QualifyOpportunityInput:
 @dataclass
 class QualifyOpportunityOutput:
     """Output: qualification result."""
+
     opportunity_id: UUID
     qualification_score: int  # 0-100
     is_qualified_for_design_partner: bool
@@ -105,7 +107,9 @@ class QualifyOpportunityUseCase:
         is_qualified = opportunity.is_qualified_for_design_partner()
 
         # 4. Build reasons
-        reasons = self._build_qualification_reasons(opportunity, qualification_score, is_qualified)
+        reasons = self._build_qualification_reasons(
+            opportunity, qualification_score, is_qualified
+        )
 
         # 5. Set status based on qualification
         if is_qualified:
@@ -124,7 +128,9 @@ class QualifyOpportunityUseCase:
             resource_type="opportunity",
             resource_id=opportunity_id,
             policy_name="enterprise_qualification",
-            policy_result=PolicyResult.APPROVED if is_qualified else PolicyResult.REVIEW_REQUIRED,
+            policy_result=(
+                PolicyResult.APPROVED if is_qualified else PolicyResult.REVIEW_REQUIRED
+            ),
             policy_evaluation_reasoning="; ".join(reasons),
             context_data={
                 "qualification_score": qualification_score,
@@ -165,7 +171,9 @@ class QualifyOpportunityUseCase:
             reasons.append("No AI maturity (learning opportunity)")
 
         if opportunity.security_maturity == MaturityLevel.ADVANCED:
-            reasons.append(f"Strong security posture ({len(opportunity.security_certifications)} certifications)")
+            reasons.append(
+                f"Strong security posture ({len(opportunity.security_certifications)} certifications)"
+            )
 
         if opportunity.has_product_team:
             reasons.append("Has dedicated product team")

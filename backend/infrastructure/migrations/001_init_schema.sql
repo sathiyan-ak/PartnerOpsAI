@@ -6,9 +6,9 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
--- Users table (via Supabase Auth, but referenced here)
+-- Users table (standalone for testing, references auth.users in production)
 CREATE TABLE IF NOT EXISTS public.users (
-    id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     email TEXT UNIQUE NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -284,27 +284,29 @@ CREATE INDEX idx_security_audit_records_resource_id ON public.security_audit_rec
 CREATE INDEX idx_security_audit_records_created_at ON public.security_audit_records(created_at DESC);
 
 -- Row-Level Security Policies
-ALTER TABLE public.opportunities ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.design_partners ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.design_feedback ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.feedback_clusters ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.product_recommendations ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.policy_decisions ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.security_audit_records ENABLE ROW LEVEL SECURITY;
+-- Disabled for local testing (requires Supabase auth schema)
+-- Enable these when deploying to Supabase
+-- ALTER TABLE public.opportunities ENABLE ROW LEVEL SECURITY;
+-- ALTER TABLE public.design_partners ENABLE ROW LEVEL SECURITY;
+-- ALTER TABLE public.design_feedback ENABLE ROW LEVEL SECURITY;
+-- ALTER TABLE public.feedback_clusters ENABLE ROW LEVEL SECURITY;
+-- ALTER TABLE public.product_recommendations ENABLE ROW LEVEL SECURITY;
+-- ALTER TABLE public.policy_decisions ENABLE ROW LEVEL SECURITY;
+-- ALTER TABLE public.security_audit_records ENABLE ROW LEVEL SECURITY;
 
--- RLS: Users can read/write own records (created_by = auth.uid())
-CREATE POLICY "opportunities_user_access" ON public.opportunities
-    FOR ALL USING (created_by = auth.uid() OR created_by = '00000000-0000-0000-0000-000000000000');
-
-CREATE POLICY "design_partners_user_access" ON public.design_partners
-    FOR ALL USING (created_by = auth.uid() OR created_by = '00000000-0000-0000-0000-000000000000');
-
-CREATE POLICY "design_feedback_user_access" ON public.design_feedback
-    FOR ALL USING (created_by = auth.uid() OR created_by = '00000000-0000-0000-0000-000000000000');
-
-CREATE POLICY "policy_decisions_user_access" ON public.policy_decisions
-    FOR ALL USING (created_by = auth.uid() OR created_by = '00000000-0000-0000-0000-000000000000');
-
-CREATE POLICY "audit_records_append_only" ON public.security_audit_records
-    FOR INSERT WITH CHECK (actor_id = auth.uid())
-    FOR SELECT USING (TRUE);  -- All users can read audit records
+-- RLS Policies (commented for local testing)
+-- CREATE POLICY "opportunities_user_access" ON public.opportunities
+--     FOR ALL USING (created_by = auth.uid() OR created_by = '00000000-0000-0000-0000-000000000000');
+--
+-- CREATE POLICY "design_partners_user_access" ON public.design_partners
+--     FOR ALL USING (created_by = auth.uid() OR created_by = '00000000-0000-0000-0000-000000000000');
+--
+-- CREATE POLICY "design_feedback_user_access" ON public.design_feedback
+--     FOR ALL USING (created_by = auth.uid() OR created_by = '00000000-0000-0000-0000-000000000000');
+--
+-- CREATE POLICY "policy_decisions_user_access" ON public.policy_decisions
+--     FOR ALL USING (created_by = auth.uid() OR created_by = '00000000-0000-0000-0000-000000000000');
+--
+-- CREATE POLICY "audit_records_append_only" ON public.security_audit_records
+--     FOR INSERT WITH CHECK (actor_id = auth.uid())
+--     FOR SELECT USING (TRUE);

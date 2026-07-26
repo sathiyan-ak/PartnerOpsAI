@@ -37,7 +37,9 @@ class EvaluatePolicyUseCase:
         self.audit_repo = audit_repository
         self.actor_id = actor_id
 
-    def execute(self, opportunity_id: UUID, input_data: EvaluatePolicyInput) -> EvaluatePolicyOutput:
+    def execute(
+        self, opportunity_id: UUID, input_data: EvaluatePolicyInput
+    ) -> EvaluatePolicyOutput:
         """Execute policy evaluation."""
 
         # Create policy

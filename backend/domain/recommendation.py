@@ -15,6 +15,7 @@ class ProductRecommendation:
     Aggregates similar feedback and provides business-driven recommendation
     on whether to build, defer, or reject the feature.
     """
+
     id: UUID = field(default_factory=uuid4)
     feedback_cluster_id: UUID = field(default_factory=uuid4)
     created_by: UUID = field(default_factory=uuid4)
@@ -114,7 +115,9 @@ class ProductRecommendation:
         }
         feasibility_factor = effort_to_feasibility.get(self.estimated_effort, 0.5) * 0.2
 
-        confidence = min(1.0, max(0.0, customer_factor + priority_factor + feasibility_factor))
+        confidence = min(
+            1.0, max(0.0, customer_factor + priority_factor + feasibility_factor)
+        )
         return round(confidence, 2)
 
     def calculate_business_score(self) -> int:
@@ -144,38 +147,69 @@ class ProductRecommendation:
         # Market opportunity approximated by impact score
         market_score = self.aggregate_impact_score * 0.1
 
-        total = int(min(100, max(0, demand_score + strategic_score + feasibility_score + market_score)))
+        total = int(
+            min(
+                100,
+                max(
+                    0, demand_score + strategic_score + feasibility_score + market_score
+                ),
+            )
+        )
         return total
 
     def to_dict(self) -> Dict[str, Any]:
         """Serialize to dictionary."""
         data = asdict(self)
-        data['id'] = str(self.id)
-        data['feedback_cluster_id'] = str(self.feedback_cluster_id)
-        data['created_by'] = str(self.created_by)
-        data['updated_by'] = str(self.updated_by)
-        data['suggested_release'] = self.suggested_release.value
-        if data['decision_made_by']:
-            data['decision_made_by'] = str(data['decision_made_by'])
-        if data['decision_made_at']:
-            data['decision_made_at'] = data['decision_made_at'].isoformat()
-        data['created_at'] = self.created_at.isoformat()
-        data['updated_at'] = self.updated_at.isoformat()
+        data["id"] = str(self.id)
+        data["feedback_cluster_id"] = str(self.feedback_cluster_id)
+        data["created_by"] = str(self.created_by)
+        data["updated_by"] = str(self.updated_by)
+        data["suggested_release"] = self.suggested_release.value
+        if data["decision_made_by"]:
+            data["decision_made_by"] = str(data["decision_made_by"])
+        if data["decision_made_at"]:
+            data["decision_made_at"] = data["decision_made_at"].isoformat()
+        data["created_at"] = self.created_at.isoformat()
+        data["updated_at"] = self.updated_at.isoformat()
         return data
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'ProductRecommendation':
+    def from_dict(cls, data: Dict[str, Any]) -> "ProductRecommendation":
         """Deserialize from dictionary."""
         data = data.copy()
-        data['id'] = UUID(data['id']) if isinstance(data['id'], str) else data['id']
-        data['feedback_cluster_id'] = UUID(data['feedback_cluster_id']) if isinstance(data['feedback_cluster_id'], str) else data['feedback_cluster_id']
-        data['created_by'] = UUID(data['created_by']) if isinstance(data['created_by'], str) else data['created_by']
-        data['updated_by'] = UUID(data['updated_by']) if isinstance(data['updated_by'], str) else data['updated_by']
-        if data.get('decision_made_by') and isinstance(data['decision_made_by'], str):
-            data['decision_made_by'] = UUID(data['decision_made_by'])
-        data['suggested_release'] = ReleaseTarget(data['suggested_release']) if isinstance(data['suggested_release'], str) else data['suggested_release']
-        if data.get('decision_made_at') and isinstance(data['decision_made_at'], str):
-            data['decision_made_at'] = datetime.fromisoformat(data['decision_made_at'])
-        data['created_at'] = datetime.fromisoformat(data['created_at']) if isinstance(data['created_at'], str) else data['created_at']
-        data['updated_at'] = datetime.fromisoformat(data['updated_at']) if isinstance(data['updated_at'], str) else data['updated_at']
+        data["id"] = UUID(data["id"]) if isinstance(data["id"], str) else data["id"]
+        data["feedback_cluster_id"] = (
+            UUID(data["feedback_cluster_id"])
+            if isinstance(data["feedback_cluster_id"], str)
+            else data["feedback_cluster_id"]
+        )
+        data["created_by"] = (
+            UUID(data["created_by"])
+            if isinstance(data["created_by"], str)
+            else data["created_by"]
+        )
+        data["updated_by"] = (
+            UUID(data["updated_by"])
+            if isinstance(data["updated_by"], str)
+            else data["updated_by"]
+        )
+        if data.get("decision_made_by") and isinstance(data["decision_made_by"], str):
+            data["decision_made_by"] = UUID(data["decision_made_by"])
+        data["suggested_release"] = (
+            ReleaseTarget(data["suggested_release"])
+            if isinstance(data["suggested_release"], str)
+            else data["suggested_release"]
+        )
+        if data.get("decision_made_at") and isinstance(data["decision_made_at"], str):
+            data["decision_made_at"] = datetime.fromisoformat(data["decision_made_at"])
+        data["created_at"] = (
+            datetime.fromisoformat(data["created_at"])
+            if isinstance(data["created_at"], str)
+            else data["created_at"]
+        )
+        data["updated_at"] = (
+            datetime.fromisoformat(data["updated_at"])
+            if isinstance(data["updated_at"], str)
+            else data["updated_at"]
+        )
         return cls(**data)

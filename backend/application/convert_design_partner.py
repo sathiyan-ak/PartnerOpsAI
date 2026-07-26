@@ -4,7 +4,11 @@ from dataclasses import dataclass
 from uuid import UUID
 from typing import Optional
 from ..domain import Opportunity, DesignPartner, DesignPartnerStatus, OpportunityStatus
-from .repositories import OpportunityRepository, DesignPartnerRepository, SecurityAuditRepository
+from .repositories import (
+    OpportunityRepository,
+    DesignPartnerRepository,
+    SecurityAuditRepository,
+)
 from ..domain.audit import SecurityAuditRecord
 from ..domain.enums import AuditAction
 
@@ -12,6 +16,7 @@ from ..domain.enums import AuditAction
 @dataclass
 class ConvertDesignPartnerInput:
     """Input: opportunity to convert."""
+
     opportunity_id: UUID
     product_owner_name: str
     product_owner_email: str
@@ -24,6 +29,7 @@ class ConvertDesignPartnerInput:
 @dataclass
 class ConvertDesignPartnerOutput:
     """Output: new design partner."""
+
     design_partner_id: UUID
     opportunity_id: UUID
     company_name: str
@@ -48,7 +54,9 @@ class ConvertDesignPartnerUseCase:
         self.audit_repo = audit_repository
         self.actor_id = actor_id
 
-    def execute(self, input_data: ConvertDesignPartnerInput) -> ConvertDesignPartnerOutput:
+    def execute(
+        self, input_data: ConvertDesignPartnerInput
+    ) -> ConvertDesignPartnerOutput:
         """Execute conversion."""
 
         # 1. Load opportunity
@@ -58,7 +66,9 @@ class ConvertDesignPartnerUseCase:
 
         # 2. Verify it's qualified
         if opp.status != OpportunityStatus.QUALIFIED:
-            raise ValueError(f"Opportunity status must be QUALIFIED, got {opp.status.value}")
+            raise ValueError(
+                f"Opportunity status must be QUALIFIED, got {opp.status.value}"
+            )
 
         # 3. Create design partner
         dp = DesignPartner(

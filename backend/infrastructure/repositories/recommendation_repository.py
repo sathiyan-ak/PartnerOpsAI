@@ -19,8 +19,17 @@ class ProductRecommendationRepositoryImpl(ProductRecommendationRepository):
         return UUID(response.data[0]["id"])
 
     def find_by_id(self, recommendation_id: UUID) -> Optional[ProductRecommendation]:
-        response = db.get_table("product_recommendations").select("*").eq("id", str(recommendation_id)).execute()
-        return DomainMapper.db_to_recommendation(response.data[0]) if response.data else None
+        response = (
+            db.get_table("product_recommendations")
+            .select("*")
+            .eq("id", str(recommendation_id))
+            .execute()
+        )
+        return (
+            DomainMapper.db_to_recommendation(response.data[0])
+            if response.data
+            else None
+        )
 
     def find_by_cluster_id(self, cluster_id: UUID) -> Optional[ProductRecommendation]:
         response = (
@@ -30,7 +39,11 @@ class ProductRecommendationRepositoryImpl(ProductRecommendationRepository):
             .limit(1)
             .execute()
         )
-        return DomainMapper.db_to_recommendation(response.data[0]) if response.data else None
+        return (
+            DomainMapper.db_to_recommendation(response.data[0])
+            if response.data
+            else None
+        )
 
     def find_undecided(self, limit: int = 50) -> List[ProductRecommendation]:
         response = (
@@ -43,5 +56,7 @@ class ProductRecommendationRepositoryImpl(ProductRecommendationRepository):
         return [DomainMapper.db_to_recommendation(row) for row in response.data]
 
     def list_all(self, limit: int = 100) -> List[ProductRecommendation]:
-        response = db.get_table("product_recommendations").select("*").limit(limit).execute()
+        response = (
+            db.get_table("product_recommendations").select("*").limit(limit).execute()
+        )
         return [DomainMapper.db_to_recommendation(row) for row in response.data]

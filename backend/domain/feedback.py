@@ -15,6 +15,7 @@ class DesignFeedback:
     Submitted by design partners (or prospects). Represents feature requests,
     bugs, enhancements, integrations that inform product decisions.
     """
+
     id: UUID = field(default_factory=uuid4)
     design_partner_id: UUID = field(default_factory=uuid4)
     created_by: UUID = field(default_factory=uuid4)
@@ -76,32 +77,67 @@ class DesignFeedback:
     def to_dict(self) -> Dict[str, Any]:
         """Serialize to dictionary."""
         data = asdict(self)
-        data['id'] = str(self.id)
-        data['design_partner_id'] = str(self.design_partner_id)
-        data['created_by'] = str(self.created_by)
-        data['updated_by'] = str(self.updated_by)
-        data['category'] = self.category.value
-        data['suggested_release'] = self.suggested_release.value
-        data['status'] = self.status.value
-        data['similar_feedback_ids'] = [str(fid) for fid in self.similar_feedback_ids]
-        data['created_at'] = self.created_at.isoformat()
-        data['updated_at'] = self.updated_at.isoformat()
+        data["id"] = str(self.id)
+        data["design_partner_id"] = str(self.design_partner_id)
+        data["created_by"] = str(self.created_by)
+        data["updated_by"] = str(self.updated_by)
+        data["category"] = self.category.value
+        data["suggested_release"] = self.suggested_release.value
+        data["status"] = self.status.value
+        data["similar_feedback_ids"] = [str(fid) for fid in self.similar_feedback_ids]
+        data["created_at"] = self.created_at.isoformat()
+        data["updated_at"] = self.updated_at.isoformat()
         return data
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'DesignFeedback':
+    def from_dict(cls, data: Dict[str, Any]) -> "DesignFeedback":
         """Deserialize from dictionary."""
         data = data.copy()
-        data['id'] = UUID(data['id']) if isinstance(data['id'], str) else data['id']
-        data['design_partner_id'] = UUID(data['design_partner_id']) if isinstance(data['design_partner_id'], str) else data['design_partner_id']
-        data['created_by'] = UUID(data['created_by']) if isinstance(data['created_by'], str) else data['created_by']
-        data['updated_by'] = UUID(data['updated_by']) if isinstance(data['updated_by'], str) else data['updated_by']
-        data['category'] = FeedbackCategory(data['category']) if isinstance(data['category'], str) else data['category']
-        data['suggested_release'] = ReleaseTarget(data['suggested_release']) if isinstance(data['suggested_release'], str) else data['suggested_release']
-        data['status'] = FeedbackStatus(data['status']) if isinstance(data['status'], str) else data['status']
-        data['similar_feedback_ids'] = [UUID(fid) if isinstance(fid, str) else fid for fid in data.get('similar_feedback_ids', [])]
-        data['created_at'] = datetime.fromisoformat(data['created_at']) if isinstance(data['created_at'], str) else data['created_at']
-        data['updated_at'] = datetime.fromisoformat(data['updated_at']) if isinstance(data['updated_at'], str) else data['updated_at']
+        data["id"] = UUID(data["id"]) if isinstance(data["id"], str) else data["id"]
+        data["design_partner_id"] = (
+            UUID(data["design_partner_id"])
+            if isinstance(data["design_partner_id"], str)
+            else data["design_partner_id"]
+        )
+        data["created_by"] = (
+            UUID(data["created_by"])
+            if isinstance(data["created_by"], str)
+            else data["created_by"]
+        )
+        data["updated_by"] = (
+            UUID(data["updated_by"])
+            if isinstance(data["updated_by"], str)
+            else data["updated_by"]
+        )
+        data["category"] = (
+            FeedbackCategory(data["category"])
+            if isinstance(data["category"], str)
+            else data["category"]
+        )
+        data["suggested_release"] = (
+            ReleaseTarget(data["suggested_release"])
+            if isinstance(data["suggested_release"], str)
+            else data["suggested_release"]
+        )
+        data["status"] = (
+            FeedbackStatus(data["status"])
+            if isinstance(data["status"], str)
+            else data["status"]
+        )
+        data["similar_feedback_ids"] = [
+            UUID(fid) if isinstance(fid, str) else fid
+            for fid in data.get("similar_feedback_ids", [])
+        ]
+        data["created_at"] = (
+            datetime.fromisoformat(data["created_at"])
+            if isinstance(data["created_at"], str)
+            else data["created_at"]
+        )
+        data["updated_at"] = (
+            datetime.fromisoformat(data["updated_at"])
+            if isinstance(data["updated_at"], str)
+            else data["updated_at"]
+        )
         return cls(**data)
 
 
@@ -113,6 +149,7 @@ class FeedbackCluster:
     Multiple feedback items with same theme get clustered into one
     aggregate view for product decision-making.
     """
+
     id: UUID = field(default_factory=uuid4)
     created_by: UUID = field(default_factory=uuid4)
     updated_by: UUID = field(default_factory=uuid4)
@@ -149,13 +186,13 @@ class FeedbackCluster:
     def to_dict(self) -> Dict[str, Any]:
         """Serialize to dictionary."""
         data = asdict(self)
-        data['id'] = str(self.id)
-        data['created_by'] = str(self.created_by)
-        data['updated_by'] = str(self.updated_by)
-        data['primary_feedback_id'] = str(self.primary_feedback_id)
-        data['related_feedback_ids'] = [str(fid) for fid in self.related_feedback_ids]
-        if data['merged_at']:
-            data['merged_at'] = data['merged_at'].isoformat()
-        data['created_at'] = self.created_at.isoformat()
-        data['updated_at'] = self.updated_at.isoformat()
+        data["id"] = str(self.id)
+        data["created_by"] = str(self.created_by)
+        data["updated_by"] = str(self.updated_by)
+        data["primary_feedback_id"] = str(self.primary_feedback_id)
+        data["related_feedback_ids"] = [str(fid) for fid in self.related_feedback_ids]
+        if data["merged_at"]:
+            data["merged_at"] = data["merged_at"].isoformat()
+        data["created_at"] = self.created_at.isoformat()
+        data["updated_at"] = self.updated_at.isoformat()
         return data

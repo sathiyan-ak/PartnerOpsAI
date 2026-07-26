@@ -18,6 +18,7 @@ class SecurityAuditRecord:
     - Configuration changes
     - Decision overrides
     """
+
     id: UUID = field(default_factory=uuid4)
     version: int = 0
 
@@ -62,24 +63,44 @@ class SecurityAuditRecord:
     def to_dict(self) -> Dict[str, Any]:
         """Serialize to dictionary."""
         data = asdict(self)
-        data['id'] = str(self.id)
-        data['actor_id'] = str(self.actor_id)
-        data['resource_id'] = str(self.resource_id)
-        data['action'] = self.action.value
-        data['policy_result'] = self.policy_result.value
-        data['created_at'] = self.created_at.isoformat()
+        data["id"] = str(self.id)
+        data["actor_id"] = str(self.actor_id)
+        data["resource_id"] = str(self.resource_id)
+        data["action"] = self.action.value
+        data["policy_result"] = self.policy_result.value
+        data["created_at"] = self.created_at.isoformat()
         return data
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'SecurityAuditRecord':
+    def from_dict(cls, data: Dict[str, Any]) -> "SecurityAuditRecord":
         """Deserialize from dictionary."""
         data = data.copy()
-        data['id'] = UUID(data['id']) if isinstance(data['id'], str) else data['id']
-        data['actor_id'] = UUID(data['actor_id']) if isinstance(data['actor_id'], str) else data['actor_id']
-        data['resource_id'] = UUID(data['resource_id']) if isinstance(data['resource_id'], str) else data['resource_id']
-        data['action'] = AuditAction(data['action']) if isinstance(data['action'], str) else data['action']
-        data['policy_result'] = PolicyResult(data['policy_result']) if isinstance(data['policy_result'], str) else data['policy_result']
-        data['created_at'] = datetime.fromisoformat(data['created_at']) if isinstance(data['created_at'], str) else data['created_at']
+        data["id"] = UUID(data["id"]) if isinstance(data["id"], str) else data["id"]
+        data["actor_id"] = (
+            UUID(data["actor_id"])
+            if isinstance(data["actor_id"], str)
+            else data["actor_id"]
+        )
+        data["resource_id"] = (
+            UUID(data["resource_id"])
+            if isinstance(data["resource_id"], str)
+            else data["resource_id"]
+        )
+        data["action"] = (
+            AuditAction(data["action"])
+            if isinstance(data["action"], str)
+            else data["action"]
+        )
+        data["policy_result"] = (
+            PolicyResult(data["policy_result"])
+            if isinstance(data["policy_result"], str)
+            else data["policy_result"]
+        )
+        data["created_at"] = (
+            datetime.fromisoformat(data["created_at"])
+            if isinstance(data["created_at"], str)
+            else data["created_at"]
+        )
         return cls(**data)
 
 
@@ -91,6 +112,7 @@ class PolicyDecision:
     Represents a policy/legal/compliance issue that needs action.
     Tracked through lifecycle: OPEN → IN_REVIEW → RESOLVED.
     """
+
     id: UUID = field(default_factory=uuid4)
     opportunity_id: UUID = field(default_factory=uuid4)
     created_by: UUID = field(default_factory=uuid4)
@@ -145,36 +167,60 @@ class PolicyDecision:
         Result: 0-100 scale
         """
         effort_factor = 1.0 - (self.effort_score / 100.0)
-        priority = (self.impact_score * 0.5) + (self.urgency_score * 0.4) + (effort_factor * 0.1 * 100)
+        priority = (
+            (self.impact_score * 0.5)
+            + (self.urgency_score * 0.4)
+            + (effort_factor * 0.1 * 100)
+        )
         return int(min(100, max(0, priority)))
 
     def to_dict(self) -> Dict[str, Any]:
         """Serialize to dictionary."""
         data = asdict(self)
-        data['id'] = str(self.id)
-        data['opportunity_id'] = str(self.opportunity_id)
-        data['created_by'] = str(self.created_by)
-        data['updated_by'] = str(self.updated_by)
-        if data.get('assigned_to_id'):
-            data['assigned_to_id'] = str(data['assigned_to_id'])
-        if data.get('due_date'):
-            data['due_date'] = data['due_date'].isoformat()
-        data['created_at'] = self.created_at.isoformat()
-        data['updated_at'] = self.updated_at.isoformat()
+        data["id"] = str(self.id)
+        data["opportunity_id"] = str(self.opportunity_id)
+        data["created_by"] = str(self.created_by)
+        data["updated_by"] = str(self.updated_by)
+        if data.get("assigned_to_id"):
+            data["assigned_to_id"] = str(data["assigned_to_id"])
+        if data.get("due_date"):
+            data["due_date"] = data["due_date"].isoformat()
+        data["created_at"] = self.created_at.isoformat()
+        data["updated_at"] = self.updated_at.isoformat()
         return data
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'PolicyDecision':
+    def from_dict(cls, data: Dict[str, Any]) -> "PolicyDecision":
         """Deserialize from dictionary."""
         data = data.copy()
-        data['id'] = UUID(data['id']) if isinstance(data['id'], str) else data['id']
-        data['opportunity_id'] = UUID(data['opportunity_id']) if isinstance(data['opportunity_id'], str) else data['opportunity_id']
-        data['created_by'] = UUID(data['created_by']) if isinstance(data['created_by'], str) else data['created_by']
-        data['updated_by'] = UUID(data['updated_by']) if isinstance(data['updated_by'], str) else data['updated_by']
-        if data.get('assigned_to_id') and isinstance(data['assigned_to_id'], str):
-            data['assigned_to_id'] = UUID(data['assigned_to_id'])
-        if data.get('due_date') and isinstance(data['due_date'], str):
-            data['due_date'] = datetime.fromisoformat(data['due_date'])
-        data['created_at'] = datetime.fromisoformat(data['created_at']) if isinstance(data['created_at'], str) else data['created_at']
-        data['updated_at'] = datetime.fromisoformat(data['updated_at']) if isinstance(data['updated_at'], str) else data['updated_at']
+        data["id"] = UUID(data["id"]) if isinstance(data["id"], str) else data["id"]
+        data["opportunity_id"] = (
+            UUID(data["opportunity_id"])
+            if isinstance(data["opportunity_id"], str)
+            else data["opportunity_id"]
+        )
+        data["created_by"] = (
+            UUID(data["created_by"])
+            if isinstance(data["created_by"], str)
+            else data["created_by"]
+        )
+        data["updated_by"] = (
+            UUID(data["updated_by"])
+            if isinstance(data["updated_by"], str)
+            else data["updated_by"]
+        )
+        if data.get("assigned_to_id") and isinstance(data["assigned_to_id"], str):
+            data["assigned_to_id"] = UUID(data["assigned_to_id"])
+        if data.get("due_date") and isinstance(data["due_date"], str):
+            data["due_date"] = datetime.fromisoformat(data["due_date"])
+        data["created_at"] = (
+            datetime.fromisoformat(data["created_at"])
+            if isinstance(data["created_at"], str)
+            else data["created_at"]
+        )
+        data["updated_at"] = (
+            datetime.fromisoformat(data["updated_at"])
+            if isinstance(data["updated_at"], str)
+            else data["updated_at"]
+        )
         return cls(**data)

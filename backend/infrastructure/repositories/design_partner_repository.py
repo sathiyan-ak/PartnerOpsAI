@@ -21,7 +21,12 @@ class DesignPartnerRepositoryImpl(DesignPartnerRepository):
         return UUID(response.data[0]["id"])
 
     def find_by_id(self, design_partner_id: UUID) -> Optional[DesignPartner]:
-        response = db.get_table("design_partners").select("*").eq("id", str(design_partner_id)).execute()
+        response = (
+            db.get_table("design_partners")
+            .select("*")
+            .eq("id", str(design_partner_id))
+            .execute()
+        )
         if not response.data:
             return None
         return DomainMapper.db_to_design_partner(response.data[0])

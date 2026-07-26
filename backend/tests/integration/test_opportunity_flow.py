@@ -24,12 +24,14 @@ class TestOpportunityQualificationFlow:
 
     def test_qualification_score_calculation(self, test_opportunity_data):
         """Test: Deterministic qualification scoring."""
-        test_opportunity_data.update({
-            "icp_score": 80,
-            "ai_maturity": MaturityLevel.INTERMEDIATE,
-            "security_maturity": MaturityLevel.ADVANCED,
-            "design_partner_potential": 70,
-        })
+        test_opportunity_data.update(
+            {
+                "icp_score": 80,
+                "ai_maturity": MaturityLevel.INTERMEDIATE,
+                "security_maturity": MaturityLevel.ADVANCED,
+                "design_partner_potential": 70,
+            }
+        )
 
         opp = Opportunity(**test_opportunity_data)
         score = opp.calculate_qualification_score()
@@ -40,14 +42,16 @@ class TestOpportunityQualificationFlow:
 
     def test_design_partner_eligibility(self, test_opportunity_data):
         """Test: Determine design partner eligibility."""
-        test_opportunity_data.update({
-            "icp_alignment": ICPAlignment.STRONG,
-            "icp_score": 70,
-            "ai_maturity": MaturityLevel.INTERMEDIATE,
-            "security_maturity": MaturityLevel.INTERMEDIATE,
-            "design_partner_potential": 70,
-            "has_product_team": True,
-        })
+        test_opportunity_data.update(
+            {
+                "icp_alignment": ICPAlignment.STRONG,
+                "icp_score": 70,
+                "ai_maturity": MaturityLevel.INTERMEDIATE,
+                "security_maturity": MaturityLevel.INTERMEDIATE,
+                "design_partner_potential": 70,
+                "has_product_team": True,
+            }
+        )
 
         opp = Opportunity(**test_opportunity_data)
 
@@ -56,29 +60,33 @@ class TestOpportunityQualificationFlow:
 
     def test_ineligible_low_score(self, test_opportunity_data):
         """Test: Reject low-score prospects."""
-        test_opportunity_data.update({
-            "icp_alignment": ICPAlignment.STRONG,
-            "icp_score": 30,
-            "has_product_team": True,
-        })
+        test_opportunity_data.update(
+            {
+                "icp_alignment": ICPAlignment.STRONG,
+                "icp_score": 30,
+                "has_product_team": True,
+            }
+        )
 
         opp = Opportunity(**test_opportunity_data)
         assert opp.is_qualified_for_design_partner() is False
 
     def test_ineligible_no_product_team(self, test_opportunity_data):
         """Test: Reject if no product team."""
-        test_opportunity_data.update({
-            "icp_alignment": ICPAlignment.STRONG,
-            "icp_score": 80,
-            "has_product_team": False,
-        })
+        test_opportunity_data.update(
+            {
+                "icp_alignment": ICPAlignment.STRONG,
+                "icp_score": 80,
+                "has_product_team": False,
+            }
+        )
 
         opp = Opportunity(**test_opportunity_data)
         assert opp.is_qualified_for_design_partner() is False
 
     def test_serialization_roundtrip(self, test_opportunity_data):
         """Test: to_dict/from_dict roundtrip."""
-        opp1 = Opportunity(**test_opportunity_data)
+        opp1 = Opportunity.from_dict(test_opportunity_data)
 
         # Serialize
         data = opp1.to_dict()

@@ -37,7 +37,9 @@ class AuditSecurityEventUseCase:
         self.audit_repo = audit_repository
         self.actor_id = actor_id
 
-    def execute(self, resource_id: UUID, input_data: AuditSecurityEventInput) -> AuditSecurityEventOutput:
+    def execute(
+        self, resource_id: UUID, input_data: AuditSecurityEventInput
+    ) -> AuditSecurityEventOutput:
         """Execute audit event recording."""
 
         # Create audit record

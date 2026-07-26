@@ -2,8 +2,13 @@
 
 from typing import Dict, Any
 from backend.domain import (
-    Opportunity, DesignPartner, DesignFeedback, FeedbackCluster,
-    ProductRecommendation, PolicyDecision, SecurityAuditRecord,
+    Opportunity,
+    DesignPartner,
+    DesignFeedback,
+    FeedbackCluster,
+    ProductRecommendation,
+    PolicyDecision,
+    SecurityAuditRecord,
 )
 
 
@@ -143,7 +148,9 @@ class DomainMapper:
             "dependencies": rec.dependencies,
             "risks": rec.risks,
             "decision_made": rec.decision_made,
-            "decision_made_by": str(rec.decision_made_by) if rec.decision_made_by else None,
+            "decision_made_by": (
+                str(rec.decision_made_by) if rec.decision_made_by else None
+            ),
             "decision_notes": rec.decision_notes,
         }
 

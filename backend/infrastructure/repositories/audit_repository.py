@@ -18,10 +18,17 @@ class SecurityAuditRepositoryImpl(SecurityAuditRepository):
         return UUID(response.data[0]["id"])
 
     def find_by_id(self, record_id: UUID) -> Optional[SecurityAuditRecord]:
-        response = db.get_table("security_audit_records").select("*").eq("id", str(record_id)).execute()
+        response = (
+            db.get_table("security_audit_records")
+            .select("*")
+            .eq("id", str(record_id))
+            .execute()
+        )
         return DomainMapper.db_to_audit(response.data[0]) if response.data else None
 
-    def find_by_resource_id(self, resource_id: UUID, limit: int = 100) -> List[SecurityAuditRecord]:
+    def find_by_resource_id(
+        self, resource_id: UUID, limit: int = 100
+    ) -> List[SecurityAuditRecord]:
         response = (
             db.get_table("security_audit_records")
             .select("*")
@@ -32,7 +39,9 @@ class SecurityAuditRepositoryImpl(SecurityAuditRepository):
         )
         return [DomainMapper.db_to_audit(row) for row in response.data]
 
-    def find_by_actor_id(self, actor_id: UUID, limit: int = 100) -> List[SecurityAuditRecord]:
+    def find_by_actor_id(
+        self, actor_id: UUID, limit: int = 100
+    ) -> List[SecurityAuditRecord]:
         response = (
             db.get_table("security_audit_records")
             .select("*")
@@ -44,5 +53,11 @@ class SecurityAuditRepositoryImpl(SecurityAuditRepository):
         return [DomainMapper.db_to_audit(row) for row in response.data]
 
     def list_all(self, limit: int = 100) -> List[SecurityAuditRecord]:
-        response = db.get_table("security_audit_records").select("*").order("created_at", desc=True).limit(limit).execute()
+        response = (
+            db.get_table("security_audit_records")
+            .select("*")
+            .order("created_at", desc=True)
+            .limit(limit)
+            .execute()
+        )
         return [DomainMapper.db_to_audit(row) for row in response.data]

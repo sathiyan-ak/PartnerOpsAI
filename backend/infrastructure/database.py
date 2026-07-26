@@ -12,10 +12,10 @@ except ImportError:
 class DatabaseClient:
     """Singleton Supabase client."""
 
-    _instance: Optional['DatabaseClient'] = None
+    _instance: Optional["DatabaseClient"] = None
     _client: Optional[Client] = None
 
-    def __new__(cls) -> 'DatabaseClient':
+    def __new__(cls) -> "DatabaseClient":
         if cls._instance is None:
             cls._instance = super().__new__(cls)
         return cls._instance
@@ -28,8 +28,8 @@ class DatabaseClient:
     @staticmethod
     def _create_client() -> Client:
         """Create Supabase client from environment variables."""
-        url = os.getenv('NEXT_PUBLIC_SUPABASE_URL')
-        key = os.getenv('SUPABASE_SERVICE_ROLE_KEY')  # Use service role for backend
+        url = os.getenv("NEXT_PUBLIC_SUPABASE_URL")
+        key = os.getenv("SUPABASE_SERVICE_ROLE_KEY")  # Use service role for backend
 
         if not url or not key:
             raise ValueError(
@@ -51,7 +51,9 @@ class DatabaseClient:
 
     def execute_query(self, query: str):
         """Execute raw SQL query."""
-        return self.client.postgrest.request("GET", f"/rpc/execute_query", json={"query": query})
+        return self.client.postgrest.request(
+            "GET", f"/rpc/execute_query", json={"query": query}
+        )
 
 
 # Singleton instance

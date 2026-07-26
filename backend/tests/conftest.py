@@ -2,6 +2,7 @@
 
 import os
 import subprocess
+from datetime import datetime
 from uuid import uuid4
 import pytest
 from typing import Generator
@@ -13,7 +14,10 @@ from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 @pytest.fixture(scope="session")
 def database_url() -> str:
     """Get test database URL from environment."""
-    url = os.getenv("DATABASE_URL", "postgresql://test_user:test_password@localhost:5432/partneropsa_test")
+    url = os.getenv(
+        "DATABASE_URL",
+        "postgresql://test_user:test_password@localhost:5432/partneropsa_test",
+    )
     return url
 
 
@@ -84,7 +88,13 @@ def test_opportunity_data(test_user_id: str) -> dict:
         "industry": "Technology",
         "location": "San Francisco",
         "status": "prospect",
+        "icp_alignment": "weak",
         "icp_score": 50,
+        "ai_maturity": "none",
+        "security_maturity": "none",
+        "design_partner_potential": 0,
+        "created_at": datetime.utcnow().isoformat(),
+        "updated_at": datetime.utcnow().isoformat(),
     }
 
 
@@ -108,7 +118,9 @@ def test_design_partner_data(test_user_id: str, test_opportunity_data: dict) -> 
 
 def pytest_configure(config):
     """Register custom markers."""
-    config.addinivalue_line("markers", "integration: integration tests (require database)")
+    config.addinivalue_line(
+        "markers", "integration: integration tests (require database)"
+    )
     config.addinivalue_line("markers", "unit: unit tests")
     config.addinivalue_line("markers", "repository: repository tests")
     config.addinivalue_line("markers", "rls: RLS policy tests")

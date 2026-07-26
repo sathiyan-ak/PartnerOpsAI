@@ -4,7 +4,11 @@ from dataclasses import dataclass
 from uuid import UUID
 from typing import List
 from ..domain import FeedbackCluster
-from .repositories import DesignFeedbackRepository, FeedbackClusterRepository, SecurityAuditRepository
+from .repositories import (
+    DesignFeedbackRepository,
+    FeedbackClusterRepository,
+    SecurityAuditRepository,
+)
 from ..domain.audit import SecurityAuditRecord
 from ..domain.enums import AuditAction
 
@@ -45,7 +49,9 @@ class ClusterFeedbackUseCase:
         # Verify primary feedback exists
         primary = self.feedback_repo.find_by_id(input_data.primary_feedback_id)
         if not primary:
-            raise ValueError(f"Primary feedback {input_data.primary_feedback_id} not found")
+            raise ValueError(
+                f"Primary feedback {input_data.primary_feedback_id} not found"
+            )
 
         # Create cluster
         cluster = FeedbackCluster(
@@ -64,7 +70,9 @@ class ClusterFeedbackUseCase:
             if self.feedback_repo.find_by_id(fid)
         ]
         cluster.total_feedback_count = len(all_scores)
-        cluster.average_impact_score = sum(all_scores) / len(all_scores) if all_scores else 0
+        cluster.average_impact_score = (
+            sum(all_scores) / len(all_scores) if all_scores else 0
+        )
 
         # Persist
         cluster_id = self.cluster_repo.save(cluster)

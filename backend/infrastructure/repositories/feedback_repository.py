@@ -3,7 +3,10 @@
 from typing import Optional, List
 from uuid import UUID
 from backend.domain import DesignFeedback, FeedbackCluster
-from backend.application.repositories import DesignFeedbackRepository, FeedbackClusterRepository
+from backend.application.repositories import (
+    DesignFeedbackRepository,
+    FeedbackClusterRepository,
+)
 from ..database import db
 from ..mapper import DomainMapper
 
@@ -19,10 +22,21 @@ class DesignFeedbackRepositoryImpl(DesignFeedbackRepository):
         return UUID(response.data[0]["id"])
 
     def find_by_id(self, feedback_id: UUID) -> Optional[DesignFeedback]:
-        response = db.get_table("design_feedback").select("*").eq("id", str(feedback_id)).execute()
-        return DomainMapper.db_to_design_feedback(response.data[0]) if response.data else None
+        response = (
+            db.get_table("design_feedback")
+            .select("*")
+            .eq("id", str(feedback_id))
+            .execute()
+        )
+        return (
+            DomainMapper.db_to_design_feedback(response.data[0])
+            if response.data
+            else None
+        )
 
-    def find_by_design_partner_id(self, design_partner_id: UUID, limit: int = 100) -> List[DesignFeedback]:
+    def find_by_design_partner_id(
+        self, design_partner_id: UUID, limit: int = 100
+    ) -> List[DesignFeedback]:
         response = (
             db.get_table("design_feedback")
             .select("*")
@@ -58,7 +72,12 @@ class FeedbackClusterRepositoryImpl(FeedbackClusterRepository):
         return UUID(response.data[0]["id"])
 
     def find_by_id(self, cluster_id: UUID) -> Optional[FeedbackCluster]:
-        response = db.get_table("feedback_clusters").select("*").eq("id", str(cluster_id)).execute()
+        response = (
+            db.get_table("feedback_clusters")
+            .select("*")
+            .eq("id", str(cluster_id))
+            .execute()
+        )
         if not response.data:
             return None
         row = response.data[0]
@@ -68,10 +87,14 @@ class FeedbackClusterRepositoryImpl(FeedbackClusterRepository):
             cluster_reason=row["cluster_reason"],
             theme=row["theme"],
         )
-        cluster.related_feedback_ids = [UUID(fid) for fid in row.get("related_feedback_ids", [])]
+        cluster.related_feedback_ids = [
+            UUID(fid) for fid in row.get("related_feedback_ids", [])
+        ]
         return cluster
 
-    def find_by_primary_feedback_id(self, feedback_id: UUID) -> Optional[FeedbackCluster]:
+    def find_by_primary_feedback_id(
+        self, feedback_id: UUID
+    ) -> Optional[FeedbackCluster]:
         response = (
             db.get_table("feedback_clusters")
             .select("*")
@@ -85,4 +108,8 @@ class FeedbackClusterRepositoryImpl(FeedbackClusterRepository):
 
     def list_all(self, limit: int = 100) -> List[FeedbackCluster]:
         response = db.get_table("feedback_clusters").select("*").limit(limit).execute()
-        return [self.find_by_id(UUID(row["id"])) for row in response.data if self.find_by_id(UUID(row["id"]))]
+        return [
+            self.find_by_id(UUID(row["id"]))
+            for row in response.data
+            if self.find_by_id(UUID(row["id"]))
+        ]

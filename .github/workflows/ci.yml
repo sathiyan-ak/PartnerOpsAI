@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_DB: partneropsa_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Lint with ruff
+        run: ruff check backend/
+
+      - name: Format check with black
+        run: black --check backend/
+
+      - name: Type check with mypy
+        run: mypy backend/
+
+      - name: Run database migrations
+        env:
+          DATABASE_URL: postgresql://test_user:test_password@localhost:5432/partneropsa_test
+        run: |
+          psql $DATABASE_URL < backend/infrastructure/migrations/001_init_schema.sql
+
+      - name: Run pytest
+        env:
+          DATABASE_URL: postgresql://test_user:test_password@localhost:5432/partneropsa_test
+          PYTEST_TIMEOUT: 30
+        run: |
+          pytest backend/tests/ -v --cov=backend --cov-report=term-missing --cov-report=html
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./htmlcov/index.html
+          fail_ci_if_error: false
+
+      - name: Check architecture rules
+        run: |
+          python backend/tests/check_architecture.py

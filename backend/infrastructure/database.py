@@ -6,7 +6,9 @@ import os
 try:
     from supabase import create_client, Client
 except ImportError:
-    raise ImportError("supabase-py not installed. Run: pip install supabase-py")
+    # Supabase optional for local testing
+    Client = None
+    create_client = None
 
 
 class DatabaseClient:
@@ -26,15 +28,16 @@ class DatabaseClient:
             self._client = self._create_client()
 
     @staticmethod
-    def _create_client() -> Client:
+    def _create_client() -> Optional[Client]:
         """Create Supabase client from environment variables."""
+        if create_client is None:
+            return None
+
         url = os.getenv("NEXT_PUBLIC_SUPABASE_URL")
         key = os.getenv("SUPABASE_SERVICE_ROLE_KEY")  # Use service role for backend
 
         if not url or not key:
-            raise ValueError(
-                "Missing Supabase credentials. Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY"
-            )
+            return None
 
         return create_client(url, key)
 

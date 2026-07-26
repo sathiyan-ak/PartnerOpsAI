@@ -70,9 +70,21 @@ def setup_database(postgres_connection):
 
 
 @pytest.fixture
-def test_user_id() -> str:
-    """Generate a test user UUID."""
-    return str(uuid4())
+def test_user_id(postgres_connection) -> str:
+    """Create and return a test user UUID."""
+    user_id = str(uuid4())
+    cursor = postgres_connection.cursor()
+    try:
+        cursor.execute(
+            "INSERT INTO users (id, email) VALUES (%s, %s) ON CONFLICT DO NOTHING",
+            (user_id, f"{user_id}@test.local"),
+        )
+        postgres_connection.commit()
+    except Exception:
+        postgres_connection.rollback()
+    finally:
+        cursor.close()
+    return user_id
 
 
 @pytest.fixture

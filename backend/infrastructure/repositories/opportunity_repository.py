@@ -1,62 +1,200 @@
-"""Opportunity repository implementation (Supabase)."""
+"""Opportunity repository implementation (PostgreSQL)."""
 
+import json
+import psycopg2
 from typing import Optional, List
 from uuid import UUID
-from backend.domain import Opportunity
+from datetime import datetime
+
+from backend.domain import Opportunity, OpportunityStatus, ICPAlignment, MaturityLevel
 from backend.application.repositories import OpportunityRepository
-from ..database import db
-from ..mapper import DomainMapper
 
 
 class OpportunityRepositoryImpl(OpportunityRepository):
-    """Supabase implementation of OpportunityRepository."""
+    """PostgreSQL implementation of OpportunityRepository."""
 
-    def save(self, opportunity: Opportunity) -> UUID:
-        """Save or update opportunity."""
-        data = DomainMapper.opportunity_to_db(opportunity)
+    def __init__(self, db_url: str = None):
+        """Initialize with database URL."""
+        if db_url is None:
+            import os
 
-        # Increment version for updates
-        if opportunity.version > 0:
-            data["version"] = opportunity.version + 1
+            db_url = os.getenv(
+                "DATABASE_URL",
+                "postgresql://test_user:test_password@localhost:5432/partneropsa_test",
+            )
+        self.db_url = db_url
 
-        response = db.get_table("opportunities").upsert(data).execute()
+    def _connect(self):
+        """Get database connection."""
+        return psycopg2.connect(self.db_url)
 
-        if not response.data or len(response.data) == 0:
-            raise RuntimeError(f"Failed to save opportunity {opportunity.id}")
+    def save(self, opportunity: Opportunity) -> Opportunity:
+        """Save or update opportunity. Returns saved object."""
+        conn = self._connect()
+        cursor = conn.cursor()
 
-        return UUID(response.data[0]["id"])
+        try:
+            if opportunity.version == 0:
+                # INSERT
+                sql = """
+                    INSERT INTO opportunities (
+                        id, created_by, updated_by, version,
+                        company_name, company_size_employees, industry, location,
+                        status, icp_alignment, icp_score,
+                        ai_maturity, security_maturity, design_partner_potential,
+                        has_product_team, created_at, updated_at
+                    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                """
+                values = (
+                    str(opportunity.id),
+                    str(opportunity.created_by),
+                    str(opportunity.updated_by),
+                    0,
+                    opportunity.company_name,
+                    opportunity.company_size_employees,
+                    opportunity.industry,
+                    opportunity.location,
+                    opportunity.status.value,
+                    opportunity.icp_alignment.value,
+                    opportunity.icp_score,
+                    opportunity.ai_maturity.value,
+                    opportunity.security_maturity.value,
+                    opportunity.design_partner_potential,
+                    opportunity.has_product_team,
+                    opportunity.created_at,
+                    opportunity.updated_at,
+                )
+            else:
+                # UPDATE with optimistic locking
+                sql = """
+                    UPDATE opportunities
+                    SET updated_by = %s, version = %s,
+                        company_name = %s, company_size_employees = %s,
+                        industry = %s, location = %s,
+                        status = %s, icp_alignment = %s, icp_score = %s,
+                        ai_maturity = %s, security_maturity = %s,
+                        design_partner_potential = %s, has_product_team = %s,
+                        updated_at = %s
+                    WHERE id = %s AND version = %s
+                """
+                values = (
+                    str(opportunity.updated_by),
+                    opportunity.version + 1,
+                    opportunity.company_name,
+                    opportunity.company_size_employees,
+                    opportunity.industry,
+                    opportunity.location,
+                    opportunity.status.value,
+                    opportunity.icp_alignment.value,
+                    opportunity.icp_score,
+                    opportunity.ai_maturity.value,
+                    opportunity.security_maturity.value,
+                    opportunity.design_partner_potential,
+                    opportunity.has_product_team,
+                    datetime.utcnow(),
+                    str(opportunity.id),
+                    opportunity.version,
+                )
+
+            cursor.execute(sql, values)
+
+            if opportunity.version > 0 and cursor.rowcount == 0:
+                raise RuntimeError(
+                    f"Optimistic locking conflict: version {opportunity.version} is stale"
+                )
+
+            conn.commit()
+            return self.find_by_id(opportunity.id)
+
+        except psycopg2.IntegrityError as e:
+            conn.rollback()
+            raise RuntimeError(f"Database constraint violation: {e}")
+        except psycopg2.Error as e:
+            conn.rollback()
+            raise RuntimeError(f"Database error: {e}")
+        finally:
+            cursor.close()
+            conn.close()
 
     def find_by_id(self, opportunity_id: UUID) -> Optional[Opportunity]:
         """Find opportunity by ID."""
-        response = (
-            db.get_table("opportunities")
-            .select("*")
-            .eq("id", str(opportunity_id))
-            .execute()
-        )
+        conn = self._connect()
+        cursor = conn.cursor()
 
-        if not response.data:
-            return None
+        try:
+            cursor.execute(
+                "SELECT * FROM opportunities WHERE id = %s", (str(opportunity_id),)
+            )
+            row = cursor.fetchone()
 
-        return DomainMapper.db_to_opportunity(response.data[0])
+            if not row:
+                return None
+
+            return self._row_to_opportunity(row, cursor.description)
+
+        finally:
+            cursor.close()
+            conn.close()
 
     def find_by_company_name(self, company_name: str) -> Optional[Opportunity]:
         """Find opportunity by company name."""
-        response = (
-            db.get_table("opportunities")
-            .select("*")
-            .eq("company_name", company_name)
-            .limit(1)
-            .execute()
+        conn = self._connect()
+        cursor = conn.cursor()
+
+        try:
+            cursor.execute(
+                "SELECT * FROM opportunities WHERE company_name = %s LIMIT 1",
+                (company_name,),
+            )
+            row = cursor.fetchone()
+
+            if not row:
+                return None
+
+            return self._row_to_opportunity(row, cursor.description)
+
+        finally:
+            cursor.close()
+            conn.close()
+
+    def list_all(self, limit: int = 100, offset: int = 0) -> List[Opportunity]:
+        """List all opportunities with pagination."""
+        conn = self._connect()
+        cursor = conn.cursor()
+
+        try:
+            cursor.execute(
+                "SELECT * FROM opportunities ORDER BY created_at DESC LIMIT %s OFFSET %s",
+                (limit, offset),
+            )
+            rows = cursor.fetchall()
+
+            return [self._row_to_opportunity(row, cursor.description) for row in rows]
+
+        finally:
+            cursor.close()
+            conn.close()
+
+    def _row_to_opportunity(self, row, description):
+        """Convert database row to Opportunity domain object."""
+        columns = {d[0]: i for i, d in enumerate(description)}
+
+        return Opportunity(
+            id=UUID(row[columns["id"]]),
+            created_by=UUID(row[columns["created_by"]]),
+            updated_by=UUID(row[columns["updated_by"]]),
+            version=row[columns["version"]],
+            company_name=row[columns["company_name"]],
+            company_size_employees=row[columns["company_size_employees"]],
+            industry=row[columns["industry"]],
+            location=row[columns["location"]],
+            status=OpportunityStatus(row[columns["status"]]),
+            icp_alignment=ICPAlignment(row[columns["icp_alignment"]]),
+            icp_score=row[columns["icp_score"]],
+            ai_maturity=MaturityLevel(row[columns["ai_maturity"]]),
+            security_maturity=MaturityLevel(row[columns["security_maturity"]]),
+            design_partner_potential=row[columns["design_partner_potential"]],
+            has_product_team=row[columns["has_product_team"]],
+            created_at=row[columns["created_at"]],
+            updated_at=row[columns["updated_at"]],
         )
-
-        if not response.data:
-            return None
-
-        return DomainMapper.db_to_opportunity(response.data[0])
-
-    def list_all(self, limit: int = 100) -> List[Opportunity]:
-        """List all opportunities."""
-        response = db.get_table("opportunities").select("*").limit(limit).execute()
-
-        return [DomainMapper.db_to_opportunity(row) for row in response.data]

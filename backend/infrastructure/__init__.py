@@ -1,16 +1,14 @@
 """Infrastructure Layer (Persistence)
 
-Concrete implementations of repositories using Supabase PostgreSQL.
+Concrete implementations of repositories using PostgreSQL.
 No business logic here—just data access abstraction.
 
 Provides:
-- DatabaseClient: Supabase connection singleton
 - DomainMapper: Converts domain ↔ database
 - Repository implementations (OpportunityRepositoryImpl, etc.)
-- SQL schema with RLS and indexes
+- SQL schema with indexes
 """
 
-from .database import db, DatabaseClient
 from .mapper import DomainMapper
 from .repositories import (
     OpportunityRepositoryImpl,
@@ -23,8 +21,6 @@ from .repositories import (
 )
 
 __all__ = [
-    "db",
-    "DatabaseClient",
     "DomainMapper",
     "OpportunityRepositoryImpl",
     "DesignPartnerRepositoryImpl",

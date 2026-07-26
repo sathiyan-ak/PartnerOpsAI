@@ -43,11 +43,14 @@ class TestOpportunityRepository:
 
     def test_create_opportunity(self, repo, test_opp):
         """Test: Create opportunity in database."""
-        result = repo.save(test_opp)
-        assert result is not None
-        assert result.id == test_opp.id
-        assert result.company_name == test_opp.company_name
-        assert result.status == OpportunityStatus.PROSPECT
+        result_id = repo.save(test_opp)
+        assert result_id is not None
+        assert result_id == test_opp.id
+
+        # Verify persisted
+        persisted = repo.find_by_id(result_id)
+        assert persisted.company_name == test_opp.company_name
+        assert persisted.status == OpportunityStatus.PROSPECT
 
     def test_find_by_id(self, repo, test_opp):
         """Test: Save then retrieve by ID."""

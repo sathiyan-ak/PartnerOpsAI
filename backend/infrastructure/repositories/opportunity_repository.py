@@ -28,8 +28,8 @@ class OpportunityRepositoryImpl(OpportunityRepository):
         """Get database connection."""
         return psycopg2.connect(self.db_url)
 
-    def save(self, opportunity: Opportunity) -> Opportunity:
-        """Save or update opportunity. Returns saved object."""
+    def save(self, opportunity: Opportunity) -> UUID:
+        """Save or update opportunity. Returns opportunity ID."""
         conn = self._connect()
         cursor = conn.cursor()
 
@@ -104,7 +104,7 @@ class OpportunityRepositoryImpl(OpportunityRepository):
                 )
 
             conn.commit()
-            return self.find_by_id(opportunity.id)
+            return opportunity.id
 
         except psycopg2.IntegrityError as e:
             conn.rollback()

@@ -7,7 +7,12 @@ enterprise qualification score and assessing fit.
 from dataclasses import dataclass
 from uuid import UUID
 from typing import List, Tuple
-from ..domain import Opportunity, OpportunityStatus, MaturityLevel
+from ..domain import (
+    Opportunity,
+    OpportunityStatus,
+    MaturityLevel,
+    ICPAlignment,
+)
 from .repositories import OpportunityRepository, SecurityAuditRepository
 from ..domain.audit import SecurityAuditRecord
 from ..domain.enums import AuditAction, PolicyResult
@@ -73,7 +78,9 @@ class QualifyOpportunityUseCase:
     def execute(self, input_data: QualifyOpportunityInput) -> QualifyOpportunityOutput:
         """Execute qualification use case."""
 
-        # 1. Create domain model
+        # 1. Create domain model (infer icp_alignment from score)
+        icp_alignment = self._infer_icp_alignment(input_data.icp_score)
+
         opportunity = Opportunity(
             created_by=self.actor_id,
             updated_by=self.actor_id,
@@ -81,13 +88,14 @@ class QualifyOpportunityUseCase:
             company_size_employees=input_data.company_size_employees,
             industry=input_data.industry,
             location=input_data.location,
+            icp_alignment=icp_alignment,
+            icp_score=input_data.icp_score,
             ai_maturity=input_data.ai_maturity,
             ai_maturity_evidence=input_data.ai_maturity_evidence,
             ai_investment_usd=input_data.ai_investment_usd,
             security_maturity=input_data.security_maturity,
             security_certifications=input_data.security_certifications,
             compliance_needs=input_data.compliance_needs,
-            icp_score=input_data.icp_score,
             design_partner_potential=input_data.design_partner_potential,
             has_product_team=input_data.has_product_team,
             product_owner_email=input_data.product_owner_email,
@@ -189,3 +197,14 @@ class QualifyOpportunityUseCase:
                 reasons.append("Product team required")
 
         return reasons
+
+    def _infer_icp_alignment(self, icp_score: int) -> ICPAlignment:
+        """Infer ICP alignment from numeric score."""
+        if icp_score >= 80:
+            return ICPAlignment.PERFECT
+        elif icp_score >= 60:
+            return ICPAlignment.STRONG
+        elif icp_score >= 40:
+            return ICPAlignment.MODERATE
+        else:
+            return ICPAlignment.WEAK

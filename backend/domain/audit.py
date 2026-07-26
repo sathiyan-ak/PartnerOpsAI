@@ -28,7 +28,7 @@ class SecurityAuditRecord:
     # Action
     action: AuditAction = AuditAction.CREATED
     resource_type: str = ""  # e.g., "opportunity", "feedback", "recommendation"
-    resource_id: UUID = field(default_factory=uuid4)
+    resource_id: UUID = field(default_factory=uuid4)  # ID of the affected resource
 
     # Policy evaluation (if applicable)
     policy_name: str = ""

@@ -1,0 +1,152 @@
+"""Product recommendation domain model."""
+
+from dataclasses import dataclass, asdict, field
+from datetime import datetime
+from typing import Optional, List, Dict, Any
+from uuid import UUID, uuid4
+from .enums import ReleaseTarget
+
+
+@dataclass
+class ProductRecommendation:
+    """
+    AI-informed product recommendation derived from clustered feedback.
+
+    Aggregates similar feedback and provides business-driven recommendation
+    on whether to build, defer, or reject the feature.
+    """
+    id: UUID = field(default_factory=uuid4)
+    feedback_cluster_id: UUID = field(default_factory=uuid4)
+    created_by: UUID = field(default_factory=uuid4)
+    updated_by: UUID = field(default_factory=uuid4)
+    version: int = 0
+
+    # Feature summary
+    title: str = ""
+    description: str = ""
+    category: str = ""  # e.g., "UI", "API", "Integration", "Performance"
+
+    # Business evidence (deterministic aggregation)
+    requesting_customer_count: int = 0
+    total_feedback_items: int = 0
+    aggregate_impact_score: int = 0  # 0-100
+    aggregate_priority_score: int = 0  # 0-100
+
+    # Strategic analysis (LLM-informed but reasoned)
+    business_justification: str = ""  # Why should we build this?
+    market_opportunity: str = ""  # What's the market upside?
+    revenue_impact_potential: str = ""  # How much could this help revenue?
+    competitive_positioning: str = ""  # Does this differentiate us?
+
+    # Recommendation (LLM-generated with reasoning)
+    recommendation: str = ""  # BUILD | DEFER | REJECT | RESEARCH
+    recommendation_reasoning: str = ""  # Why this recommendation?
+    confidence: float = 0.0  # 0.0-1.0 (how certain is this recommendation?)
+
+    # Release timing (if BUILD)
+    suggested_release: ReleaseTarget = ReleaseTarget.BACKLOG
+    release_reasoning: str = ""
+
+    # Implementation considerations
+    estimated_effort: str = ""  # small | medium | large | xlarge
+    affected_personas: List[str] = field(default_factory=list)
+    dependencies: List[str] = field(default_factory=list)  # Other features needed?
+    risks: List[str] = field(default_factory=list)
+
+    # Status
+    decision_made: bool = False
+    decision_made_by: Optional[UUID] = None
+    decision_made_at: Optional[datetime] = None
+    decision_notes: str = ""
+
+    # Timestamps
+    created_at: datetime = field(default_factory=datetime.utcnow)
+    updated_at: datetime = field(default_factory=datetime.utcnow)
+
+    def validate(self) -> List[str]:
+        """Validate recommendation data."""
+        errors = []
+        if not self.title.strip():
+            errors.append("title: required")
+        if not 0 <= self.aggregate_impact_score <= 100:
+            errors.append("aggregate_impact_score: must be 0-100")
+        if not 0 <= self.aggregate_priority_score <= 100:
+            errors.append("aggregate_priority_score: must be 0-100")
+        if not 0.0 <= self.confidence <= 1.0:
+            errors.append("confidence: must be 0.0-1.0")
+        if self.requesting_customer_count < 0:
+            errors.append("requesting_customer_count: must be >= 0")
+        if self.total_feedback_items < 0:
+            errors.append("total_feedback_items: must be >= 0")
+        return errors
+
+    def make_decision(self, decision_by: UUID, notes: str = "") -> None:
+        """Record that a decision has been made on this recommendation."""
+        self.decision_made = True
+        self.decision_made_by = decision_by
+        self.decision_made_at = datetime.utcnow()
+        self.decision_notes = notes
+        self.updated_at = datetime.utcnow()
+
+    def calculate_business_score(self) -> int:
+        """
+        Deterministic: Calculate overall business case score (0-100).
+
+        Weights:
+        - Customer demand: 40% (impact from multiple customers)
+        - Strategic alignment: 30%
+        - Implementation feasibility: 20%
+        - Market opportunity: 10%
+        """
+        demand_score = min(100, self.requesting_customer_count * 5) * 0.4
+
+        # Strategic alignment is subjective, approximated by priority score
+        strategic_score = self.aggregate_priority_score * 0.3
+
+        # Effort-based feasibility
+        effort_to_score = {
+            "small": 100,
+            "medium": 80,
+            "large": 50,
+            "xlarge": 20,
+        }
+        feasibility_score = effort_to_score.get(self.estimated_effort, 50) * 0.2
+
+        # Market opportunity approximated by impact score
+        market_score = self.aggregate_impact_score * 0.1
+
+        total = int(min(100, max(0, demand_score + strategic_score + feasibility_score + market_score)))
+        return total
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Serialize to dictionary."""
+        data = asdict(self)
+        data['id'] = str(self.id)
+        data['feedback_cluster_id'] = str(self.feedback_cluster_id)
+        data['created_by'] = str(self.created_by)
+        data['updated_by'] = str(self.updated_by)
+        data['suggested_release'] = self.suggested_release.value
+        if data['decision_made_by']:
+            data['decision_made_by'] = str(data['decision_made_by'])
+        if data['decision_made_at']:
+            data['decision_made_at'] = data['decision_made_at'].isoformat()
+        data['created_at'] = self.created_at.isoformat()
+        data['updated_at'] = self.updated_at.isoformat()
+        return data
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> 'ProductRecommendation':
+        """Deserialize from dictionary."""
+        data = data.copy()
+        data['id'] = UUID(data['id']) if isinstance(data['id'], str) else data['id']
+        data['feedback_cluster_id'] = UUID(data['feedback_cluster_id']) if isinstance(data['feedback_cluster_id'], str) else data['feedback_cluster_id']
+        data['created_by'] = UUID(data['created_by']) if isinstance(data['created_by'], str) else data['created_by']
+        data['updated_by'] = UUID(data['updated_by']) if isinstance(data['updated_by'], str) else data['updated_by']
+        if data.get('decision_made_by') and isinstance(data['decision_made_by'], str):
+            data['decision_made_by'] = UUID(data['decision_made_by'])
+        data['suggested_release'] = ReleaseTarget(data['suggested_release']) if isinstance(data['suggested_release'], str) else data['suggested_release']
+        if data.get('decision_made_at') and isinstance(data['decision_made_at'], str):
+            data['decision_made_at'] = datetime.fromisoformat(data['decision_made_at'])
+        data['created_at'] = datetime.fromisoformat(data['created_at']) if isinstance(data['created_at'], str) else data['created_at']
+        data['updated_at'] = datetime.fromisoformat(data['updated_at']) if isinstance(data['updated_at'], str) else data['updated_at']
+        return cls(**data)

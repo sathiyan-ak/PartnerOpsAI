@@ -3,18 +3,30 @@
 Domain models and business logic layer.
 """
 
-from .models import (
-    Opportunity, OpportunityStatus, RiskLevel,
-    DesignFeedback, FeedbackCategory, FeedbackStatus, ReleaseTarget,
-    PolicyDecision, PolicyDecisionStatus,
-    ActivityLogEntry,
-    FeedbackCluster,
+from .domain import (
+    # Enums
+    OpportunityStatus, ICPAlignment, MaturityLevel,
+    DesignPartnerStatus, PartnerHealth,
+    FeedbackCategory, FeedbackStatus, ReleaseTarget,
+    AuditAction, PolicyResult,
+    # Models
+    Opportunity,
+    DesignPartner,
+    DesignFeedback, FeedbackCluster,
+    ProductRecommendation,
+    SecurityAuditRecord, PolicyDecision,
 )
 
 __all__ = [
-    "Opportunity", "OpportunityStatus", "RiskLevel",
-    "DesignFeedback", "FeedbackCategory", "FeedbackStatus", "ReleaseTarget",
-    "PolicyDecision", "PolicyDecisionStatus",
-    "ActivityLogEntry",
-    "FeedbackCluster",
+    # Enums
+    "OpportunityStatus", "ICPAlignment", "MaturityLevel",
+    "DesignPartnerStatus", "PartnerHealth",
+    "FeedbackCategory", "FeedbackStatus", "ReleaseTarget",
+    "AuditAction", "PolicyResult",
+    # Models
+    "Opportunity",
+    "DesignPartner",
+    "DesignFeedback", "FeedbackCluster",
+    "ProductRecommendation",
+    "SecurityAuditRecord", "PolicyDecision",
 ]

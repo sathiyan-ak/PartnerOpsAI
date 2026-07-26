@@ -33,13 +33,14 @@ PartnerOpsAI automates decision support.
 - Every AI output includes reasoning + confidence + evidence.
 
 **Provider-agnostic AI.**
-- Default: Ollama (local llama3.1/qwen2.5) via `/api/ai`
-- Swappable: OpenAI, Anthropic by env var
+- Default: Groq (fast, free tier) via `/api/ai`
+- Swappable: OpenAI, Anthropic, Ollama by env var
 - No vendor lock-in. No GPTfy branding in code.
 
-**Single source of truth.**
-- Supabase Postgres (RLS-protected)
-- Real-time subscriptions for live updates
+**Clean architecture.**
+- FastAPI backend (business logic, deterministic scoring, LLM orchestration)
+- Supabase Postgres (data store with RLS)
+- Real-time subscriptions for live updates via frontend polling or Supabase subscriptions
 - Audit logs for everything
 
 **Premium product feel.**
@@ -99,8 +100,10 @@ PartnerOpsAI automates decision support.
 | Command palette | cmdk |
 | Charts | recharts |
 | Dates | date-fns |
-| AI | Ollama (local) via `/api/ai` |
-| Hosting | Vercel |
+| AI | Groq (default) via `/api/ai` (swappable) |
+| Frontend Hosting | Vercel (Next.js) |
+| Backend Hosting | FastAPI on Railway/Fly.io/Docker |
+| Database | Supabase Postgres (separate) |
 
 **Do not deviate without written approval.**
 

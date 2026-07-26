@@ -2,50 +2,21 @@
 
 ## High-Level Overview
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                     Next.js Frontend                        │
-│          (React + Tailwind + shadcn/ui + Framer)          │
-│                 - Dark-first dashboard                      │
-│                 - Cmd+K command palette                     │
-│                 - Real-time subscriptions                   │
-└──────────────────────┬──────────────────────────────────────┘
-                       │ (HTTPS)
-┌──────────────────────▼──────────────────────────────────────┐
-│              Next.js API Routes + Server Actions            │
-│  ┌─────────────────────────────────────────────────────┐   │
-│  │  /api/ai          (Provider-agnostic LLM routing)   │   │
-│  │  /api/score       (Deterministic business logic)    │   │
-│  │  /api/duplicates  (Similarity detection)            │   │
-│  │  /api/activity    (Audit logging)                   │   │
-│  └─────────────────────────────────────────────────────┘   │
-└──────────────────────┬──────────────────────────────────────┘
-                       │
-┌──────────────────────▼──────────────────────────────────────┐
-│           Supabase (Postgres + Auth + Realtime)            │
-│  ┌─────────────────────────────────────────────────────┐   │
-│  │ Tables:                                              │   │
-│  │  - prospects (deals + context)                      │   │
-│  │  - governance_items (compliance workflows)          │   │
-│  │  - design_feedback (customer feedback)              │   │
-│  │  - activity_log (audit trail)                       │   │
-│  │  - scores (priority/impact calculations)            │   │
-│  │  - users (auth + profiles)                          │   │
-│  ├─────────────────────────────────────────────────────┤   │
-│  │ RLS Policies:                                       │   │
-│  │  - User can read own + shared items only            │   │
-│  │  - User can write only own items                    │   │
-│  │  - Activity log append-only                         │   │
-│  └─────────────────────────────────────────────────────┘   │
-└──────────────────────┬──────────────────────────────────────┘
-                       │
-┌──────────────────────▼──────────────────────────────────────┐
-│        External LLM Services (via /api/ai)                  │
-│  - Ollama (local, default)                                 │
-│  - OpenAI (via API key)                                    │
-│  - Anthropic (via API key)                                 │
-└──────────────────────────────────────────────────────────────┘
-```
+**Three independent layers:**
+
+1. **Frontend (Next.js + React)** - UI/UX layer
+2. **Backend (FastAPI)** - Business logic, scoring, LLM orchestration  
+3. **Database (Supabase Postgres)** - Persistence with RLS
+
+**Data flow:**
+Frontend → FastAPI Backend → Supabase → External LLM (Groq/OpenAI/Anthropic)
+
+**Key principles:**
+- Deterministic scoring (business logic, not AI)
+- AI for categorization + explanation only
+- Provider-agnostic LLM abstraction
+- RLS for data isolation
+- FastAPI handles all business logic (independent of frontend)
 
 ---
 

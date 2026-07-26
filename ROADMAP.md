@@ -2,13 +2,17 @@
 
 ## Phase Breakdown
 
-| Phase | Name | Status | Dates | Artifacts |
-|---|---|---|---|---|
-| 0 | Repository Bootstrap | ✅ Complete | 2026-07-27 | CLAUDE.md, README.md, DECISIONS.md, ARCHITECTURE.md |
-| 1 | Enterprise Prospect Intelligence | 🔒 Locked | TBD | Prospect dashboard, risk scoring, data model |
-| 2 | AI Governance Pipeline | 🔒 Locked | TBD | Governance workflow, LLM integration, recommendations |
-| 3 | Design Partner Portal | 🔒 Locked | TBD | Feedback aggregation, priority ranking, mock Jira preview |
-| 4+ | Advanced Features | 🔒 Locked | TBD | Multi-workspace, SSO, custom workflows |
+| Phase | Name | Status | Dates |
+|---|---|---|---|
+| 0 | Repository Bootstrap | ✅ Complete | 2026-07-27 |
+| 1 | Domain Foundation | 🔒 Locked | TBD |
+| 2 | API Layer | 🔒 Locked | TBD |
+| 3 | Data Layer | 🔒 Locked | TBD |
+| 4 | Enterprise Prospect Intelligence | 🔒 Locked | TBD |
+| 5 | AI Governance Pipeline | 🔒 Locked | TBD |
+| 6 | Design Partner Portal | 🔒 Locked | TBD |
+| 7 | Frontend Dashboard | 🔒 Locked | TBD |
+| 8 | Final Review + Documentation | 🔒 Locked | TBD |
 
 ---
 
@@ -35,7 +39,53 @@
 
 ---
 
-## Phase 1: Enterprise Prospect Intelligence
+## Phase 1: Domain Foundation
+
+**Status:** 🔒 LOCKED
+
+**Problem Solved:**
+Every later phase (API, data, features) depends on a stable domain model. Without this, architecture decisions become inconsistent and rework compounds.
+
+**Solution:**
+Define pure business models for Opportunity, Feedback, PolicyDecision, SecurityAuditRecord, etc.
+Framework-independent. Testable. Serializable.
+
+### Deliverables
+
+- [x] Typed domain models (Python dataclasses + Pydantic)
+- [x] Validation rules (constructors + helper methods)
+- [x] Serialization support (to_dict, from_dict)
+- [x] Documentation comments
+- [x] Deterministic helper methods (score calculation, status transitions)
+- [x] Unit tests for all models
+
+### Success Criteria
+
+- Domain models are framework-independent
+- All models have constructors + validation
+- Serialization works (Python → JSON → Python)
+- Helper methods are deterministic
+- Tests pass
+
+---
+
+## Phase 2: API Layer
+
+**Status:** 🔒 LOCKED
+
+Uses domain models from Phase 1 to build FastAPI endpoints.
+
+---
+
+## Phase 3: Data Layer
+
+**Status:** 🔒 LOCKED
+
+Creates Supabase tables + RLS policies. Implements persistence for Phase 1 domain models.
+
+---
+
+## Phase 4: Enterprise Prospect Intelligence
 
 **Status:** 🔒 LOCKED (awaiting Phase 0 review)
 

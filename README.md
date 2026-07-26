@@ -36,26 +36,36 @@ PartnerOpsAI automates decision support so you can ship faster.
 
 ---
 
+## Why Use PartnerOpsAI?
+
+**Problem:** Founders spend 40+ hours/week processing customer feedback, governance requests, and deal context manually. No signal/noise. No priority. No release timeline.
+
+**Solution:** PartnerOpsAI automates decision support. Feed customer feedback → Get prioritized recommendations with reasoning → Make better product decisions faster.
+
+**Time saved:** 5+ hours/week per founder (conservative).
+
+---
+
 ## Architecture Overview
 
-**Three layers:**
+**Three independent layers:**
 
 ```
-UI Layer (Next.js + React)
+Frontend (Next.js + React)
     ↓
-Business Logic (TypeScript + Supabase)
+Backend API (FastAPI)
     ↓
-Data Layer (Postgres + RLS)
+Database (Supabase Postgres)
     ↓
-AI (Ollama/OpenAI via /api/ai)
+LLM Provider (Groq/OpenAI/Anthropic)
 ```
 
 **Key principles:**
-- Deterministic scoring (code, not AI)
+- Deterministic scoring (business logic, not AI)
 - AI for categorization + explanation only
-- Real-time Supabase subscriptions
-- Provider-agnostic LLM layer
-- RLS for multi-tenant isolation
+- Provider-agnostic LLM abstraction
+- RLS for data isolation
+- FastAPI for business logic (independent of frontend)
 
 ---
 

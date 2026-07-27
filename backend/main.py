@@ -35,10 +35,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-db_url = os.getenv(
-    "DATABASE_URL",
-    "postgresql://test_user:test_password@localhost:5432/partneropsa_test",
+# Try multiple possible database URL environment variable names
+db_url = (
+    os.getenv("DATABASE_URL")
+    or os.getenv("POSTGRES_URL")  # Railway Postgres plugin
+    or os.getenv("PGURL")
+    or "postgresql://test_user:test_password@localhost:5432/partneropsa_test"
 )
+
+# Log which database is being used
+if "localhost" in db_url:
+    print(f"⚠ Using localhost database (development mode)", file=sys.stderr)
+else:
+    print(f"✓ Using remote database", file=sys.stderr)
 
 opp_repo = OpportunityRepositoryImpl(db_url)
 audit_repo = SecurityAuditRepositoryImpl(db_url)

@@ -1,0 +1,127 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.14.6, pytest-9.1.1, pluggy-1.6.0 -- /opt/homebrew/opt/python@3.14/bin/python3.14
+cachedir: .pytest_cache
+rootdir: /Users/stronzer/Developer/PartnerOpsAI
+configfile: pytest.ini
+plugins: mock-3.15.1, cov-7.1.0, asyncio-1.4.0, anyio-4.14.2
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 61 items
+
+backend/tests/integration/test_application_audit_security.py::TestAuditSecurityEventUseCase::test_audit_security_event_happy_path SKIPPED [  1%]
+backend/tests/integration/test_application_audit_security.py::TestAuditSecurityEventUseCase::test_audit_multiple_events_append_only SKIPPED [  3%]
+backend/tests/integration/test_application_audit_security.py::TestAuditSecurityEventUseCase::test_audit_event_with_context_data SKIPPED [  4%]
+backend/tests/integration/test_application_audit_security.py::TestAuditSecurityEventUseCase::test_audit_event_minimal_input SKIPPED [  6%]
+backend/tests/integration/test_application_audit_security.py::TestAuditSecurityEventUseCase::test_audit_event_validation_required_fields SKIPPED [  8%]
+backend/tests/integration/test_application_audit_security.py::TestAuditSecurityEventUseCase::test_audit_different_policy_results SKIPPED [  9%]
+backend/tests/integration/test_application_audit_security.py::TestAuditSecurityEventUseCase::test_audit_append_only_immutability SKIPPED [ 11%]
+backend/tests/integration/test_application_cluster_feedback.py::TestClusterFeedbackUseCase::test_cluster_feedback_happy_path SKIPPED [ 13%]
+backend/tests/integration/test_application_cluster_feedback.py::TestClusterFeedbackUseCase::test_cluster_missing_primary_feedback_fails SKIPPED [ 14%]
+backend/tests/integration/test_application_cluster_feedback.py::TestClusterFeedbackUseCase::test_cluster_with_no_related_feedback SKIPPED [ 16%]
+backend/tests/integration/test_application_convert_partner.py::TestConvertDesignPartnerUseCase::test_convert_qualified_opportunity_happy_path SKIPPED [ 18%]
+backend/tests/integration/test_application_convert_partner.py::TestConvertDesignPartnerUseCase::test_convert_non_qualified_opportunity_fails SKIPPED [ 19%]
+backend/tests/integration/test_application_convert_partner.py::TestConvertDesignPartnerUseCase::test_convert_nonexistent_opportunity_fails SKIPPED [ 21%]
+backend/tests/integration/test_application_convert_partner.py::TestConvertDesignPartnerUseCase::test_audit_trail_created SKIPPED [ 22%]
+backend/tests/integration/test_application_evaluate_policy.py::TestEvaluatePolicyUseCase::test_evaluate_policy_happy_path SKIPPED [ 24%]
+backend/tests/integration/test_application_evaluate_policy.py::TestEvaluatePolicyUseCase::test_evaluate_high_priority_policy SKIPPED [ 26%]
+backend/tests/integration/test_application_evaluate_policy.py::TestEvaluatePolicyUseCase::test_evaluate_low_priority_policy SKIPPED [ 27%]
+backend/tests/integration/test_application_evaluate_policy.py::TestEvaluatePolicyUseCase::test_evaluate_policy_validation_error_invalid_score SKIPPED [ 29%]
+backend/tests/integration/test_application_evaluate_policy.py::TestEvaluatePolicyUseCase::test_evaluate_policy_deterministic_scoring SKIPPED [ 31%]
+backend/tests/integration/test_application_evaluate_policy.py::TestEvaluatePolicyUseCase::test_evaluate_multiple_policies_same_opportunity SKIPPED [ 32%]
+backend/tests/integration/test_application_generate_recommendation.py::TestGenerateRecommendationUseCase::test_generate_recommendation_happy_path SKIPPED [ 34%]
+backend/tests/integration/test_application_generate_recommendation.py::TestGenerateRecommendationUseCase::test_generate_recommendation_defer_decision SKIPPED [ 36%]
+backend/tests/integration/test_application_generate_recommendation.py::TestGenerateRecommendationUseCase::test_generate_recommendation_missing_cluster_fails SKIPPED [ 37%]
+backend/tests/integration/test_application_generate_recommendation.py::TestGenerateRecommendationUseCase::test_generate_recommendation_deterministic_scoring SKIPPED [ 39%]
+backend/tests/integration/test_application_qualify.py::TestQualifyOpportunityUseCase::test_qualify_strong_prospect SKIPPED [ 40%]
+backend/tests/integration/test_application_qualify.py::TestQualifyOpportunityUseCase::test_qualify_weak_prospect SKIPPED [ 42%]
+backend/tests/integration/test_application_qualify.py::TestQualifyOpportunityUseCase::test_validation_error_missing_company SKIPPED [ 44%]
+backend/tests/integration/test_application_qualify.py::TestQualifyOpportunityUseCase::test_invalid_icp_score SKIPPED [ 45%]
+backend/tests/integration/test_application_qualify.py::TestQualifyOpportunityUseCase::test_qualification_deterministic SKIPPED [ 47%]
+backend/tests/integration/test_application_qualify.py::TestQualifyOpportunityUseCase::test_audit_trail_created SKIPPED [ 49%]
+backend/tests/integration/test_application_remaining.py::TestConvertDesignPartnerUseCase::test_convert_qualified_opportunity SKIPPED [ 50%]
+backend/tests/integration/test_application_remaining.py::TestRepositoryOperations::test_design_partner_repo_placeholder SKIPPED [ 52%]
+backend/tests/integration/test_application_remaining.py::TestRepositoryOperations::test_feedback_repo_placeholder SKIPPED [ 54%]
+backend/tests/integration/test_application_remaining.py::TestRepositoryOperations::test_cluster_repo_placeholder SKIPPED [ 55%]
+backend/tests/integration/test_application_remaining.py::TestRepositoryOperations::test_recommendation_repo_placeholder SKIPPED [ 57%]
+backend/tests/integration/test_application_remaining.py::TestRepositoryOperations::test_policy_repo_placeholder SKIPPED [ 59%]
+backend/tests/integration/test_application_remaining.py::TestEndToEndBusinessJourney::test_full_journey_placeholder SKIPPED [ 60%]
+backend/tests/integration/test_application_submit_feedback.py::TestSubmitFeedbackUseCase::test_submit_feedback_happy_path SKIPPED [ 62%]
+backend/tests/integration/test_application_submit_feedback.py::TestSubmitFeedbackUseCase::test_submit_feedback_validation_error_missing_title SKIPPED [ 63%]
+backend/tests/integration/test_application_submit_feedback.py::TestSubmitFeedbackUseCase::test_submit_feedback_invalid_scores SKIPPED [ 65%]
+backend/tests/integration/test_application_submit_feedback.py::TestSubmitFeedbackUseCase::test_submit_multiple_feedback_same_partner SKIPPED [ 67%]
+backend/tests/integration/test_opportunity_flow.py::TestOpportunityQualificationFlow::test_opportunity_creation_and_validation SKIPPED [ 68%]
+backend/tests/integration/test_opportunity_flow.py::TestOpportunityQualificationFlow::test_qualification_score_calculation SKIPPED [ 70%]
+backend/tests/integration/test_opportunity_flow.py::TestOpportunityQualificationFlow::test_design_partner_eligibility SKIPPED [ 72%]
+backend/tests/integration/test_opportunity_flow.py::TestOpportunityQualificationFlow::test_ineligible_low_score SKIPPED [ 73%]
+backend/tests/integration/test_opportunity_flow.py::TestOpportunityQualificationFlow::test_ineligible_no_product_team SKIPPED [ 75%]
+backend/tests/integration/test_opportunity_flow.py::TestOpportunityQualificationFlow::test_serialization_roundtrip SKIPPED [ 77%]
+backend/tests/integration/test_repositories.py::TestOpportunityRepository::test_create_opportunity SKIPPED [ 78%]
+backend/tests/integration/test_repositories.py::TestOpportunityRepository::test_find_by_id SKIPPED [ 80%]
+backend/tests/integration/test_repositories.py::TestOpportunityRepository::test_find_by_company_name SKIPPED [ 81%]
+backend/tests/integration/test_repositories.py::TestOpportunityRepository::test_list_all SKIPPED [ 83%]
+backend/tests/integration/test_repositories.py::TestOpportunityRepository::test_update_opportunity SKIPPED [ 85%]
+backend/tests/integration/test_repositories.py::TestOpportunityRepository::test_optimistic_locking_conflict SKIPPED [ 86%]
+backend/tests/integration/test_repositories.py::TestOpportunityRepository::test_duplicate_id_upserts SKIPPED [ 88%]
+backend/tests/integration/test_repositories.py::TestOpportunityRepository::test_invalid_score_rejected SKIPPED [ 90%]
+backend/tests/integration/test_repositories.py::TestOpportunityRepository::test_missing_company_name_rejected SKIPPED [ 91%]
+backend/tests/integration/test_repositories.py::TestOpportunityRepository::test_invalid_status_rejected SKIPPED [ 93%]
+backend/tests/integration/test_repositories.py::TestOpportunityRepository::test_find_nonexistent_returns_none SKIPPED [ 95%]
+backend/tests/integration/test_repositories.py::TestOpportunityRepository::test_find_by_status SKIPPED [ 96%]
+backend/tests/integration/test_repositories.py::TestOpportunityRepository::test_pagination SKIPPED [ 98%]
+backend/tests/integration/test_smoke.py::TestBusinessJourney::test_complete_opportunity_lifecycle SKIPPED [100%]
+ERROR: Coverage failure: total of 34 is less than fail-under=65
+
+
+================================ tests coverage ================================
+_______________ coverage: platform darwin, python 3.14.6-final-0 _______________
+
+Name                                                                    Stmts   Miss  Cover   Missing
+-----------------------------------------------------------------------------------------------------
+backend/__init__.py                                                         2      0   100%
+backend/application/__init__.py                                             9      0   100%
+backend/application/audit_security_event.py                                27      8    70%   38-39, 47-69
+backend/application/cluster_feedback.py                                    30     16    47%   41-44, 50-88
+backend/application/convert_design_partner.py                              35     20    43%   52-55, 61-109
+backend/application/evaluate_policy.py                                     26     13    50%   37-39, 47-82
+backend/application/generate_recommendation.py                             30     17    43%   55-58, 64-120
+backend/application/qualify_opportunity.py                                 63     48    24%   74-76, 82-149, 163-195, 199-206
+backend/application/repositories.py                                        72      0   100%
+backend/application/submit_feedback.py                                     24     11    54%   39-41, 49-82
+backend/domain/__init__.py                                                  7      0   100%
+backend/domain/audit.py                                                   120     63    48%   57-64, 68-75, 80-103, 148-159, 168-172, 176-187, 192-219
+backend/domain/design_partner.py                                          108     63    42%   74-83, 87-92, 96-98, 102-104, 108-133, 138-191
+backend/domain/enums.py                                                    66      0   100%
+backend/domain/feedback.py                                                112     56    50%   63-78, 82-93, 98-138, 174-175, 179-181, 185-195
+backend/domain/opportunity.py                                              83     41    51%   72-83, 95-114, 118, 126-136, 141-177
+backend/domain/recommendation.py                                          104     58    44%   71-84, 88-92, 109-121, 133-156, 160-172, 177-209
+backend/domain/test_models.py                                             214    214     0%   8-463
+backend/infrastructure/__init__.py                                          3      0   100%
+backend/infrastructure/database.py                                         36     36     0%   3-61
+backend/infrastructure/mapper.py                                           33     10    70%   20, 53, 58, 84, 89, 118, 123, 157, 162, 186
+backend/infrastructure/repositories/__init__.py                             7      0   100%
+backend/infrastructure/repositories/audit_repository.py                    76     60    21%   19-26, 30, 34-78, 82-96, 100-114, 118-132, 136-150, 154-166
+backend/infrastructure/repositories/design_partner_repository.py           54     42    22%   16-23, 27, 31-90, 94-106, 110-122, 126-138, 146
+backend/infrastructure/repositories/feedback_repository.py                119     98    18%   20-27, 31, 35-102, 106-118, 124-136, 140-149, 153-175, 209-216, 220, 224-272, 276-288, 292-304, 308-317, 322-336
+backend/infrastructure/repositories/opportunity_repository.py              65     53    18%   16-23, 27, 31-102, 106-120, 124-141, 145-159, 163-165
+backend/infrastructure/repositories/policy_repository.py                   65     52    20%   16-23, 27, 31-90, 94-106, 112-124, 128-140, 144-153, 157-181
+backend/infrastructure/repositories/recommendation_repository.py           83     69    17%   17-24, 28, 32-109, 113-125, 129-141, 145-157, 161-170, 176-201
+backend/main.py                                                           117    117     0%   3-684
+backend/seed.py                                                            43     43     0%   3-344
+backend/tests/conftest.py                                                 111     74    33%   27-29, 37-67, 73-86, 92-129, 135-168, 174-175, 198-199, 219-220, 254-271
+backend/tests/integration/__init__.py                                       0      0   100%
+backend/tests/integration/test_application_audit_security.py               66     48    27%   23, 27, 34-54, 58-75, 79-102, 106-120, 124-134, 138-154, 158-175
+backend/tests/integration/test_application_cluster_feedback.py             60     36    40%   37, 41, 45, 49, 53, 70-147, 151-161, 173-219
+backend/tests/integration/test_application_convert_partner.py              57     35    39%   36, 40, 44, 48, 59-111, 117-151, 155-166, 170-204
+backend/tests/integration/test_application_evaluate_policy.py              59     40    32%   25, 29, 33, 43-65, 69-84, 88-103, 107-119, 125-146, 152-168
+backend/tests/integration/test_application_generate_recommendation.py      69     45    35%   37, 41, 45, 49, 53, 70-141, 153-214, 218-241, 253-318
+backend/tests/integration/test_application_qualify.py                      55     35    36%   30, 35, 40, 51-86, 90-120, 124-149, 153-175, 179-210, 214-241
+backend/tests/integration/test_application_remaining.py                    32     12    62%   25, 29-58, 70, 74, 78, 82, 86, 95
+backend/tests/integration/test_application_submit_feedback.py              60     38    37%   35, 39, 43, 47, 57-97, 103-133, 139-167, 173-207
+backend/tests/integration/test_opportunity_flow.py                         35     25    29%   14-23, 27-41, 45-59, 63-72, 76-85, 89-100
+backend/tests/integration/test_repositories.py                            101     77    24%   21, 26-27, 49-56, 60-64, 68-71, 75-78, 82-91, 95-104, 108-136, 140-142, 148-153, 157-159, 163-164, 168-192, 196-230
+backend/tests/integration/test_smoke.py                                    33     23    30%   26, 36-89
+-----------------------------------------------------------------------------------------------------
+TOTAL                                                                    2571   1696    34%
+Coverage HTML written to dir htmlcov
+FAIL Required test coverage of 65% not reached. Total coverage: 34.03%
+============================= 61 skipped in 0.71s ==============================
+

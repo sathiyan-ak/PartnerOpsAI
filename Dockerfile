@@ -24,5 +24,5 @@ EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=3s --start-period=15s --retries=5 \
   CMD curl -f http://localhost:${PORT:-8000}/health || exit 1
 
-# Run FastAPI (PORT defaults to 8000 if not set)
-CMD ["/bin/sh", "-c", "python -m uvicorn backend.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
+# Run FastAPI (Railway maps port automatically)
+CMD python -m uvicorn backend.main:app --host 0.0.0.0 --port 8000

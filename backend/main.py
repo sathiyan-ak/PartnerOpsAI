@@ -125,219 +125,322 @@ async def root():
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>PartnerOpsAI — Enterprise Qualification Engine</title>
+        <title>Identify Your Design Partners | PartnerOps</title>
         <style>
             * { margin: 0; padding: 0; box-sizing: border-box; }
+            html { scroll-behavior: smooth; }
             body {
-                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
-                background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-                color: #e2e8f0;
-                line-height: 1.6;
-                min-height: 100vh;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", sans-serif;
+                background: #ffffff;
+                color: #1f2937;
+                line-height: 1.5;
+                letter-spacing: -0.3px;
             }
-
-            .container { max-width: 1200px; margin: 0 auto; padding: 60px 20px; }
 
             header {
-                text-align: center;
-                margin-bottom: 80px;
-                animation: fadeInDown 0.8s ease;
+                background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+                border-bottom: 1px solid #e5e7eb;
+                padding: 24px 20px;
+                position: sticky;
+                top: 0;
+                z-index: 100;
             }
 
-            .logo { font-size: 48px; margin-bottom: 16px; }
-            h1 { font-size: 48px; font-weight: 700; margin-bottom: 12px; background: linear-gradient(120deg, #60a5fa, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-            .tagline { font-size: 20px; color: #94a3b8; margin-bottom: 8px; }
-            .subtitle { font-size: 16px; color: #64748b; max-width: 600px; margin: 0 auto; }
+            nav {
+                max-width: 1280px;
+                margin: 0 auto;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
 
-            .cta-buttons { margin-top: 32px; display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+            .logo-text { font-size: 20px; font-weight: 700; color: #000; }
+            .logo-text span { color: #2563eb; }
+
+            .nav-links { display: flex; gap: 32px; }
+            .nav-links a { text-decoration: none; color: #6b7280; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+            .nav-links a:hover { color: #000; }
+
+            .hero {
+                max-width: 900px;
+                margin: 0 auto;
+                padding: 120px 20px 100px;
+                text-align: center;
+            }
+
+            .hero h1 {
+                font-size: 56px;
+                font-weight: 800;
+                line-height: 1.1;
+                margin-bottom: 24px;
+                color: #000;
+            }
+
+            .hero .highlight { color: #2563eb; }
+
+            .hero p {
+                font-size: 20px;
+                color: #4b5563;
+                margin-bottom: 40px;
+                max-width: 600px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .cta { display: flex; gap: 16px; justify-content: center; margin-bottom: 80px; flex-wrap: wrap; }
             .btn {
+                padding: 14px 32px;
+                border-radius: 6px;
+                font-weight: 600;
+                font-size: 15px;
+                border: none;
+                cursor: pointer;
+                text-decoration: none;
+                transition: all 0.2s;
                 display: inline-flex;
                 align-items: center;
                 gap: 8px;
-                padding: 14px 32px;
-                border-radius: 8px;
-                font-size: 16px;
-                font-weight: 600;
-                text-decoration: none;
-                border: none;
-                cursor: pointer;
-                transition: all 0.3s ease;
             }
+
             .btn-primary {
-                background: linear-gradient(120deg, #3b82f6, #2563eb);
+                background: #2563eb;
                 color: white;
             }
-            .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(59, 130, 246, 0.4); }
+            .btn-primary:hover { background: #1d4ed8; transform: translateY(-1px); }
+
             .btn-secondary {
-                background: rgba(75, 85, 99, 0.3);
-                color: #cbd5e1;
-                border: 1px solid rgba(148, 163, 184, 0.2);
+                background: #f3f4f6;
+                color: #1f2937;
+                border: 1px solid #d1d5db;
             }
-            .btn-secondary:hover { background: rgba(75, 85, 99, 0.5); }
+            .btn-secondary:hover { background: #e5e7eb; }
 
-            .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin: 60px 0; }
-
-            .card {
-                background: rgba(51, 65, 85, 0.5);
-                border: 1px solid rgba(148, 163, 184, 0.2);
-                border-radius: 12px;
-                padding: 32px;
-                transition: all 0.3s ease;
-                backdrop-filter: blur(10px);
-            }
-            .card:hover {
-                background: rgba(51, 65, 85, 0.7);
-                border-color: rgba(148, 163, 184, 0.4);
-                transform: translateY(-4px);
+            .features-grid {
+                max-width: 1280px;
+                margin: 0 auto;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 32px;
+                padding: 0 20px 100px;
             }
 
-            .card-icon { font-size: 32px; margin-bottom: 16px; }
-            .card h3 { font-size: 20px; margin-bottom: 12px; color: #f1f5f9; }
-            .card p { color: #cbd5e1; font-size: 14px; }
-
-            .features { margin-top: 60px; }
-            .features h2 { font-size: 32px; margin-bottom: 32px; text-align: center; }
-            .feature-list { list-style: none; }
-            .feature-list li {
-                padding: 12px 0;
-                display: flex;
-                align-items: center;
-                gap: 12px;
-                font-size: 16px;
-            }
-            .feature-list li:before { content: "✓"; color: #10b981; font-weight: bold; font-size: 20px; }
-
-            .code-section { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(148, 163, 184, 0.2); border-radius: 8px; padding: 24px; margin: 40px 0; }
-            .code-section h3 { margin-bottom: 16px; color: #f1f5f9; }
-            pre {
-                background: rgba(30, 27, 75, 0.8);
-                padding: 16px;
-                border-radius: 6px;
-                overflow-x: auto;
-                font-size: 13px;
-                color: #a1d3b0;
-                line-height: 1.5;
-            }
-
-            .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 40px 0; }
-            .stat {
-                text-align: center;
-                padding: 24px;
-                background: rgba(51, 65, 85, 0.3);
+            .feature {
+                background: #ffffff;
+                border: 1px solid #e5e7eb;
                 border-radius: 8px;
+                padding: 32px;
+                transition: all 0.3s;
             }
-            .stat-value { font-size: 32px; font-weight: 700; color: #60a5fa; }
-            .stat-label { color: #94a3b8; font-size: 14px; margin-top: 8px; }
+
+            .feature:hover {
+                border-color: #2563eb;
+                box-shadow: 0 10px 30px rgba(37, 99, 235, 0.1);
+                transform: translateY(-2px);
+            }
+
+            .feature-icon { font-size: 32px; margin-bottom: 16px; }
+            .feature h3 { font-size: 18px; font-weight: 700; margin-bottom: 12px; color: #000; }
+            .feature p { color: #6b7280; font-size: 14px; line-height: 1.6; }
+
+            .benefits {
+                max-width: 1280px;
+                margin: 0 auto;
+                padding: 100px 20px;
+                background: #f9fafb;
+            }
+
+            .benefits h2 {
+                font-size: 36px;
+                font-weight: 800;
+                margin-bottom: 48px;
+                text-align: center;
+                color: #000;
+            }
+
+            .benefits-list {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+                gap: 32px;
+            }
+
+            .benefit-item {
+                display: flex;
+                gap: 12px;
+            }
+
+            .benefit-check {
+                font-size: 20px;
+                font-weight: 700;
+                color: #10b981;
+                flex-shrink: 0;
+            }
+
+            .benefit-item p {
+                color: #374151;
+                font-size: 15px;
+                font-weight: 500;
+            }
+
+            .stats-section {
+                max-width: 1280px;
+                margin: 0 auto;
+                padding: 80px 20px;
+            }
+
+            .stats-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 40px;
+                text-align: center;
+            }
+
+            .stat { padding: 20px 0; }
+            .stat-number { font-size: 40px; font-weight: 800; color: #2563eb; margin-bottom: 8px; }
+            .stat-label { color: #6b7280; font-size: 14px; font-weight: 500; }
+
+            .cta-final {
+                max-width: 800px;
+                margin: 0 auto;
+                text-align: center;
+                padding: 100px 20px;
+            }
+
+            .cta-final h2 {
+                font-size: 40px;
+                font-weight: 800;
+                margin-bottom: 24px;
+                color: #000;
+            }
+
+            .cta-final p {
+                font-size: 16px;
+                color: #6b7280;
+                margin-bottom: 32px;
+            }
 
             footer {
+                background: #1f2937;
+                color: #d1d5db;
+                padding: 40px 20px;
                 text-align: center;
-                margin-top: 80px;
-                padding-top: 40px;
-                border-top: 1px solid rgba(148, 163, 184, 0.1);
-                color: #64748b;
-                font-size: 14px;
+                font-size: 13px;
             }
 
             footer a { color: #60a5fa; text-decoration: none; }
             footer a:hover { text-decoration: underline; }
 
-            @keyframes fadeInDown {
-                from { opacity: 0; transform: translateY(-20px); }
-                to { opacity: 1; transform: translateY(0); }
-            }
-
             @media (max-width: 768px) {
-                h1 { font-size: 32px; }
-                .tagline { font-size: 18px; }
-                .cta-buttons { flex-direction: column; }
-                .btn { width: 100%; justify-content: center; }
+                .hero h1 { font-size: 36px; }
+                .hero p { font-size: 16px; }
+                .nav-links { gap: 16px; font-size: 13px; }
+                .benefits h2 { font-size: 28px; }
+                .cta-final h2 { font-size: 28px; }
+                .stats-number { font-size: 32px; }
             }
         </style>
     </head>
     <body>
-        <div class="container">
-            <header>
-                <div class="logo">🎯</div>
-                <h1>PartnerOpsAI</h1>
-                <p class="tagline">Enterprise Qualification Engine</p>
-                <p class="subtitle">Automatically score enterprise prospects for design partner potential. Deterministic AI scoring without LLM black boxes.</p>
+        <header>
+            <nav>
+                <div class="logo-text">Partner<span>Ops</span></div>
+                <div class="nav-links">
+                    <a href="/docs">API Docs</a>
+                    <a href="https://github.com/sathiyan-ak/PartnerOpsAI">GitHub</a>
+                </div>
+            </nav>
+        </header>
 
-                <div class="cta-buttons">
-                    <a href="/docs" class="btn btn-primary">📖 Try the API</a>
-                    <a href="/health" class="btn btn-secondary">💚 Health Check</a>
+        <main>
+            <section class="hero">
+                <h1>Identify Your Next <span class="highlight">Design Partners</span></h1>
+                <p>Score enterprise prospects in real-time. Know instantly which customers are ready to partner with you.</p>
+                <div class="cta">
+                    <a href="/docs" class="btn btn-primary">Try the API</a>
+                    <a href="/health" class="btn btn-secondary">Live Status</a>
                 </div>
-            </header>
+            </section>
 
-            <div class="grid">
-                <div class="card">
-                    <div class="card-icon">⚡</div>
-                    <h3>Instant Qualification</h3>
-                    <p>Score enterprise prospects in milliseconds. AI maturity, security posture, team readiness — all in one call.</p>
+            <section class="features-grid">
+                <div class="feature">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Instant Scoring</h3>
+                    <p>Get qualification scores in milliseconds. No waiting. Know if a prospect is partnership-ready before your next call.</p>
                 </div>
-                <div class="card">
-                    <div class="card-icon">🔍</div>
-                    <h3>Deterministic Scoring</h3>
-                    <p>No LLM black boxes. All scoring is auditable code. Reproducible results every time.</p>
+                <div class="feature">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Transparent Logic</h3>
+                    <p>Every decision is auditable code. No black boxes. See exactly why each prospect qualified or didn't.</p>
                 </div>
-                <div class="card">
-                    <div class="card-icon">🗄️</div>
-                    <h3>PostgreSQL Backed</h3>
-                    <p>Immutable audit logs. Full RLS. Enterprise-ready data governance out of the box.</p>
+                <div class="feature">
+                    <div class="feature-icon">📊</div>
+                    <h3>Enterprise-Grade</h3>
+                    <p>ACID-compliant database. Immutable audit logs. Security-first architecture for regulated industries.</p>
                 </div>
-            </div>
+            </section>
 
-            <div class="features">
-                <h2>What You Get</h2>
-                <ul class="feature-list">
-                    <li>Qualify prospects by ICP score, AI maturity, security readiness, design partner potential</li>
-                    <li>Deterministic scoring algorithm: ICP 40% + AI 30% + Security 20% + Partnership 10%</li>
-                    <li>Immutable audit trail of every qualification decision</li>
-                    <li>Clean Architecture: testable, swappable repositories</li>
-                    <li>9 REST API endpoints for full workflow</li>
-                    <li>Interactive Swagger UI for testing</li>
-                </ul>
-            </div>
+            <section class="benefits">
+                <h2>Why Partner Qualification Matters</h2>
+                <div class="benefits-list">
+                    <div class="benefit-item">
+                        <div class="benefit-check">✓</div>
+                        <p>Find customers with strong team maturity and clear product focus</p>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-check">✓</div>
+                        <p>Score by ICP alignment, security posture, and growth readiness</p>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-check">✓</div>
+                        <p>Automate prospect screening to focus sales on high-potential deals</p>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-check">✓</div>
+                        <p>Track every decision with complete audit trail for compliance</p>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-check">✓</div>
+                        <p>Reproducible results — same company gets same score every time</p>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-check">✓</div>
+                        <p>REST API + Swagger UI for easy integration and testing</p>
+                    </div>
+                </div>
+            </section>
 
-            <div class="code-section">
-                <h3>Quick Start</h3>
-                <p style="margin-bottom: 16px;">POST /api/qualify with company details:</p>
-                <pre>{
-  "company_name": "Acme Corporation",
-  "company_size_employees": 5000,
-  "industry": "Technology",
-  "location": "San Francisco",
-  "ai_maturity": "advanced",
-  "security_maturity": "advanced",
-  "icp_score": 95,
-  "design_partner_potential": 90,
-  "has_product_team": true
-}</pre>
-                <p style="margin-top: 16px; color: #cbd5e1; font-size: 14px;"><strong>Response:</strong> qualification_score (0-100), is_qualified_for_design_partner (boolean), reasons array</p>
-            </div>
+            <section class="stats-section">
+                <div class="stats-grid">
+                    <div class="stat">
+                        <div class="stat-number">9</div>
+                        <div class="stat-label">API Endpoints</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">55+</div>
+                        <div class="stat-label">Tests Passing</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">100%</div>
+                        <div class="stat-label">Audit Logged</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">PostgreSQL</div>
+                        <div class="stat-label">Enterprise DB</div>
+                    </div>
+                </div>
+            </section>
 
-            <div class="stats">
-                <div class="stat">
-                    <div class="stat-value">9</div>
-                    <div class="stat-label">API Endpoints</div>
+            <section class="cta-final">
+                <h2>Ready to Start Scoring?</h2>
+                <p>Integrate our API in minutes. Works with your existing sales platform.</p>
+                <div class="cta">
+                    <a href="/docs" class="btn btn-primary">View API Documentation</a>
                 </div>
-                <div class="stat">
-                    <div class="stat-value">100%</div>
-                    <div class="stat-label">Audit Trail</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-value">Clean</div>
-                    <div class="stat-label">Architecture</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-value">PostgreSQL</div>
-                    <div class="stat-label">Database</div>
-                </div>
-            </div>
+            </section>
+        </main>
 
-            <footer>
-                <p>Phase 3.6.5 Demo | <a href="https://github.com/sathiyan-ak/PartnerOpsAI">View on GitHub</a></p>
-            </footer>
-        </div>
+        <footer>
+            <p>PartnerOps Demo | <a href="https://github.com/sathiyan-ak/PartnerOpsAI">Source on GitHub</a></p>
+        </footer>
     </body>
     </html>
     """

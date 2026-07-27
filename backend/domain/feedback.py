@@ -62,6 +62,8 @@ class DesignFeedback:
         errors = []
         if not self.customer_name.strip():
             errors.append("customer_name: required")
+        if not self.title.strip():
+            errors.append("title: required")
         if not self.description.strip():
             errors.append("description: required")
         if not 0 <= self.impact_score <= 100:

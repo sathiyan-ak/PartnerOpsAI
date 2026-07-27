@@ -159,6 +159,16 @@ class SecurityAuditRepositoryImpl(SecurityAuditRepository):
         """Convert database row to SecurityAuditRecord."""
         columns = {d[0]: i for i, d in enumerate(description)}
 
+        # Handle context_data: psycopg2 may return dict (JSONB) or str
+        context_raw = row[columns["context_data"]]
+        if context_raw:
+            if isinstance(context_raw, dict):
+                context_data = context_raw
+            else:
+                context_data = json.loads(context_raw)
+        else:
+            context_data = {}
+
         return SecurityAuditRecord(
             id=UUID(row[columns["id"]]),
             version=row[columns["version"]],
@@ -179,8 +189,6 @@ class SecurityAuditRepositoryImpl(SecurityAuditRepository):
             previous_hash=row[columns["previous_hash"]],
             ip_address=row[columns["ip_address"]],
             user_agent=row[columns["user_agent"]],
-            context_data=json.loads(row[columns["context_data"]])
-            if row[columns["context_data"]]
-            else {},
+            context_data=context_data,
             created_at=row[columns["created_at"]],
         )

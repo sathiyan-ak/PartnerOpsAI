@@ -1,0 +1,14 @@
+{
+  "buildCommand": "pip install -r requirements.txt",
+  "outputDirectory": "backend",
+  "framework": "python",
+  "regions": ["iad1"],
+  "functions": {
+    "backend/main.py": {
+      "runtime": "python3.9"
+    }
+  },
+  "env": {
+    "DATABASE_URL": "@database_url"
+  }
+}

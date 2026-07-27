@@ -43,6 +43,7 @@ class ProductRecommendation:
     recommendation: str = ""  # BUILD | DEFER | REJECT | RESEARCH
     recommendation_reasoning: str = ""  # Why this recommendation?
     confidence: float = 0.0  # 0.0-1.0 (deterministic: from evidence, NOT LLM)
+    business_score: int = 0  # 0-100 (deterministic: overall business case)
 
     # Release timing (if BUILD)
     suggested_release: ReleaseTarget = ReleaseTarget.BACKLOG

@@ -96,10 +96,8 @@ class GenerateRecommendationUseCase:
             raise ValueError(f"Recommendation validation failed: {errors}")
 
         # Calculate deterministic scores (NOT LLM)
-        business_score = rec.calculate_business_score()
-        confidence = rec.calculate_confidence()
-
-        rec.confidence = confidence
+        rec.business_score = rec.calculate_business_score()
+        rec.confidence = rec.calculate_confidence()
 
         # Persist
         rec_id = self.recommendation_repo.save(rec)
@@ -113,8 +111,8 @@ class GenerateRecommendationUseCase:
             resource_id=rec_id,
             policy_result=PolicyResult.APPROVED,
             context_data={
-                "business_score": business_score,
-                "confidence": float(confidence),
+                "business_score": rec.business_score,
+                "confidence": float(rec.confidence),
                 "recommendation": input_data.recommendation,
             },
         )
@@ -122,7 +120,7 @@ class GenerateRecommendationUseCase:
 
         return GenerateRecommendationOutput(
             recommendation_id=rec_id,
-            business_score=business_score,
-            confidence=confidence,
+            business_score=rec.business_score,
+            confidence=rec.confidence,
             recommendation=input_data.recommendation,
         )

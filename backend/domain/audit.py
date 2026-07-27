@@ -54,6 +54,8 @@ class SecurityAuditRecord:
     def validate(self) -> list[str]:
         """Validate audit record data."""
         errors = []
+        if not self.actor_role.strip():
+            errors.append("actor_role: required")
         if not self.action:
             errors.append("action: required")
         if not self.resource_type.strip():

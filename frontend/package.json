@@ -1,0 +1,13 @@
+{
+  "name": "partneropsa-frontend",
+  "version": "3.6.1",
+  "description": "PartnerOpsAI Demo Frontend",
+  "scripts": {
+    "dev": "python -m http.server 3000",
+    "build": "echo 'Static site, no build needed'",
+    "start": "python -m http.server 3000"
+  },
+  "keywords": ["partneropsa", "demo"],
+  "author": "Sathiyan",
+  "license": "MIT"
+}

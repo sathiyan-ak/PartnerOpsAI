@@ -34,73 +34,60 @@ class OpportunityRepositoryImpl(OpportunityRepository):
         cursor = conn.cursor()
 
         try:
-            if opportunity.version == 0:
-                # INSERT
-                sql = """
-                    INSERT INTO opportunities (
-                        id, created_by, updated_by, version,
-                        company_name, company_size_employees, industry, location,
-                        status, icp_alignment, icp_score,
-                        ai_maturity, security_maturity, design_partner_potential,
-                        has_product_team, created_at, updated_at
-                    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                """
-                values = (
-                    str(opportunity.id),
-                    str(opportunity.created_by),
-                    str(opportunity.updated_by),
-                    0,
-                    opportunity.company_name,
-                    opportunity.company_size_employees,
-                    opportunity.industry,
-                    opportunity.location,
-                    opportunity.status.value,
-                    opportunity.icp_alignment.value,
-                    opportunity.icp_score,
-                    opportunity.ai_maturity.value,
-                    opportunity.security_maturity.value,
-                    opportunity.design_partner_potential,
-                    opportunity.has_product_team,
-                    opportunity.created_at,
-                    opportunity.updated_at,
-                )
-            else:
-                # UPDATE with optimistic locking
-                sql = """
-                    UPDATE opportunities
-                    SET updated_by = %s, version = %s,
-                        company_name = %s, company_size_employees = %s,
-                        industry = %s, location = %s,
-                        status = %s, icp_alignment = %s, icp_score = %s,
-                        ai_maturity = %s, security_maturity = %s,
-                        design_partner_potential = %s, has_product_team = %s,
-                        updated_at = %s
-                    WHERE id = %s AND version = %s
-                """
-                values = (
-                    str(opportunity.updated_by),
-                    opportunity.version + 1,
-                    opportunity.company_name,
-                    opportunity.company_size_employees,
-                    opportunity.industry,
-                    opportunity.location,
-                    opportunity.status.value,
-                    opportunity.icp_alignment.value,
-                    opportunity.icp_score,
-                    opportunity.ai_maturity.value,
-                    opportunity.security_maturity.value,
-                    opportunity.design_partner_potential,
-                    opportunity.has_product_team,
-                    datetime.utcnow(),
-                    str(opportunity.id),
-                    opportunity.version,
-                )
+            # UPSERT: INSERT or UPDATE with optimistic locking
+            sql = """
+                INSERT INTO opportunities (
+                    id, created_by, updated_by, version,
+                    company_name, company_size_employees, industry, location,
+                    status, icp_alignment, icp_score,
+                    ai_maturity, security_maturity, design_partner_potential,
+                    has_product_team, created_at, updated_at
+                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                ON CONFLICT (id) DO UPDATE SET
+                    updated_by = EXCLUDED.updated_by,
+                    version = opportunities.version + 1,
+                    company_name = EXCLUDED.company_name,
+                    company_size_employees = EXCLUDED.company_size_employees,
+                    industry = EXCLUDED.industry,
+                    location = EXCLUDED.location,
+                    status = EXCLUDED.status,
+                    icp_alignment = EXCLUDED.icp_alignment,
+                    icp_score = EXCLUDED.icp_score,
+                    ai_maturity = EXCLUDED.ai_maturity,
+                    security_maturity = EXCLUDED.security_maturity,
+                    design_partner_potential = EXCLUDED.design_partner_potential,
+                    has_product_team = EXCLUDED.has_product_team,
+                    updated_at = EXCLUDED.updated_at
+                WHERE opportunities.version = %s
+            """
+            values = (
+                str(opportunity.id),
+                str(opportunity.created_by),
+                str(opportunity.updated_by),
+                opportunity.version,
+                opportunity.company_name,
+                opportunity.company_size_employees,
+                opportunity.industry,
+                opportunity.location,
+                opportunity.status.value,
+                opportunity.icp_alignment.value,
+                opportunity.icp_score,
+                opportunity.ai_maturity.value,
+                opportunity.security_maturity.value,
+                opportunity.design_partner_potential,
+                opportunity.has_product_team,
+                opportunity.created_at,
+                opportunity.updated_at,
+                opportunity.version,
+            )
 
             cursor.execute(sql, values)
 
-            if opportunity.version > 0 and cursor.rowcount == 0:
+            # Check if update/insert actually happened
+            if cursor.rowcount == 0:
+                # No rows affected = version conflict
                 raise RuntimeError(
-                    f"Optimistic locking conflict: version {opportunity.version} is stale"
+                    f"Optimistic locking conflict: version {opportunity.version} is stale or record doesn't exist"
                 )
 
             conn.commit()

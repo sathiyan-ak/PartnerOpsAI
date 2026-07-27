@@ -28,7 +28,7 @@ class DesignPartner:
 
     # Conversion info
     converted_at: datetime = field(default_factory=datetime.utcnow)
-    converted_by: UUID = field(default_factory=uuid4)
+    converted_by: UUID | None = None
 
     # Design partner info
     company_name: str = ""

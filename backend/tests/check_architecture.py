@@ -10,7 +10,7 @@ class ImportChecker(ast.NodeVisitor):
 
     def __init__(self, filepath: str):
         self.filepath = filepath
-        self.errors = []
+        self.errors: list[str] = []
 
     def visit_ImportFrom(self, node):
         if node.module:

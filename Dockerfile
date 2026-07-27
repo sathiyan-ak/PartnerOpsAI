@@ -28,5 +28,5 @@ EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
   CMD curl -f http://localhost:8000/health || exit 1
 
-# Run application with startup script
-CMD ["/app/start.sh"]
+# Run application (use shell form to expand $PORT)
+CMD /app/start.sh

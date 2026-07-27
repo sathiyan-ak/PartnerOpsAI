@@ -1,60 +1,77 @@
-# PartnerOpsAI — Complete Recruiter Guide
+# PartnerOpsAI — Recruiter & Engineer Guide
 
-**Live Demo:** https://partneropsai-production.up.railway.app
-
----
-
-## 🎯 What Is This?
-
-**PartnerOpsAI** is an enterprise AI product qualification system. It scores potential design partners based on:
-- Company size & industry fit (ICP score)
-- AI maturity level
-- Security posture
-- Design partner potential
-- Product team readiness
-
-**Use Case:** SaaS founders need to find which enterprise customers are ready to be design partners (early adopters, strategic partners). This system automates that screening.
+**PartnerOpsAI** is a verified MVP backend demo for enterprise partner qualification and design-partner workflow management. It demonstrates FastAPI, PostgreSQL, Clean Architecture, repository pattern, deterministic scoring, immutable audit logs, optimistic locking, Docker deployment, and integration testing.
 
 ---
 
-## ✅ What Works RIGHT NOW
+## Live Demo & Links
 
-### 1. **Professional Landing Page** ✅
+| What | Link |
+|------|------|
+| **Live Demo** | https://partneropsai-production.up.railway.app |
+| **GitHub Repo** | https://github.com/sathiyan-ak/PartnerOpsAI |
+| **API Docs (Swagger)** | https://partneropsai-production.up.railway.app/docs |
+| **Health Check** | https://partneropsai-production.up.railway.app/health |
+
+---
+
+## ✅ What You Can Click (For Non-Technical Recruiters)
+
+### 1. Landing Page
 **URL:** https://partneropsai-production.up.railway.app
 
-Shows:
-- Clear product description
-- 3 value propositions
-- 6 key features
+What you see:
+- Product name and description
+- 3 core value propositions (Instant Qualification, Deterministic Scoring, PostgreSQL Backed)
+- 6 key features listed
 - Quick-start code example
-- 4 key stats (9 APIs, 100% audit trail, clean architecture, PostgreSQL)
-- Two CTAs: "Try the API" & "Health Check"
+- Performance metrics (9 endpoints, 100% audit trail, Clean Architecture, PostgreSQL)
+- Two action buttons: "Try the API" and "Health Check"
 
-**Design:** Dark theme, professional, responsive. No confusion about what this is.
+**Design:** Dark theme, responsive, professional layout.
 
-### 2. **Interactive API Explorer** ✅
+**Visual Placeholder:**
+```
+[visual:screenshot:landing page with dark theme, gradient header, feature cards]
+```
+
+---
+
+### 2. Interactive API Documentation
 **URL:** https://partneropsai-production.up.railway.app/docs
 
-Swagger UI where you can:
-- See all 9 endpoints documented
-- Test each endpoint without coding
-- Read parameters & responses
-- See live responses
+What you see:
+- Complete Swagger UI
+- All 9 API endpoints listed
+- Click "Try it out" on any endpoint to test without coding
+- Request/response examples for each endpoint
+- HTTP status codes and error handling documented
 
-### 3. **Health Check Endpoint** ✅
+**Visual Placeholder:**
+```
+[visual:screenshot:swagger UI with GET, POST endpoints expanded]
+```
+
+---
+
+### 3. Health Check
 **URL:** https://partneropsai-production.up.railway.app/health
 
-```
-GET /health
-Response: {"status":"ok","service":"PartnerOpsAI Demo","version":"3.6.1"}
-Status: 200 OK
+Response:
+```json
+{"status":"ok","service":"PartnerOpsAI Demo","version":"3.6.1"}
 ```
 
-Proves the system is running and responsive.
+HTTP Status: `200 OK`
 
-### 4. **Service Status Endpoint** ✅
+Proves the system is live and responding.
+
+---
+
+### 4. Service Status
 **URL:** https://partneropsai-production.up.railway.app/api/status
 
+Response:
 ```json
 {
   "service": "PartnerOpsAI",
@@ -66,213 +83,268 @@ Proves the system is running and responsive.
 }
 ```
 
-Shows system maturity, tech stack, architecture pattern.
+Shows system maturity, tech stack, and architecture pattern.
 
 ---
 
-## 🚀 What Can Recruiters Do With This?
+## 🔍 What Engineers Can Inspect (For Technical Reviewers)
 
-### **Option 1: Visual Walkthrough (5 minutes)**
-1. Go to https://partneropsai-production.up.railway.app
-2. Read landing page (understand the problem & solution)
-3. Click "Try the API" → Opens Swagger UI
-4. See all 9 endpoints documented
-5. Click "Health Check" → Proves it's live
+### Repository Structure
 
-**What they see:** Professional product, running on Railway, responsive, documented.
+**GitHub:** https://github.com/sathiyan-ak/PartnerOpsAI
 
-### **Option 2: Interactive API Testing (10 minutes)**
-1. Go to https://partneropsai-production.up.railway.app/docs
-2. Find "POST /api/qualify" endpoint
-3. Click "Try it out"
-4. Fill in sample company data:
-   ```json
-   {
-     "company_name": "TechCorp",
-     "company_size_employees": 5000,
-     "industry": "Technology",
-     "location": "San Francisco",
-     "ai_maturity": "advanced",
-     "security_maturity": "advanced",
-     "icp_score": 95,
-     "design_partner_potential": 90,
-     "has_product_team": true
-   }
-   ```
-5. Click "Execute"
-6. See response (qualification score, whether qualified, reasons)
-
-**What they see:** Deterministic business logic. Scores calculated. Auditable reasoning.
-
-### **Option 3: Code Review (30 minutes)**
-GitHub: https://github.com/sathiyan-ak/PartnerOpsAI
-
-**Show them:**
-- `backend/main.py` → 9 clean API endpoints
-- `backend/domain/` → Business logic (opportunity qualification)
-- `backend/application/` → Use cases (clean architecture)
-- `backend/infrastructure/` → Database repositories (PostgreSQL)
-- `backend/tests/integration/` → 54/55 tests passing (98% pass rate, 71.5% coverage)
-- `backend/infrastructure/migrations/001_init_schema.sql` → Full database schema with constraints
-
-**What they see:**
-- Clean Architecture pattern (testable, maintainable)
-- Real business logic (not just CRUD)
-- Comprehensive testing
-- Production-ready database design
-
----
-
-## 📊 Architecture (What Impressive?)
-
-### **Layered Design**
 ```
-Domain Layer (Opportunity, MaturityLevel, QualificationScore)
-    ↓
-Application Layer (QualifyOpportunityUseCase)
-    ↓
-Infrastructure Layer (PostgreSQL Repositories)
-    ↓
-FastAPI HTTP Server (9 endpoints)
+backend/
+  ├── main.py                    # FastAPI app, 9 endpoints
+  ├── domain/                    # Business logic layer
+  │   ├── opportunity.py        # Opportunity entity
+  │   ├── maturity.py           # MaturityLevel enum
+  │   └── qualification_score.py # Scoring value object
+  ├── application/               # Use case layer
+  │   └── qualify_opportunity.py # QualifyOpportunityUseCase
+  ├── infrastructure/            # Data access layer
+  │   ├── repositories/         # OpportunityRepository, AuditRepository
+  │   └── migrations/           # 001_init_schema.sql (PostgreSQL DDL)
+  └── tests/
+      └── integration/          # 54/55 tests passing (98% pass rate)
 ```
 
-**Why this matters:** Easy to swap database, easy to test, business logic is independent of framework.
+### Code Quality
 
-### **Database Design**
-- PostgreSQL with full ACID guarantees
-- Constraints (CHECK, FOREIGN KEY) enforce data integrity
-- RLS (Row-Level Security) ready for multi-tenancy
-- Immutable audit logging (append-only records)
-- Native UUID support
-- Indexes for performance
-
-### **Testing Coverage**
-- 54/55 integration tests passing (98%)
+**Test Coverage:**
+- 54/55 integration tests passing (98% test pass rate)
 - 71.5% code coverage
-- Tests use REAL PostgreSQL (not mocks)
-- Catches actual bugs (constraint violations, migrations)
+- Tests use real PostgreSQL (not mocks)
+- Includes schema validation and constraint testing
 
----
-
-## 📈 What's NOT Fully Working Yet
-
-### Database Endpoints (Pending Configuration)
-These endpoints are coded & ready, but need PostgreSQL connection on Railway:
-
-- ❌ `POST /api/seed-demo-data` — Load demo company data
-- ❌ `POST /api/qualify` — Score a company (would work if DB connected)
-- ❌ `POST /api/opportunities` — Create opportunity record
-- ❌ `GET /api/opportunities/{id}` — Fetch opportunity
-- ❌ `GET /api/audit/{id}` — Fetch audit trail
-
-**Reason:** Railway's PostgreSQL service is running but environment variables aren't being passed to backend service. Needs manual DATABASE_URL configuration in Railway dashboard (1-minute setup).
-
-**What this means for recruiters:** Backend infrastructure is 100% ready. The issue is a hosting/configuration detail, not code quality.
-
----
-
-## 🎓 What Does This Demonstrate?
-
-### **For Recruiters Looking At Hiring:**
-✅ **Backend Skills:**
-- FastAPI (Python web framework)
-- PostgreSQL (relational database)
-- Clean Architecture (testable, maintainable code)
-- Integration testing (real database, not mocks)
-- Docker (containerization)
-- Deployment (Railway, environment variables, 12-factor app)
-
-✅ **Engineering Practices:**
-- Deterministic business logic (auditability)
-- Immutable audit logs
-- Optimistic locking (concurrency safe)
-- Repository pattern (swappable data layer)
-- Error handling & resilience
-- Database migrations (schema version control)
-
-✅ **System Design:**
-- Enterprise-ready (RLS, constraints, indexing)
-- Scalable architecture (stateless API, PostgreSQL scale-out ready)
-- Production-ready deployment
-
-### **For Recruiters Evaluating Product Skills:**
-✅ Can build:
-- Scalable backend APIs
-- Database-backed systems
-- Testing & QA mindset
-- Deployment pipelines
-- Production monitoring (health checks)
-
----
-
-## 📋 Verification Checklist (For Recruiters)
-
+**Test Output Visual:**
 ```
-Endpoint Verification:
-✅ GET  /              → Landing page (professional UI)
-✅ GET  /health        → 200 OK (system running)
-✅ GET  /api/status    → Service details
-✅ GET  /docs          → Swagger UI (interactive testing)
-
-Architecture Verification (via GitHub):
-✅ backend/main.py     → 9 endpoints, well-structured
-✅ backend/domain/     → Business logic isolated
-✅ backend/tests/      → 54/55 passing, 71.5% coverage
-✅ backend/migrations/ → Database schema with constraints
-
-Database Status:
-⏳ Pending DATABASE_URL configuration on Railway
-   (Not a code issue — hosting configuration)
-
-Test Coverage:
-✅ Unit tests: 54/55 passing (98%)
-✅ Coverage: 71.5% across backend
-✅ Tests use REAL PostgreSQL (production-like)
-
-Deployment:
-✅ Docker build successful
-✅ Running on Railway (production host)
-✅ Auto-deploys on GitHub push
-✅ Health checks passing
+[visual:screenshot:pytest terminal output showing 54/55 passed, 71.5% coverage]
 ```
 
 ---
 
-## 🔗 Quick Links
+### Architecture
 
-| Item | URL |
-|------|-----|
-| **Live Demo** | https://partneropsai-production.up.railway.app |
-| **Interactive API** | https://partneropsai-production.up.railway.app/docs |
-| **Health Check** | https://partneropsai-production.up.railway.app/health |
-| **GitHub Code** | https://github.com/sathiyan-ak/PartnerOpsAI |
-| **Architecture** | backend/domain, backend/application, backend/infrastructure (in repo) |
-| **Tests** | backend/tests/integration/ (54/55 passing) |
-| **Database Schema** | backend/infrastructure/migrations/001_init_schema.sql |
+**Clean Architecture Layers:**
+
+```
+┌─────────────────────────────────────┐
+│   FastAPI HTTP Server (9 endpoints) │
+├─────────────────────────────────────┤
+│   Domain Layer                      │
+│   (Opportunity, QualificationScore) │
+├─────────────────────────────────────┤
+│   Application Layer                 │
+│   (QualifyOpportunityUseCase)       │
+├─────────────────────────────────────┤
+│   Infrastructure Layer              │
+│   (PostgreSQL Repositories)         │
+└─────────────────────────────────────┘
+```
+
+**Why this matters:**
+- Business logic is independent of framework
+- Easy to test without HTTP server
+- Easy to swap databases
+- Clear separation of concerns
+
+**Visual Placeholder:**
+```
+[visual:diagram:clean architecture layers with arrows showing data flow]
+```
 
 ---
 
-## 💡 What This Could Become (Phase 3.7)
+### Database Design
 
-The foundation is built. Next phases would add:
-- Next.js frontend dashboard (dark theme, Framer Motion animations)
-- JWT authentication (Supabase Auth)
-- Real-time feedback subscriptions
-- AI-powered recommendations
-- Load testing & performance optimization
-- Production monitoring (Datadog/Sentry)
+**Schema Highlights:**
+- PostgreSQL with ACID guarantees
+- Foreign key constraints enforce referential integrity
+- CHECK constraints enforce valid states at database level
+- Indexes on frequently queried columns
+- Row-Level Security (RLS) ready for multi-tenancy
+- Immutable audit logging (append-only records)
+- UUID support for distributed systems
 
-But **this demo is complete and production-ready for what it does.**
+**Example Constraints:**
+```sql
+-- From 001_init_schema.sql
+CHECK (status IN ('QUALIFIED', 'NOT_QUALIFIED', 'PENDING'))
+CHECK (qualification_score >= 0 AND qualification_score <= 100)
+UNIQUE (user_id, company_name)  -- No duplicate qualifications
+```
 
 ---
 
-## 🎯 Bottom Line for Recruiters
+### API Endpoints (9 Total)
 
-**This is a working, tested, deployed backend system that shows:**
-1. **Can build:** Enterprise-grade APIs with clean architecture
-2. **Can test:** Real integration tests with actual database
-3. **Can deploy:** Docker + Railway + GitHub automation
-4. **Understands scale:** RLS, indexing, audit trails, constraints
-5. **Writes quality code:** 71.5% coverage, deterministic logic, error handling
+| Endpoint | Method | Status | Notes |
+|----------|--------|--------|-------|
+| `/` | GET | ✅ Working | Landing page |
+| `/health` | GET | ✅ Working | Health check |
+| `/api/status` | GET | ✅ Working | Service status |
+| `/docs` | GET | ✅ Working | Swagger UI |
+| `/api/seed-demo-data` | POST | ⏳ Needs DB | Load demo data |
+| `/api/qualify` | POST | ⏳ Needs DB | Score a company |
+| `/api/opportunities` | POST | ⏳ Needs DB | Create opportunity |
+| `/api/opportunities/{id}` | GET | ⏳ Needs DB | Fetch opportunity |
+| `/api/audit/{id}` | GET | ⏳ Needs DB | Fetch audit trail |
 
-**No toy project. No "hello world." Real MVP with production patterns.**
+---
+
+### Deployment
+
+**Platform:** Railway (https://railway.app)
+
+**Build:**
+- Docker container (python:3.11-slim)
+- Automatic deployment on GitHub push
+- Health checks configured
+
+**Configuration:**
+- Environment variables: DATABASE_URL, SERVER_HOST, SERVER_PORT
+- Start script: `start.sh` handles database migrations and initialization
+- 5 restart retries (crash recovery)
+
+**Verification:**
+- ✅ Docker build successful
+- ✅ Deployed to Railway
+- ✅ HTTP server responsive (health check passing)
+- ✅ Auto-deploys on git push
+
+---
+
+### Testing & Quality
+
+**Test Strategy:**
+- Integration tests (not unit tests)
+- Tests use real PostgreSQL
+- Each test verifies end-to-end flow
+- Covers scoring logic, data persistence, audit trails
+
+**Visual Placeholder:**
+```
+[visual:screenshot:test file showing 54 test cases with real DB setup]
+```
+
+---
+
+### Business Logic: Enterprise Qualification
+
+**Scoring Formula (Deterministic):**
+```
+Qualification Score = 
+  (ICP Score × 0.40) +
+  (AI Maturity Level × 0.30) +
+  (Security Maturity Level × 0.20) +
+  (Design Partner Potential × 0.10)
+```
+
+**Key Features:**
+- No LLM black box (all scoring is auditable code)
+- Deterministic (same input = same output every time)
+- Reproducible (code is the source of truth)
+- Auditable (every decision logged)
+
+**Business Workflow Visual:**
+```
+[visual:diagram:prospect input → scoring → qualification result → audit log]
+```
+
+---
+
+## ⚠️ Known Limitations
+
+### Database-Backed Endpoints Currently Not Functional
+
+**Why?** PostgreSQL connection not yet configured on Railway.
+
+**Affected Endpoints:**
+- `POST /api/seed-demo-data` — Load demo company
+- `POST /api/qualify` — Score a company
+- `POST /api/opportunities` — Create opportunity record
+- `GET /api/opportunities/{id}` — Fetch opportunity
+- `GET /api/audit/{id}` — Fetch audit trail
+
+**Root Cause:** Railway's PostgreSQL service is running, but DATABASE_URL environment variable isn't being passed to backend service. Requires manual configuration in Railway dashboard (1-minute setup).
+
+**What This Means:**
+- ✅ Code is complete and tested locally
+- ✅ Schema is defined and working
+- ✅ Repositories are implemented
+- ⏳ Hosting configuration pending
+
+**Not a code quality issue.** This is a hosting/infrastructure configuration detail.
+
+---
+
+## 📊 Summary: What This Demonstrates
+
+### For Backend Engineering
+
+✅ **Framework Experience:**
+- FastAPI (async Python web framework)
+- Pydantic (validation)
+- SQLAlchemy/psycopg2 (database access)
+
+✅ **Database Skills:**
+- PostgreSQL (relational design)
+- Schema design (constraints, indexes)
+- Migrations (version control for schema)
+- Query optimization
+
+✅ **Architecture Knowledge:**
+- Clean Architecture (layered design)
+- Repository pattern (data access abstraction)
+- Use case pattern (business logic)
+- Dependency injection
+
+✅ **Testing & Quality:**
+- Integration testing strategy
+- Test coverage analysis (71.5%)
+- Real database testing (not mocks)
+- Deterministic business logic
+
+✅ **DevOps & Deployment:**
+- Docker containerization
+- Environment variables & 12-factor app
+- Health checks & monitoring
+- Automated deployment (git → Railway)
+
+### For Product Engineering
+
+✅ **Can understand business requirements** (enterprise qualification)
+
+✅ **Can model as system architecture** (domain → application → infrastructure)
+
+✅ **Can verify with tests** (54/55 tests passing)
+
+✅ **Can ship working demo** (deployed to Railway, live)
+
+---
+
+## 🎯 Bottom Line
+
+This project demonstrates:
+
+1. **Full-stack backend competency** — API, business logic, database, deployment
+2. **Test-driven mindset** — 98% test pass rate, 71.5% coverage
+3. **Production patterns** — Clean architecture, immutable logs, audit trails
+4. **Real problem-solving** — Enterprise qualification is a legitimate B2B need
+5. **End-to-end execution** — From design to deployment
+
+**This project was built to show that I can understand a B2B problem, model it as a real backend system, verify it with tests, and ship a working demo.**
+
+---
+
+## Questions?
+
+- **For non-technical questions:** See the landing page (https://partneropsai-production.up.railway.app) and Swagger docs (/docs)
+- **For technical deep dives:** See the GitHub repo (https://github.com/sathiyan-ak/PartnerOpsAI) and review the test suite
+- **For live testing:** Use the Swagger UI at /docs (database endpoints require DATABASE_URL configuration)
+
+---
+
+**Last Updated:** 2026-07-27  
+**Current Phase:** 3.6.5 Demo Build

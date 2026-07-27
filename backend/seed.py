@@ -11,6 +11,7 @@ DB_URL = os.getenv(
     "postgresql://test_user:test_password@localhost:5432/partneropsa_test",
 )
 
+
 def seed_demo_data():
     """Populate database with realistic demo company."""
     conn = psycopg2.connect(DB_URL)
@@ -49,15 +50,30 @@ def seed_demo_data():
             )
             """,
             (
-                opp_id, user_id, user_id, 1,
-                "Acme Corp", "Enterprise Software", "San Francisco", 5000,
-                "advanced", "Acme uses ML in product recommendations and analytics", 500000,
-                "advanced", ["SOC2", "ISO27001"], ["GDPR", "CCPA"],
-                85, 90, True,
-                "alice@acme.com", "bob@acme.com", "carol@acme.com",
+                opp_id,
+                user_id,
+                user_id,
+                1,
+                "Acme Corp",
+                "Enterprise Software",
+                "San Francisco",
+                5000,
+                "advanced",
+                "Acme uses ML in product recommendations and analytics",
+                500000,
+                "advanced",
+                ["SOC2", "ISO27001"],
+                ["GDPR", "CCPA"],
+                85,
+                90,
+                True,
+                "alice@acme.com",
+                "bob@acme.com",
+                "carol@acme.com",
                 "Strong ICP alignment: 5000+ employees, tech-forward, heavy AI investment",
                 "Enterprise customer, high-value partnership opportunity",
-                datetime.utcnow(), datetime.utcnow(),
+                datetime.utcnow(),
+                datetime.utcnow(),
             ),
         )
         print(f"✅ Created opportunity: {opp_id}")
@@ -85,13 +101,26 @@ def seed_demo_data():
             )
             """,
             (
-                partner_id, opp_id, user_id, user_id, 1,
-                "onboarding", "design_partner", 250000,
-                "2026-07-27", "2026-10-27", '["Dashboard customization", "API feedback", "Performance optimization"]',
-                "Alice Chen", "alice@acme.com", "+1-555-1234",
-                "Bob Smith", "bob@acme.com",
-                12, 150,
-                datetime.utcnow(), datetime.utcnow(),
+                partner_id,
+                opp_id,
+                user_id,
+                user_id,
+                1,
+                "onboarding",
+                "design_partner",
+                250000,
+                "2026-07-27",
+                "2026-10-27",
+                '["Dashboard customization", "API feedback", "Performance optimization"]',
+                "Alice Chen",
+                "alice@acme.com",
+                "+1-555-1234",
+                "Bob Smith",
+                "bob@acme.com",
+                12,
+                150,
+                datetime.utcnow(),
+                datetime.utcnow(),
             ),
         )
         print(f"✅ Created design partner: {partner_id}")
@@ -115,12 +144,22 @@ def seed_demo_data():
             )
             """,
             (
-                feedback_id, partner_id, user_id, user_id, 1,
-                "Alice Chen", "alice@acme.com", "Acme Corp",
-                "feature_request", "Dashboard Customization",
+                feedback_id,
+                partner_id,
+                user_id,
+                user_id,
+                1,
+                "Alice Chen",
+                "alice@acme.com",
+                "Acme Corp",
+                "feature_request",
+                "Dashboard Customization",
                 "Users want to customize dashboard layout and color scheme. Currently fixed to default design.",
-                82, 85, "submitted",
-                datetime.utcnow(), datetime.utcnow(),
+                82,
+                85,
+                "submitted",
+                datetime.utcnow(),
+                datetime.utcnow(),
             ),
         )
         print(f"✅ Created feedback: {feedback_id}")
@@ -142,10 +181,18 @@ def seed_demo_data():
             )
             """,
             (
-                cluster_id, user_id, user_id, 1,
-                feedback_id, "{}", "Primary feedback only in demo",
-                "Dashboard Customization", 1, 82.0,
-                datetime.utcnow(), datetime.utcnow(),
+                cluster_id,
+                user_id,
+                user_id,
+                1,
+                feedback_id,
+                "{}",
+                "Primary feedback only in demo",
+                "Dashboard Customization",
+                1,
+                82.0,
+                datetime.utcnow(),
+                datetime.utcnow(),
             ),
         )
         print(f"✅ Created feedback cluster: {cluster_id}")
@@ -181,31 +228,79 @@ def seed_demo_data():
             )
             """,
             (
-                rec_id, cluster_id, user_id, user_id, 1,
-                "Dashboard Customization", "Allow users to customize dashboard layout and theme", "UI",
-                1, 1,
-                82, 85,
+                rec_id,
+                cluster_id,
+                user_id,
+                user_id,
+                1,
+                "Dashboard Customization",
+                "Allow users to customize dashboard layout and theme",
+                "UI",
+                1,
+                1,
+                82,
+                85,
                 "High-value design partner requesting this feature; strong impact on user retention",
                 "Competitive feature; Tableau and Looker offer extensive customization",
                 "$500K ARR from Acme renewal contingent on this feature",
                 "Differentiator in enterprise segment",
-                "build", "High demand + revenue impact + competitive advantage",
-                0.88, "Q4_2026", "Can be built in 6-8 weeks with existing design system",
-                "large", '["Dashboard Admins", "Power Users"]', '["Design System", "Authentication"]', '["Timeline compression", "Scope creep"]',
-                False, None, None, "",
-                datetime.utcnow(), datetime.utcnow(),
+                "build",
+                "High demand + revenue impact + competitive advantage",
+                0.88,
+                "Q4_2026",
+                "Can be built in 6-8 weeks with existing design system",
+                "large",
+                '["Dashboard Admins", "Power Users"]',
+                '["Design System", "Authentication"]',
+                '["Timeline compression", "Scope creep"]',
+                False,
+                None,
+                None,
+                "",
+                datetime.utcnow(),
+                datetime.utcnow(),
             ),
         )
         print(f"✅ Created recommendation: {rec_id}")
 
         # 7. Create audit log entries
         audit_events = [
-            ("opportunity_created", "opportunity", opp_id, "Acme Corp opportunity created"),
-            ("opportunity_qualified", "opportunity", opp_id, "Qualification score: 82 (qualified for DP)"),
-            ("partner_onboarding", "design_partner", partner_id, "Acme Corp onboarded as design partner"),
-            ("feedback_submitted", "feedback", feedback_id, "Dashboard customization feedback submitted"),
-            ("cluster_created", "feedback_cluster", cluster_id, "Feedback clustered with theme: Dashboard Customization"),
-            ("recommendation_generated", "recommendation", rec_id, "Product recommendation generated: BUILD"),
+            (
+                "opportunity_created",
+                "opportunity",
+                opp_id,
+                "Acme Corp opportunity created",
+            ),
+            (
+                "opportunity_qualified",
+                "opportunity",
+                opp_id,
+                "Qualification score: 82 (qualified for DP)",
+            ),
+            (
+                "partner_onboarding",
+                "design_partner",
+                partner_id,
+                "Acme Corp onboarded as design partner",
+            ),
+            (
+                "feedback_submitted",
+                "feedback",
+                feedback_id,
+                "Dashboard customization feedback submitted",
+            ),
+            (
+                "cluster_created",
+                "feedback_cluster",
+                cluster_id,
+                "Feedback clustered with theme: Dashboard Customization",
+            ),
+            (
+                "recommendation_generated",
+                "recommendation",
+                rec_id,
+                "Product recommendation generated: BUILD",
+            ),
         ]
 
         for action, res_type, res_id, context in audit_events:
@@ -217,8 +312,15 @@ def seed_demo_data():
                 ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
                 """,
                 (
-                    str(uuid4()), user_id, "admin", action, res_type, res_id,
-                    "approved", f'{{"event": "{context}"}}', datetime.utcnow(),
+                    str(uuid4()),
+                    user_id,
+                    "admin",
+                    action,
+                    res_type,
+                    res_id,
+                    "approved",
+                    f'{{"event": "{context}"}}',
+                    datetime.utcnow(),
                 ),
             )
         print(f"✅ Created {len(audit_events)} audit log entries")

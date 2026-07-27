@@ -1,6 +1,5 @@
 """Integration test: Full opportunity qualification flow."""
 
-
 import pytest
 
 from backend.domain import ICPAlignment, MaturityLevel, Opportunity, OpportunityStatus

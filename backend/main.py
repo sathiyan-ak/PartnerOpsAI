@@ -63,27 +63,33 @@ db_url = (
 if "localhost" in db_url:
     print("⚠ Using localhost database (development mode)", file=sys.stderr)
 else:
-    print(f"✓ Using remote database: {db_url.split('@')[1][:50] if '@' in db_url else '...'}", file=sys.stderr)
+    print(
+        f"✓ Using remote database: {db_url.split('@')[1][:50] if '@' in db_url else '...'}",
+        file=sys.stderr,
+    )
 
 opp_repo = OpportunityRepositoryImpl(db_url)
 audit_repo = SecurityAuditRepositoryImpl(db_url)
 actor_id = UUID("00000000-0000-0000-0000-000000000001")
 
+
 # Initialize test user for demo
 def _init_demo_user():
     try:
         import psycopg2
+
         conn = psycopg2.connect(db_url)
         cursor = conn.cursor()
         cursor.execute(
             "INSERT INTO users (id, email) VALUES (%s, %s) ON CONFLICT (id) DO NOTHING",
-            (str(actor_id), "demo@partneropsa.com")
+            (str(actor_id), "demo@partneropsa.com"),
         )
         conn.commit()
         cursor.close()
         conn.close()
     except Exception:
         pass
+
 
 _init_demo_user()
 
@@ -96,6 +102,7 @@ async def seed_demo_data():
     """
     try:
         from backend.seed import seed_demo_data as seed_func
+
         seed_func()
         return {"status": "ok", "message": "Demo data seeded successfully"}
     except Exception as e:
@@ -628,6 +635,7 @@ async def get_audit_trail(resource_id: str):
     try:
         # Fetch recent audit records for this resource
         import psycopg2
+
         conn = psycopg2.connect(db_url)
         cursor = conn.cursor()
 

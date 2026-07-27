@@ -58,7 +58,13 @@ class TestClusterFeedbackUseCase:
         )
 
     def test_cluster_feedback_happy_path(
-        self, use_case, partner_repo, feedback_repo, cluster_repo, test_user_id, test_opportunity_id
+        self,
+        use_case,
+        partner_repo,
+        feedback_repo,
+        cluster_repo,
+        test_user_id,
+        test_opportunity_id,
     ):
         """Test: Cluster similar feedback items."""
         user_uuid = UUID(test_user_id)
@@ -155,7 +161,13 @@ class TestClusterFeedbackUseCase:
         assert "not found" in str(exc_info.value)
 
     def test_cluster_with_no_related_feedback(
-        self, use_case, partner_repo, feedback_repo, cluster_repo, test_user_id, test_opportunity_id
+        self,
+        use_case,
+        partner_repo,
+        feedback_repo,
+        cluster_repo,
+        test_user_id,
+        test_opportunity_id,
     ):
         """Test: Cluster with only primary feedback."""
         user_uuid = UUID(test_user_id)

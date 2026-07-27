@@ -29,9 +29,7 @@ class TestAuditSecurityEventUseCase:
             actor_id=UUID(test_user_id),
         )
 
-    def test_audit_security_event_happy_path(
-        self, use_case, audit_repo
-    ):
+    def test_audit_security_event_happy_path(self, use_case, audit_repo):
         """Test: Record security audit event."""
         resource_id = uuid4()
 
@@ -55,9 +53,7 @@ class TestAuditSecurityEventUseCase:
         assert audit.action == AuditAction.CREATED
         assert audit.resource_type == "opportunity"
 
-    def test_audit_multiple_events_append_only(
-        self, use_case, audit_repo
-    ):
+    def test_audit_multiple_events_append_only(self, use_case, audit_repo):
         """Test: Multiple audit events append correctly."""
         resource_id = uuid4()
 
@@ -66,7 +62,9 @@ class TestAuditSecurityEventUseCase:
         for i in range(3):
             input_data = AuditSecurityEventInput(
                 actor_role="user",
-                action=[AuditAction.CREATED, AuditAction.UPDATED, AuditAction.DELETED][i],
+                action=[AuditAction.CREATED, AuditAction.UPDATED, AuditAction.DELETED][
+                    i
+                ],
                 resource_type="design_partner",
             )
 
@@ -78,9 +76,7 @@ class TestAuditSecurityEventUseCase:
             audit = audit_repo.find_by_id(event_id)
             assert audit is not None
 
-    def test_audit_event_with_context_data(
-        self, use_case, audit_repo
-    ):
+    def test_audit_event_with_context_data(self, use_case, audit_repo):
         """Test: Audit event with rich context."""
         resource_id = uuid4()
 
@@ -107,9 +103,7 @@ class TestAuditSecurityEventUseCase:
         assert audit.context_data["icp_score"] == 45
         assert audit.ip_address == "192.168.1.100"
 
-    def test_audit_event_minimal_input(
-        self, use_case, audit_repo
-    ):
+    def test_audit_event_minimal_input(self, use_case, audit_repo):
         """Test: Audit event with minimal input."""
         resource_id = uuid4()
 
@@ -127,9 +121,7 @@ class TestAuditSecurityEventUseCase:
         assert audit.actor_role == "user"
         assert audit.policy_name == ""
 
-    def test_audit_event_validation_required_fields(
-        self, use_case
-    ):
+    def test_audit_event_validation_required_fields(self, use_case):
         """Test: Missing required field → validation error."""
         resource_id = uuid4()
 
@@ -143,13 +135,15 @@ class TestAuditSecurityEventUseCase:
         with pytest.raises(ValueError):
             use_case.execute(resource_id, input_data)
 
-    def test_audit_different_policy_results(
-        self, use_case, audit_repo
-    ):
+    def test_audit_different_policy_results(self, use_case, audit_repo):
         """Test: Audit events with different policy outcomes."""
         resource_id = uuid4()
 
-        for policy_result in [PolicyResult.APPROVED, PolicyResult.REVIEW_REQUIRED, PolicyResult.REJECTED]:
+        for policy_result in [
+            PolicyResult.APPROVED,
+            PolicyResult.REVIEW_REQUIRED,
+            PolicyResult.REJECTED,
+        ]:
             input_data = AuditSecurityEventInput(
                 actor_role="compliance_engine",
                 action=AuditAction.POLICY_EVALUATED,
@@ -161,9 +155,7 @@ class TestAuditSecurityEventUseCase:
             audit = audit_repo.find_by_id(output.audit_id)
             assert audit.policy_result == policy_result
 
-    def test_audit_append_only_immutability(
-        self, use_case, audit_repo
-    ):
+    def test_audit_append_only_immutability(self, use_case, audit_repo):
         """Test: Audit records are immutable (append-only)."""
         resource_id = uuid4()
 

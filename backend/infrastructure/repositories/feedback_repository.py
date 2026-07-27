@@ -96,7 +96,9 @@ class DesignFeedbackRepositoryImpl(DesignFeedbackRepository):
             return feedback.id
         except psycopg2.Error as e:
             conn.rollback()
-            raise RuntimeError(f"Database constraint violation: {str(e).split(chr(10))[0]}") from e
+            raise RuntimeError(
+                f"Database constraint violation: {str(e).split(chr(10))[0]}"
+            ) from e
         finally:
             cursor.close()
             conn.close()
@@ -162,11 +164,21 @@ class DesignFeedbackRepositoryImpl(DesignFeedbackRepository):
         # status(22), created_at(23), updated_at(24)
 
         # Handle similar_feedback_ids array
-        similar_ids = row[15] if isinstance(row[15], list) else (json.loads(row[15]) if row[15] else [])
-        similar_ids = [UUID(sid) if isinstance(sid, str) else sid for sid in similar_ids]
+        similar_ids = (
+            row[15]
+            if isinstance(row[15], list)
+            else (json.loads(row[15]) if row[15] else [])
+        )
+        similar_ids = [
+            UUID(sid) if isinstance(sid, str) else sid for sid in similar_ids
+        ]
 
         # Handle affected_personas array
-        affected = row[21] if isinstance(row[21], list) else (json.loads(row[21]) if row[21] else [])
+        affected = (
+            row[21]
+            if isinstance(row[21], list)
+            else (json.loads(row[21]) if row[21] else [])
+        )
 
         return DesignFeedback(
             id=UUID(row[0]),
@@ -241,7 +253,9 @@ class FeedbackClusterRepositoryImpl(FeedbackClusterRepository):
                     average_priority_score=EXCLUDED.average_priority_score
             """
             # Format UUID array as PostgreSQL array literal: {uuid1,uuid2}
-            uuid_array_str = "{" + ",".join(str(fid) for fid in cluster.related_feedback_ids) + "}"
+            uuid_array_str = (
+                "{" + ",".join(str(fid) for fid in cluster.related_feedback_ids) + "}"
+            )
             cursor.execute(
                 sql,
                 (
@@ -262,7 +276,9 @@ class FeedbackClusterRepositoryImpl(FeedbackClusterRepository):
             return cluster.id
         except psycopg2.Error as e:
             conn.rollback()
-            raise RuntimeError(f"Database constraint violation: {str(e).split(chr(10))[0]}") from e
+            raise RuntimeError(
+                f"Database constraint violation: {str(e).split(chr(10))[0]}"
+            ) from e
         finally:
             cursor.close()
             conn.close()
@@ -283,9 +299,7 @@ class FeedbackClusterRepositoryImpl(FeedbackClusterRepository):
             cursor.close()
             conn.close()
 
-    def find_by_primary_feedback_id(
-        self, feedback_id: UUID
-    ) -> FeedbackCluster | None:
+    def find_by_primary_feedback_id(self, feedback_id: UUID) -> FeedbackCluster | None:
         """Find cluster by primary feedback ID."""
         conn = self._connect()
         cursor = conn.cursor()
@@ -321,15 +335,19 @@ class FeedbackClusterRepositoryImpl(FeedbackClusterRepository):
         if isinstance(raw_ids, list):
             related_ids = raw_ids
         elif isinstance(raw_ids, str):
-            if raw_ids.startswith('{'):
+            if raw_ids.startswith("{"):
                 # PostgreSQL array literal: {uuid1,uuid2}
-                related_ids = [x.strip() for x in raw_ids.strip('{}').split(',') if x.strip()]
+                related_ids = [
+                    x.strip() for x in raw_ids.strip("{}").split(",") if x.strip()
+                ]
             else:
                 # Try JSON
                 related_ids = json.loads(raw_ids) if raw_ids else []
         else:
             related_ids = []
-        related_ids = [UUID(fid) if isinstance(fid, str) else fid for fid in related_ids]
+        related_ids = [
+            UUID(fid) if isinstance(fid, str) else fid for fid in related_ids
+        ]
 
         return FeedbackCluster(
             id=UUID(row[0]),

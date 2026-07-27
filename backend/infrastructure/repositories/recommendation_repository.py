@@ -103,7 +103,9 @@ class ProductRecommendationRepositoryImpl(ProductRecommendationRepository):
             return recommendation.id
         except psycopg2.Error as e:
             conn.rollback()
-            raise RuntimeError(f"Database constraint violation: {str(e).split(chr(10))[0]}") from e
+            raise RuntimeError(
+                f"Database constraint violation: {str(e).split(chr(10))[0]}"
+            ) from e
         finally:
             cursor.close()
             conn.close()
@@ -171,19 +173,20 @@ class ProductRecommendationRepositoryImpl(ProductRecommendationRepository):
 
     def _row_to_recommendation(self, row) -> ProductRecommendation:
         """Convert database row to ProductRecommendation domain object."""
+
         # Handle arrays in different formats: Python list, JSON string, or PostgreSQL literal
         def parse_array(value):
-            if value is None or value == '':
+            if value is None or value == "":
                 return []
             if isinstance(value, list):
                 return value
             elif isinstance(value, str):
-                if value.startswith('{'):
+                if value.startswith("{"):
                     # PostgreSQL array literal: {val1,val2}
-                    inner = value.strip('{}')
+                    inner = value.strip("{}")
                     if not inner:
                         return []
-                    return [x.strip().strip('"') for x in inner.split(',') if x.strip()]
+                    return [x.strip().strip('"') for x in inner.split(",") if x.strip()]
                 else:
                     # Try JSON
                     try:
@@ -212,7 +215,9 @@ class ProductRecommendationRepositoryImpl(ProductRecommendationRepository):
             market_opportunity=row[13],
             revenue_impact_potential=row[14],
             competitive_positioning=row[15],
-            recommendation=row[16].upper() if isinstance(row[16], str) else row[16],  # Normalize back to uppercase
+            recommendation=(
+                row[16].upper() if isinstance(row[16], str) else row[16]
+            ),  # Normalize back to uppercase
             recommendation_reasoning=row[17],
             suggested_release=ReleaseTarget(row[19]),
             release_reasoning=row[20],

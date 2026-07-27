@@ -24,7 +24,9 @@ class TestConvertDesignPartnerUseCase:
     def repo(self, database_url) -> OpportunityRepositoryImpl:
         return OpportunityRepositoryImpl(database_url)
 
-    def test_convert_qualified_opportunity(self, repo, test_user_id, postgres_connection):
+    def test_convert_qualified_opportunity(
+        self, repo, test_user_id, postgres_connection
+    ):
         """Test: Convert qualified opportunity to design partner."""
         user_uuid = UUID(test_user_id)
 

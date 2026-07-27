@@ -84,7 +84,9 @@ class PolicyDecisionRepositoryImpl(PolicyDecisionRepository):
             return policy.id
         except psycopg2.Error as e:
             conn.rollback()
-            raise RuntimeError(f"Database constraint violation: {str(e).split(chr(10))[0]}") from e
+            raise RuntimeError(
+                f"Database constraint violation: {str(e).split(chr(10))[0]}"
+            ) from e
         finally:
             cursor.close()
             conn.close()

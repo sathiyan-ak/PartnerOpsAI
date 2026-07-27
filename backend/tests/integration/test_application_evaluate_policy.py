@@ -106,9 +106,7 @@ class TestEvaluatePolicyUseCase:
         policy = policy_repo.find_by_id(output.policy_id)
         assert policy.priority_score <= 40
 
-    def test_evaluate_policy_validation_error_invalid_score(
-        self, use_case
-    ):
+    def test_evaluate_policy_validation_error_invalid_score(self, use_case):
         """Test: Invalid score > 100 → validation error."""
         opportunity_id = uuid4()
 

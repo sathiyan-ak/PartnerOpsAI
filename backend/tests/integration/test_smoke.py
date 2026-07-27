@@ -25,7 +25,9 @@ class TestBusinessJourney:
         """Get repository."""
         return OpportunityRepositoryImpl(database_url)
 
-    def test_complete_opportunity_lifecycle(self, repo, test_user_id, postgres_connection):
+    def test_complete_opportunity_lifecycle(
+        self, repo, test_user_id, postgres_connection
+    ):
         """
         Smoke test: Complete journey.
 

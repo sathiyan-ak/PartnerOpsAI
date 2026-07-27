@@ -92,9 +92,7 @@ class FeedbackClusterRepository(ABC):
         """Find cluster by ID."""
 
     @abstractmethod
-    def find_by_primary_feedback_id(
-        self, feedback_id: UUID
-    ) -> FeedbackCluster | None:
+    def find_by_primary_feedback_id(self, feedback_id: UUID) -> FeedbackCluster | None:
         """Find cluster by primary feedback ID."""
 
     @abstractmethod

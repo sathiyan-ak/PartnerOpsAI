@@ -58,7 +58,13 @@ class TestGenerateRecommendationUseCase:
         )
 
     def test_generate_recommendation_happy_path(
-        self, use_case, feedback_repo, cluster_repo, recommendation_repo, test_user_id, test_design_partner_id
+        self,
+        use_case,
+        feedback_repo,
+        cluster_repo,
+        recommendation_repo,
+        test_user_id,
+        test_design_partner_id,
     ):
         """Test: Generate recommendation from cluster."""
         user_uuid = UUID(test_user_id)
@@ -135,7 +141,13 @@ class TestGenerateRecommendationUseCase:
         assert rec.recommendation == "BUILD"
 
     def test_generate_recommendation_defer_decision(
-        self, use_case, feedback_repo, cluster_repo, recommendation_repo, test_user_id, test_design_partner_id
+        self,
+        use_case,
+        feedback_repo,
+        cluster_repo,
+        recommendation_repo,
+        test_user_id,
+        test_design_partner_id,
     ):
         """Test: Generate DEFER recommendation."""
         user_uuid = UUID(test_user_id)
@@ -229,7 +241,13 @@ class TestGenerateRecommendationUseCase:
         assert "not found" in str(exc_info.value)
 
     def test_generate_recommendation_deterministic_scoring(
-        self, use_case, feedback_repo, cluster_repo, recommendation_repo, test_user_id, test_design_partner_id
+        self,
+        use_case,
+        feedback_repo,
+        cluster_repo,
+        recommendation_repo,
+        test_user_id,
+        test_design_partner_id,
     ):
         """Test: Same inputs produce same scores."""
         user_uuid = UUID(test_user_id)

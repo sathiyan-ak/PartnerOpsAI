@@ -179,9 +179,11 @@ class SecurityAuditRepositoryImpl(SecurityAuditRepository):
             resource_id=UUID(row[columns["resource_id"]]),
             policy_name=row[columns["policy_name"]],
             policy_version=row[columns["policy_version"]],
-            policy_result=PolicyResult(row[columns["policy_result"]])
-            if row[columns["policy_result"]]
-            else None,
+            policy_result=(
+                PolicyResult(row[columns["policy_result"]])
+                if row[columns["policy_result"]]
+                else None
+            ),
             policy_evaluation_reasoning=row[columns["policy_evaluation_reasoning"]],
             request_id=row[columns["request_id"]],
             request_hash=row[columns["request_hash"]],

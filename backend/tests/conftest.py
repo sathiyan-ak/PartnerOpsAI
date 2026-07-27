@@ -92,20 +92,34 @@ def test_opportunity_id(postgres_connection, test_user_id: str) -> str:
     opp_id = str(uuid4())
     cursor = postgres_connection.cursor()
     try:
-        cursor.execute("""
+        cursor.execute(
+            """
             INSERT INTO opportunities (
                 id, created_by, updated_by, version, company_name,
                 company_size_employees, industry, location, status,
                 icp_alignment, icp_score, ai_maturity, security_maturity,
                 design_partner_potential, created_at, updated_at
             ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-        """, (
-            opp_id, test_user_id, test_user_id, 0,
-            f"Test Company {uuid4()}",
-            50, "Technology", "San Francisco", "prospect",
-            "weak", 50, "none", "none",
-            0, datetime.now(timezone.utc), datetime.now(timezone.utc)
-        ))
+        """,
+            (
+                opp_id,
+                test_user_id,
+                test_user_id,
+                0,
+                f"Test Company {uuid4()}",
+                50,
+                "Technology",
+                "San Francisco",
+                "prospect",
+                "weak",
+                50,
+                "none",
+                "none",
+                0,
+                datetime.now(timezone.utc),
+                datetime.now(timezone.utc),
+            ),
+        )
         postgres_connection.commit()
     except Exception as e:
         postgres_connection.rollback()
@@ -116,23 +130,37 @@ def test_opportunity_id(postgres_connection, test_user_id: str) -> str:
 
 
 @pytest.fixture
-def test_design_partner_id(postgres_connection, test_user_id: str, test_opportunity_id: str) -> str:
+def test_design_partner_id(
+    postgres_connection, test_user_id: str, test_opportunity_id: str
+) -> str:
     """Create and persist design partner. DEPENDENCY: Requires test_user_id + test_opportunity_id."""
     dp_id = str(uuid4())
     cursor = postgres_connection.cursor()
     try:
-        cursor.execute("""
+        cursor.execute(
+            """
             INSERT INTO design_partners (
                 id, opportunity_id, created_by, updated_by, version,
                 company_name, product_owner_name, product_owner_email,
                 converted_at, converted_by, onboarding_status, created_at, updated_at
             ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-        """, (
-            dp_id, test_opportunity_id, test_user_id, test_user_id, 0,
-            f"Test Partner {uuid4()}", "Jane Doe", "jane@test.local",
-            datetime.now(timezone.utc), test_user_id, "onboarding",
-            datetime.now(timezone.utc), datetime.now(timezone.utc)
-        ))
+        """,
+            (
+                dp_id,
+                test_opportunity_id,
+                test_user_id,
+                test_user_id,
+                0,
+                f"Test Partner {uuid4()}",
+                "Jane Doe",
+                "jane@test.local",
+                datetime.now(timezone.utc),
+                test_user_id,
+                "onboarding",
+                datetime.now(timezone.utc),
+                datetime.now(timezone.utc),
+            ),
+        )
         postgres_connection.commit()
     except Exception as e:
         postgres_connection.rollback()

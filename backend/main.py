@@ -583,6 +583,8 @@ async def create_opportunity(request: QualifyRequest):
 
         output = use_case.execute(input_data)
         opp = opp_repo.find_by_id(output.opportunity_id)
+        if not opp:
+            raise HTTPException(status_code=404, detail="Opportunity not found")
 
         return OpportunityResponse(
             opportunity_id=str(output.opportunity_id),

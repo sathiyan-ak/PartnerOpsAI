@@ -64,11 +64,12 @@ class ClusterFeedbackUseCase:
         )
 
         # Calculate aggregates
-        all_scores = [primary.impact_score] + [
-            self.feedback_repo.find_by_id(fid).impact_score
+        related_scores = [
+            feedback.impact_score
             for fid in input_data.related_feedback_ids
-            if self.feedback_repo.find_by_id(fid)
+            if (feedback := self.feedback_repo.find_by_id(fid))
         ]
+        all_scores = [primary.impact_score] + related_scores
         cluster.total_feedback_count = len(all_scores)
         cluster.average_impact_score = (
             sum(all_scores) / len(all_scores) if all_scores else 0

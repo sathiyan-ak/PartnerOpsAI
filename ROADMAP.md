@@ -22,7 +22,6 @@
 
 **Deliverables:**
 - [x] Repository initialized on `main` branch
-- [x] CLAUDE.md (engineering manifesto)
 - [x] README.md (project overview)
 - [x] DECISIONS.md (architectural decisions)
 - [x] ARCHITECTURE.md (system design)

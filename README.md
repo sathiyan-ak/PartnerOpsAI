@@ -76,7 +76,6 @@ PartnerOpsAI/
 ├── backend/        # Business logic + API routes
 ├── frontend/       # Next.js dashboard (not created yet)
 ├── docs/           # Architecture decisions + plan
-├── CLAUDE.md       # Engineering manifesto
 ├── README.md       # This file
 ├── DECISIONS.md    # Decision log
 ├── ARCHITECTURE.md # High-level design
@@ -138,7 +137,6 @@ open http://localhost:8000/docs
 |---|---|
 | [PORTFOLIO.md](PORTFOLIO.md) | Internship demo release (this is what to share) |
 | [DEPLOYMENT.md](DEPLOYMENT.md) | Quick start + architecture overview |
-| CLAUDE.md | Engineering manifesto + coding standards |
 | DECISIONS.md | Architectural decision log |
 | ARCHITECTURE.md | System design + data flow |
 | ROADMAP.md | Phase breakdown + timeline
@@ -156,15 +154,6 @@ open http://localhost:8000/docs
 
 ---
 
-## Key Files
-
-| File | Purpose |
-|---|---|
-| CLAUDE.md | Engineering manifesto + coding standards |
-| DECISIONS.md | Architectural decision log |
-| ARCHITECTURE.md | System design + data flow |
-| ROADMAP.md | Phase breakdown + timeline |
-
 ---
 
 ## Secret Management
@@ -177,6 +166,6 @@ See `.env.example` for required variables.
 
 ---
 
-## Questions?
+## Architecture & Design
 
-See CLAUDE.md for architecture, coding standards, and review process.
+See ARCHITECTURE.md for system design, DECISIONS.md for architectural decisions, and ROADMAP.md for phase breakdown.

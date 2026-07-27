@@ -13,8 +13,10 @@ echo "════════════════════════�
 echo "PartnerOpsAI Startup"
 echo "═══════════════════════════════════════════════════════"
 echo "Environment: $ENVIRONMENT"
-echo "Database: $DATABASE_URL"
+echo "Database URL: ${DATABASE_URL:0:50}..."
 echo "Server: $SERVER_HOST:$SERVER_PORT"
+echo "All env vars with DATABASE:"
+env | grep -i database || echo "  (none found)"
 echo ""
 
 # Wait for database to be ready (if in Docker Compose)

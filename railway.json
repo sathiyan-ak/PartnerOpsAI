@@ -4,6 +4,7 @@
     "builder": "dockerfile"
   },
   "deploy": {
+    "startCommand": "bash /app/start.sh",
     "restartPolicyMaxRetries": 5,
     "restartPolicyWindowSeconds": 600
   }

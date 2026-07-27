@@ -22,7 +22,7 @@ echo "Waiting for database..."
 max_attempts=30
 attempt=1
 while [ $attempt -le $max_attempts ]; do
-    if python -c "import psycopg2; psycopg2.connect('$DATABASE_URL')" 2>/dev/null; then
+    if python -c "import psycopg2; psycopg2.connect(\"$DATABASE_URL\")" 2>/dev/null; then
         echo "✓ Database is ready"
         break
     fi

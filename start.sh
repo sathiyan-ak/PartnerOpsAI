@@ -3,8 +3,18 @@
 
 set -e
 
-# Configuration
-DATABASE_URL="${DATABASE_URL:-postgresql://test_user:test_password@localhost:5432/partneropsa_test}"
+# Configuration - try to construct DATABASE_URL from individual env vars if not set
+if [ -z "$DATABASE_URL" ]; then
+    # Try to build from individual PostgreSQL environment variables (Railway style)
+    if [ -n "$PGHOST" ] && [ -n "$PGUSER" ] && [ -n "$PGPASSWORD" ] && [ -n "$PGDATABASE" ]; then
+        PGPORT="${PGPORT:-5432}"
+        DATABASE_URL="postgresql://${PGUSER}:${PGPASSWORD}@${PGHOST}:${PGPORT}/${PGDATABASE}"
+    else
+        # Fall back to default or DATABASE_URL env var
+        DATABASE_URL="postgresql://test_user:test_password@localhost:5432/partneropsa_test"
+    fi
+fi
+
 SERVER_HOST="${SERVER_HOST:-0.0.0.0}"
 SERVER_PORT="${SERVER_PORT:-8000}"
 ENVIRONMENT="${ENVIRONMENT:-development}"

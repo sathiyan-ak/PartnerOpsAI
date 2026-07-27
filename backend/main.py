@@ -36,9 +36,21 @@ app.add_middleware(
 )
 
 # Try multiple possible database URL environment variable names
+# Handle Railway's individual env vars (PGHOST, PGUSER, PGPASSWORD, PGDATABASE, PGPORT)
+db_url = os.getenv("DATABASE_URL")
+if not db_url:
+    pghost = os.getenv("PGHOST")
+    pguser = os.getenv("PGUSER")
+    pgpassword = os.getenv("PGPASSWORD")
+    pgdatabase = os.getenv("PGDATABASE")
+    pgport = os.getenv("PGPORT", "5432")
+
+    if all([pghost, pguser, pgpassword, pgdatabase]):
+        db_url = f"postgresql://{pguser}:{pgpassword}@{pghost}:{pgport}/{pgdatabase}"
+
 db_url = (
-    os.getenv("DATABASE_URL")
-    or os.getenv("POSTGRES_URL")  # Railway Postgres plugin
+    db_url
+    or os.getenv("POSTGRES_URL")  # Railway Postgres plugin alternate
     or os.getenv("PGURL")
     or "postgresql://test_user:test_password@localhost:5432/partneropsa_test"
 )
@@ -47,7 +59,7 @@ db_url = (
 if "localhost" in db_url:
     print(f"⚠ Using localhost database (development mode)", file=sys.stderr)
 else:
-    print(f"✓ Using remote database", file=sys.stderr)
+    print(f"✓ Using remote database: {db_url.split('@')[1][:50] if '@' in db_url else '...'}", file=sys.stderr)
 
 opp_repo = OpportunityRepositoryImpl(db_url)
 audit_repo = SecurityAuditRepositoryImpl(db_url)

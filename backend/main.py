@@ -121,73 +121,223 @@ class QualifyResponse(BaseModel):
 async def root():
     return """
     <!DOCTYPE html>
-    <html>
+    <html lang="en">
     <head>
-        <title>PartnerOpsAI Demo</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>PartnerOpsAI — Enterprise Qualification Engine</title>
         <style>
-            body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto; max-width: 900px; margin: 40px auto; padding: 20px; }
-            h1 { color: #1e40af; }
-            code { background: #f3f4f6; padding: 2px 6px; border-radius: 3px; }
-            .button { background: #1e40af; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; display: inline-block; margin: 10px 0; }
-            .section { margin: 30px 0; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px; }
-            pre { background: #f9fafb; padding: 15px; border-radius: 5px; overflow-x: auto; }
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+                background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+                color: #e2e8f0;
+                line-height: 1.6;
+                min-height: 100vh;
+            }
+
+            .container { max-width: 1200px; margin: 0 auto; padding: 60px 20px; }
+
+            header {
+                text-align: center;
+                margin-bottom: 80px;
+                animation: fadeInDown 0.8s ease;
+            }
+
+            .logo { font-size: 48px; margin-bottom: 16px; }
+            h1 { font-size: 48px; font-weight: 700; margin-bottom: 12px; background: linear-gradient(120deg, #60a5fa, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+            .tagline { font-size: 20px; color: #94a3b8; margin-bottom: 8px; }
+            .subtitle { font-size: 16px; color: #64748b; max-width: 600px; margin: 0 auto; }
+
+            .cta-buttons { margin-top: 32px; display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+            .btn {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                padding: 14px 32px;
+                border-radius: 8px;
+                font-size: 16px;
+                font-weight: 600;
+                text-decoration: none;
+                border: none;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+            .btn-primary {
+                background: linear-gradient(120deg, #3b82f6, #2563eb);
+                color: white;
+            }
+            .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(59, 130, 246, 0.4); }
+            .btn-secondary {
+                background: rgba(75, 85, 99, 0.3);
+                color: #cbd5e1;
+                border: 1px solid rgba(148, 163, 184, 0.2);
+            }
+            .btn-secondary:hover { background: rgba(75, 85, 99, 0.5); }
+
+            .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin: 60px 0; }
+
+            .card {
+                background: rgba(51, 65, 85, 0.5);
+                border: 1px solid rgba(148, 163, 184, 0.2);
+                border-radius: 12px;
+                padding: 32px;
+                transition: all 0.3s ease;
+                backdrop-filter: blur(10px);
+            }
+            .card:hover {
+                background: rgba(51, 65, 85, 0.7);
+                border-color: rgba(148, 163, 184, 0.4);
+                transform: translateY(-4px);
+            }
+
+            .card-icon { font-size: 32px; margin-bottom: 16px; }
+            .card h3 { font-size: 20px; margin-bottom: 12px; color: #f1f5f9; }
+            .card p { color: #cbd5e1; font-size: 14px; }
+
+            .features { margin-top: 60px; }
+            .features h2 { font-size: 32px; margin-bottom: 32px; text-align: center; }
+            .feature-list { list-style: none; }
+            .feature-list li {
+                padding: 12px 0;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                font-size: 16px;
+            }
+            .feature-list li:before { content: "✓"; color: #10b981; font-weight: bold; font-size: 20px; }
+
+            .code-section { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(148, 163, 184, 0.2); border-radius: 8px; padding: 24px; margin: 40px 0; }
+            .code-section h3 { margin-bottom: 16px; color: #f1f5f9; }
+            pre {
+                background: rgba(30, 27, 75, 0.8);
+                padding: 16px;
+                border-radius: 6px;
+                overflow-x: auto;
+                font-size: 13px;
+                color: #a1d3b0;
+                line-height: 1.5;
+            }
+
+            .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 40px 0; }
+            .stat {
+                text-align: center;
+                padding: 24px;
+                background: rgba(51, 65, 85, 0.3);
+                border-radius: 8px;
+            }
+            .stat-value { font-size: 32px; font-weight: 700; color: #60a5fa; }
+            .stat-label { color: #94a3b8; font-size: 14px; margin-top: 8px; }
+
+            footer {
+                text-align: center;
+                margin-top: 80px;
+                padding-top: 40px;
+                border-top: 1px solid rgba(148, 163, 184, 0.1);
+                color: #64748b;
+                font-size: 14px;
+            }
+
+            footer a { color: #60a5fa; text-decoration: none; }
+            footer a:hover { text-decoration: underline; }
+
+            @keyframes fadeInDown {
+                from { opacity: 0; transform: translateY(-20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+
+            @media (max-width: 768px) {
+                h1 { font-size: 32px; }
+                .tagline { font-size: 18px; }
+                .cta-buttons { flex-direction: column; }
+                .btn { width: 100%; justify-content: center; }
+            }
         </style>
     </head>
     <body>
-        <h1>🎯 PartnerOpsAI Demo</h1>
-        <p><strong>Enterprise AI Product Decision Support — Qualification Engine</strong></p>
+        <div class="container">
+            <header>
+                <div class="logo">🎯</div>
+                <h1>PartnerOpsAI</h1>
+                <p class="tagline">Enterprise Qualification Engine</p>
+                <p class="subtitle">Automatically score enterprise prospects for design partner potential. Deterministic AI scoring without LLM black boxes.</p>
 
-        <div class="section">
-            <h2>What's This?</h2>
-            <p>PartnerOpsAI qualifies enterprise prospects as design partners using deterministic business logic (no LLM for scoring).</p>
-            <p><strong>MVP Status:</strong> This demo exposes the proven qualification workflow. Full product includes feedback clustering, recommendations, and policy evaluation.</p>
-        </div>
+                <div class="cta-buttons">
+                    <a href="/docs" class="btn btn-primary">📖 Try the API</a>
+                    <a href="/health" class="btn btn-secondary">💚 Health Check</a>
+                </div>
+            </header>
 
-        <div class="section">
-            <h2>Try It</h2>
-            <p><a href="/docs" class="button">📖 Interactive API Docs (Swagger UI)</a></p>
-            <p><a href="/health" class="button">💚 Health Check</a></p>
-        </div>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-icon">⚡</div>
+                    <h3>Instant Qualification</h3>
+                    <p>Score enterprise prospects in milliseconds. AI maturity, security posture, team readiness — all in one call.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🔍</div>
+                    <h3>Deterministic Scoring</h3>
+                    <p>No LLM black boxes. All scoring is auditable code. Reproducible results every time.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🗄️</div>
+                    <h3>PostgreSQL Backed</h3>
+                    <p>Immutable audit logs. Full RLS. Enterprise-ready data governance out of the box.</p>
+                </div>
+            </div>
 
-        <div class="section">
-            <h2>How to Qualify</h2>
-            <p>POST to <code>/api/qualify</code> with:</p>
-            <pre>{
-  "company_name": "Acme Corp",
+            <div class="features">
+                <h2>What You Get</h2>
+                <ul class="feature-list">
+                    <li>Qualify prospects by ICP score, AI maturity, security readiness, design partner potential</li>
+                    <li>Deterministic scoring algorithm: ICP 40% + AI 30% + Security 20% + Partnership 10%</li>
+                    <li>Immutable audit trail of every qualification decision</li>
+                    <li>Clean Architecture: testable, swappable repositories</li>
+                    <li>9 REST API endpoints for full workflow</li>
+                    <li>Interactive Swagger UI for testing</li>
+                </ul>
+            </div>
+
+            <div class="code-section">
+                <h3>Quick Start</h3>
+                <p style="margin-bottom: 16px;">POST /api/qualify with company details:</p>
+                <pre>{
+  "company_name": "Acme Corporation",
   "company_size_employees": 5000,
   "industry": "Technology",
   "location": "San Francisco",
   "ai_maturity": "advanced",
   "security_maturity": "advanced",
-  "icp_score": 85,
+  "icp_score": 95,
   "design_partner_potential": 90,
   "has_product_team": true
 }</pre>
-            <p><strong>Returns:</strong> qualification_score (0-100), is_qualified_for_design_partner (boolean), reasons</p>
-        </div>
+                <p style="margin-top: 16px; color: #cbd5e1; font-size: 14px;"><strong>Response:</strong> qualification_score (0-100), is_qualified_for_design_partner (boolean), reasons array</p>
+            </div>
 
-        <div class="section">
-            <h2>Architecture</h2>
-            <ul>
-                <li><strong>Domain:</strong> Enterprise opportunity + qualification logic</li>
-                <li><strong>Application:</strong> Clean use case pattern</li>
-                <li><strong>Infrastructure:</strong> PostgreSQL with RLS</li>
-                <li><strong>AI:</strong> Deterministic scoring (no LLM for qualification)</li>
-            </ul>
-        </div>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value">9</div>
+                    <div class="stat-label">API Endpoints</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">100%</div>
+                    <div class="stat-label">Audit Trail</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">Clean</div>
+                    <div class="stat-label">Architecture</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">PostgreSQL</div>
+                    <div class="stat-label">Database</div>
+                </div>
+            </div>
 
-        <div class="section">
-            <h2>Verification</h2>
-            <ul>
-                <li>✅ Qualification engine: 100% test coverage, 6/6 tests passing</li>
-                <li>✅ Opportunity model: 96% coverage</li>
-                <li>✅ Repository pattern: Verified with PostgreSQL</li>
-                <li>🟡 Full product: 62.94% coverage (feedback clustering, recommendations pending)</li>
-            </ul>
+            <footer>
+                <p>Phase 3.6.5 Demo | <a href="https://github.com/sathiyan-ak/PartnerOpsAI">View on GitHub</a></p>
+            </footer>
         </div>
-
-        <hr>
-        <p style="color: #666; font-size: 14px;">Phase 3.6.1 Demo Build | Code: <a href="https://github.com/sathiyan5092/PartnerOpsAI">GitHub</a></p>
     </body>
     </html>
     """

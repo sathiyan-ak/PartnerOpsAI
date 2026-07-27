@@ -51,6 +51,7 @@ jobs:
         env:
           DATABASE_URL: postgresql://test_user:test_password@localhost:5432/partneropsa_test
         run: |
+          apt-get update && apt-get install -y postgresql-client
           psql $DATABASE_URL < backend/infrastructure/migrations/001_init_schema.sql
 
       - name: Run pytest

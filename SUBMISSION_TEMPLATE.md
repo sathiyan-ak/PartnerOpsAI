@@ -219,7 +219,6 @@ pytest backend/tests/integration/ -v --cov=backend
 | ARCHITECTURE.md | System design + data flow | [Link] |
 | DEPLOYMENT.md | Quick start guide | [Link] |
 | DEPLOYMENT_GUIDE.md | Step-by-step for all platforms | [Link] |
-| CLAUDE.md | Engineering manifesto | [Link] |
 | DECISIONS.md | Decision log | [Link] |
 
 ---

@@ -106,7 +106,7 @@ curl -X POST http://localhost:8000/api/seed-demo-data
 |---|---|---|
 | `README.md` | Added quick start, demo instructions, documentation table | ✅ Updated |
 | `DEPLOYMENT.md` | Added new endpoints (3), demo data loading, curl examples for all 4 examples | ✅ Updated |
-| CLAUDE.md | No changes (pre-existing manifesto) | ✅ Verified |
+| `ARCHITECTURE.md` | System design documented | ✅ Verified |
 
 ---
 

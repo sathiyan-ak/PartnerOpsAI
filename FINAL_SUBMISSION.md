@@ -107,7 +107,7 @@ Live demo includes:
 - **ARCHITECTURE.md** — System design + data flow
 - **DEPLOYMENT.md** — Quick start guide
 - **DEPLOYMENT_GUIDE.md** — Platform-specific deployment (Railway/Fly.io/AWS)
-- **CLAUDE.md** — Engineering manifesto
+- **DECISIONS.md** — Architectural decision log
 
 ---
 

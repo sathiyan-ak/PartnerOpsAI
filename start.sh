@@ -45,19 +45,22 @@ import psycopg2
 
 db_url = os.getenv('DATABASE_URL')
 conn = psycopg2.connect(db_url)
+conn.autocommit = True
 cursor = conn.cursor()
 
 # Read migration file
 with open('backend/infrastructure/migrations/001_init_schema.sql', 'r') as f:
     schema = f.read()
 
-# Execute schema
-cursor.execute(schema)
-conn.commit()
+# Execute schema statements
+try:
+    cursor.execute(schema)
+    print('✓ Database schema initialized')
+except Exception as e:
+    print(f'Schema already exists or error: {e}')
+
 cursor.close()
 conn.close()
-
-print('✓ Database schema initialized')
 "
 
 # Initialize demo user

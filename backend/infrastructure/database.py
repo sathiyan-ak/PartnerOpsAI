@@ -54,9 +54,7 @@ class DatabaseClient:
 
     def execute_query(self, query: str):
         """Execute raw SQL query."""
-        return self.client.postgrest.request(
-            "GET", "/rpc/execute_query", json={"query": query}
-        )
+        return self.client.postgrest.request("GET", "/rpc/execute_query", json={"query": query})
 
 
 # Singleton instance

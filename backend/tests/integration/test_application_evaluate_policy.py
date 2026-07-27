@@ -64,9 +64,7 @@ class TestEvaluatePolicyUseCase:
         assert policy.title == "GDPR Compliance"
         assert policy.category == "Compliance"
 
-    def test_evaluate_high_priority_policy(
-        self, use_case, policy_repo, test_opportunity_id
-    ):
+    def test_evaluate_high_priority_policy(self, use_case, policy_repo, test_opportunity_id):
         """Test: High impact policy gets high priority."""
         opportunity_id = test_opportunity_id
 
@@ -85,9 +83,7 @@ class TestEvaluatePolicyUseCase:
         policy = policy_repo.find_by_id(output.policy_id)
         assert policy.priority_score >= 80
 
-    def test_evaluate_low_priority_policy(
-        self, use_case, policy_repo, test_opportunity_id
-    ):
+    def test_evaluate_low_priority_policy(self, use_case, policy_repo, test_opportunity_id):
         """Test: Low impact policy gets low priority."""
         opportunity_id = test_opportunity_id
 

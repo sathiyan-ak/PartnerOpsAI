@@ -1,6 +1,6 @@
 """Application layer: SubmitFeedbackUseCase tests."""
 
-from datetime import datetime
+from datetime import UTC, datetime
 from uuid import UUID, uuid4
 
 import pytest
@@ -64,10 +64,10 @@ class TestSubmitFeedbackUseCase:
             updated_by=user_uuid,
             converted_by=user_uuid,
             company_name="Feedback Customer",
-            converted_at=datetime.utcnow(),
+            converted_at=datetime.now(UTC),
             onboarding_status=DesignPartnerStatus.ONBOARDING,
-            created_at=datetime.utcnow(),
-            updated_at=datetime.utcnow(),
+            created_at=datetime.now(UTC),
+            updated_at=datetime.now(UTC),
         )
         dp_id = partner_repo.save(dp)
 
@@ -109,10 +109,10 @@ class TestSubmitFeedbackUseCase:
             updated_by=user_uuid,
             converted_by=user_uuid,
             company_name="Test Co",
-            converted_at=datetime.utcnow(),
+            converted_at=datetime.now(UTC),
             onboarding_status=DesignPartnerStatus.ONBOARDING,
-            created_at=datetime.utcnow(),
-            updated_at=datetime.utcnow(),
+            created_at=datetime.now(UTC),
+            updated_at=datetime.now(UTC),
         )
         dp_id = partner_repo.save(dp)
 
@@ -145,10 +145,10 @@ class TestSubmitFeedbackUseCase:
             updated_by=user_uuid,
             converted_by=user_uuid,
             company_name="Test Co",
-            converted_at=datetime.utcnow(),
+            converted_at=datetime.now(UTC),
             onboarding_status=DesignPartnerStatus.ONBOARDING,
-            created_at=datetime.utcnow(),
-            updated_at=datetime.utcnow(),
+            created_at=datetime.now(UTC),
+            updated_at=datetime.now(UTC),
         )
         dp_id = partner_repo.save(dp)
 
@@ -180,9 +180,9 @@ class TestSubmitFeedbackUseCase:
             converted_by=user_uuid,
             company_name="Active Customer",
             onboarding_status=DesignPartnerStatus.ONBOARDING,
-            converted_at=datetime.utcnow(),
-            created_at=datetime.utcnow(),
-            updated_at=datetime.utcnow(),
+            converted_at=datetime.now(UTC),
+            created_at=datetime.now(UTC),
+            updated_at=datetime.now(UTC),
         )
         dp_id = partner_repo.save(dp)
 

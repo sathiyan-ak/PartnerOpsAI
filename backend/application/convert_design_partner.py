@@ -54,9 +54,7 @@ class ConvertDesignPartnerUseCase:
         self.audit_repo = audit_repository
         self.actor_id = actor_id
 
-    def execute(
-        self, input_data: ConvertDesignPartnerInput
-    ) -> ConvertDesignPartnerOutput:
+    def execute(self, input_data: ConvertDesignPartnerInput) -> ConvertDesignPartnerOutput:
         """Execute conversion."""
 
         # 1. Load opportunity
@@ -66,9 +64,7 @@ class ConvertDesignPartnerUseCase:
 
         # 2. Verify it's qualified
         if opp.status != OpportunityStatus.QUALIFIED:
-            raise ValueError(
-                f"Opportunity status must be QUALIFIED, got {opp.status.value}"
-            )
+            raise ValueError(f"Opportunity status must be QUALIFIED, got {opp.status.value}")
 
         # 3. Create design partner
         dp = DesignPartner(

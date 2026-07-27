@@ -28,15 +28,11 @@ class ImportChecker(ast.NodeVisitor):
 
         # Rule 1: Domain cannot import Infrastructure
         if "domain" in filepath and "infrastructure" in module:
-            self.errors.append(
-                f"{filepath}: Domain layer imports Infrastructure ({module})"
-            )
+            self.errors.append(f"{filepath}: Domain layer imports Infrastructure ({module})")
 
         # Rule 2: Domain cannot import Application
         if "domain" in filepath and "application" in module:
-            self.errors.append(
-                f"{filepath}: Domain layer imports Application ({module})"
-            )
+            self.errors.append(f"{filepath}: Domain layer imports Application ({module})")
 
         # Rule 3: Application cannot import Infrastructure directly
         # (only through interfaces)

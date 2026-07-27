@@ -12,7 +12,7 @@ from backend.domain import ProductRecommendation, ReleaseTarget
 class ProductRecommendationRepositoryImpl(ProductRecommendationRepository):
     """PostgreSQL implementation of ProductRecommendationRepository."""
 
-    def __init__(self, db_url: str = None):
+    def __init__(self, db_url: str | None = None):
         """Initialize with database URL."""
         if db_url is None:
             import os
@@ -103,9 +103,7 @@ class ProductRecommendationRepositoryImpl(ProductRecommendationRepository):
             return recommendation.id
         except psycopg2.Error as e:
             conn.rollback()
-            raise RuntimeError(
-                f"Database constraint violation: {str(e).split(chr(10))[0]}"
-            ) from e
+            raise RuntimeError(f"Database constraint violation: {str(e).split(chr(10))[0]}") from e
         finally:
             cursor.close()
             conn.close()

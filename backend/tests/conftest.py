@@ -1,7 +1,7 @@
 """Pytest configuration and fixtures for integration testing."""
 
 import os
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from uuid import uuid4
 
 import psycopg2
@@ -78,9 +78,9 @@ def test_user_id(postgres_connection) -> str:
             (user_id, f"{user_id}@test.local"),
         )
         postgres_connection.commit()
-    except Exception as e:
+    except Exception:
         postgres_connection.rollback()
-        raise e
+        raise
     finally:
         cursor.close()
     return user_id
@@ -116,23 +116,21 @@ def test_opportunity_id(postgres_connection, test_user_id: str) -> str:
                 "none",
                 "none",
                 0,
-                datetime.now(timezone.utc),
-                datetime.now(timezone.utc),
+                datetime.now(UTC),
+                datetime.now(UTC),
             ),
         )
         postgres_connection.commit()
-    except Exception as e:
+    except Exception:
         postgres_connection.rollback()
-        raise e
+        raise
     finally:
         cursor.close()
     return opp_id
 
 
 @pytest.fixture
-def test_design_partner_id(
-    postgres_connection, test_user_id: str, test_opportunity_id: str
-) -> str:
+def test_design_partner_id(postgres_connection, test_user_id: str, test_opportunity_id: str) -> str:
     """Create and persist design partner. DEPENDENCY: Requires test_user_id + test_opportunity_id."""
     dp_id = str(uuid4())
     cursor = postgres_connection.cursor()
@@ -154,17 +152,17 @@ def test_design_partner_id(
                 f"Test Partner {uuid4()}",
                 "Jane Doe",
                 "jane@test.local",
-                datetime.now(timezone.utc),
+                datetime.now(UTC),
                 test_user_id,
                 "onboarding",
-                datetime.now(timezone.utc),
-                datetime.now(timezone.utc),
+                datetime.now(UTC),
+                datetime.now(UTC),
             ),
         )
         postgres_connection.commit()
-    except Exception as e:
+    except Exception:
         postgres_connection.rollback()
-        raise e
+        raise
     finally:
         cursor.close()
     return dp_id
@@ -173,7 +171,7 @@ def test_design_partner_id(
 @pytest.fixture
 def test_opportunity_data(test_user_id: str) -> dict:
     """Fixture: minimal opportunity data dict for manual inserts."""
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     return {
         "id": str(uuid4()),
         "created_by": test_user_id,
@@ -197,7 +195,7 @@ def test_opportunity_data(test_user_id: str) -> dict:
 @pytest.fixture
 def test_design_partner_data(test_user_id: str, test_opportunity_id: str) -> dict:
     """Fixture: minimal design partner data dict for manual inserts."""
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     return {
         "id": str(uuid4()),
         "opportunity_id": test_opportunity_id,
@@ -218,7 +216,7 @@ def test_design_partner_data(test_user_id: str, test_opportunity_id: str) -> dic
 @pytest.fixture
 def test_feedback_data(test_user_id: str, test_design_partner_id: str) -> dict:
     """Fixture: feedback data. DEPENDENCY: Requires test_design_partner_id."""
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     return {
         "id": str(uuid4()),
         "design_partner_id": test_design_partner_id,
@@ -244,9 +242,7 @@ def test_feedback_data(test_user_id: str, test_design_partner_id: str) -> dict:
 
 def pytest_configure(config):
     """Register custom markers."""
-    config.addinivalue_line(
-        "markers", "integration: integration tests (require database)"
-    )
+    config.addinivalue_line("markers", "integration: integration tests (require database)")
     config.addinivalue_line("markers", "unit: unit tests")
     config.addinivalue_line("markers", "repository: repository tests")
     config.addinivalue_line("markers", "rls: RLS policy tests")

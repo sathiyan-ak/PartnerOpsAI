@@ -1,6 +1,6 @@
 """Repository integration tests: CRUD + constraints + concurrency."""
 
-from datetime import datetime
+from datetime import UTC, datetime
 from uuid import UUID, uuid4
 
 import pytest
@@ -40,8 +40,8 @@ class TestOpportunityRepository:
             security_maturity=MaturityLevel.ADVANCED,
             design_partner_potential=80,
             has_product_team=True,
-            created_at=datetime.utcnow(),
-            updated_at=datetime.utcnow(),
+            created_at=datetime.now(UTC),
+            updated_at=datetime.now(UTC),
         )
 
     def test_create_opportunity(self, repo, test_opp):
@@ -125,8 +125,8 @@ class TestOpportunityRepository:
             ai_maturity=MaturityLevel.NONE,
             security_maturity=MaturityLevel.NONE,
             design_partner_potential=0,
-            created_at=datetime.utcnow(),
-            updated_at=datetime.utcnow(),
+            created_at=datetime.now(UTC),
+            updated_at=datetime.now(UTC),
         )
         # Should upsert (update because version matches)
         repo.save(update)
@@ -183,8 +183,8 @@ class TestOpportunityRepository:
             ai_maturity=MaturityLevel.ADVANCED,
             security_maturity=MaturityLevel.ADVANCED,
             design_partner_potential=90,
-            created_at=datetime.utcnow(),
-            updated_at=datetime.utcnow(),
+            created_at=datetime.now(UTC),
+            updated_at=datetime.now(UTC),
         )
         repo.save(qualified)
         # Verify we can distinguish statuses
@@ -211,8 +211,8 @@ class TestOpportunityRepository:
                 ai_maturity=MaturityLevel.BEGINNER,
                 security_maturity=MaturityLevel.BEGINNER,
                 design_partner_potential=0,
-                created_at=datetime.utcnow(),
-                updated_at=datetime.utcnow(),
+                created_at=datetime.now(UTC),
+                updated_at=datetime.now(UTC),
             )
             repo.save(opp)
 

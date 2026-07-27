@@ -1,7 +1,7 @@
 """Demo seed data for PartnerOpsAI internship demo."""
 
 import os
-from datetime import datetime
+from datetime import UTC, datetime
 from uuid import uuid4
 
 import psycopg2
@@ -72,8 +72,8 @@ def seed_demo_data():
                 "carol@acme.com",
                 "Strong ICP alignment: 5000+ employees, tech-forward, heavy AI investment",
                 "Enterprise customer, high-value partnership opportunity",
-                datetime.utcnow(),
-                datetime.utcnow(),
+                datetime.now(UTC),
+                datetime.now(UTC),
             ),
         )
         print(f"✅ Created opportunity: {opp_id}")
@@ -119,8 +119,8 @@ def seed_demo_data():
                 "bob@acme.com",
                 12,
                 150,
-                datetime.utcnow(),
-                datetime.utcnow(),
+                datetime.now(UTC),
+                datetime.now(UTC),
             ),
         )
         print(f"✅ Created design partner: {partner_id}")
@@ -158,8 +158,8 @@ def seed_demo_data():
                 82,
                 85,
                 "submitted",
-                datetime.utcnow(),
-                datetime.utcnow(),
+                datetime.now(UTC),
+                datetime.now(UTC),
             ),
         )
         print(f"✅ Created feedback: {feedback_id}")
@@ -191,8 +191,8 @@ def seed_demo_data():
                 "Dashboard Customization",
                 1,
                 82.0,
-                datetime.utcnow(),
-                datetime.utcnow(),
+                datetime.now(UTC),
+                datetime.now(UTC),
             ),
         )
         print(f"✅ Created feedback cluster: {cluster_id}")
@@ -257,8 +257,8 @@ def seed_demo_data():
                 None,
                 None,
                 "",
-                datetime.utcnow(),
-                datetime.utcnow(),
+                datetime.now(UTC),
+                datetime.now(UTC),
             ),
         )
         print(f"✅ Created recommendation: {rec_id}")
@@ -320,7 +320,7 @@ def seed_demo_data():
                     res_id,
                     "approved",
                     f'{{"event": "{context}"}}',
-                    datetime.utcnow(),
+                    datetime.now(UTC),
                 ),
             )
         print(f"✅ Created {len(audit_events)} audit log entries")

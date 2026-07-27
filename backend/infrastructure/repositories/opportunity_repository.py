@@ -11,7 +11,7 @@ from backend.domain import ICPAlignment, MaturityLevel, Opportunity, Opportunity
 class OpportunityRepositoryImpl(OpportunityRepository):
     """PostgreSQL implementation of OpportunityRepository."""
 
-    def __init__(self, db_url: str = None):
+    def __init__(self, db_url: str | None = None):
         """Initialize with database URL."""
         if db_url is None:
             import os
@@ -107,9 +107,7 @@ class OpportunityRepositoryImpl(OpportunityRepository):
         cursor = conn.cursor()
 
         try:
-            cursor.execute(
-                "SELECT * FROM opportunities WHERE id = %s", (str(opportunity_id),)
-            )
+            cursor.execute("SELECT * FROM opportunities WHERE id = %s", (str(opportunity_id),))
             row = cursor.fetchone()
 
             if not row:

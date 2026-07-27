@@ -1,7 +1,7 @@
 """Security Audit repository (append-only)."""
 
 import json
-from datetime import datetime
+from datetime import UTC, datetime
 from uuid import UUID
 
 import psycopg2
@@ -14,7 +14,7 @@ from backend.domain.enums import AuditAction, PolicyResult
 class SecurityAuditRepositoryImpl(SecurityAuditRepository):
     """PostgreSQL append-only audit repository."""
 
-    def __init__(self, db_url: str = None):
+    def __init__(self, db_url: str | None = None):
         """Initialize with database URL."""
         if db_url is None:
             import os
@@ -63,7 +63,7 @@ class SecurityAuditRepositoryImpl(SecurityAuditRepository):
                 record.ip_address,
                 record.user_agent,
                 json.dumps(record.context_data) if record.context_data else "{}",
-                datetime.utcnow(),
+                datetime.now(UTC),
             )
 
             cursor.execute(sql, values)
@@ -83,9 +83,7 @@ class SecurityAuditRepositoryImpl(SecurityAuditRepository):
         cursor = conn.cursor()
 
         try:
-            cursor.execute(
-                "SELECT * FROM security_audit_records WHERE id = %s", (str(record_id),)
-            )
+            cursor.execute("SELECT * FROM security_audit_records WHERE id = %s", (str(record_id),))
             row = cursor.fetchone()
 
             if not row:
@@ -97,9 +95,7 @@ class SecurityAuditRepositoryImpl(SecurityAuditRepository):
             cursor.close()
             conn.close()
 
-    def find_by_resource_id(
-        self, resource_id: UUID, limit: int = 100
-    ) -> list[SecurityAuditRecord]:
+    def find_by_resource_id(self, resource_id: UUID, limit: int = 100) -> list[SecurityAuditRecord]:
         """Find audit records by resource ID."""
         conn = self._connect()
         cursor = conn.cursor()
@@ -117,9 +113,7 @@ class SecurityAuditRepositoryImpl(SecurityAuditRepository):
             cursor.close()
             conn.close()
 
-    def find_by_actor_id(
-        self, actor_id: UUID, limit: int = 100
-    ) -> list[SecurityAuditRecord]:
+    def find_by_actor_id(self, actor_id: UUID, limit: int = 100) -> list[SecurityAuditRecord]:
         """Find audit records by actor ID."""
         conn = self._connect()
         cursor = conn.cursor()

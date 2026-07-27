@@ -103,14 +103,10 @@ class DesignFeedback:
             else data["design_partner_id"]
         )
         data["created_by"] = (
-            UUID(data["created_by"])
-            if isinstance(data["created_by"], str)
-            else data["created_by"]
+            UUID(data["created_by"]) if isinstance(data["created_by"], str) else data["created_by"]
         )
         data["updated_by"] = (
-            UUID(data["updated_by"])
-            if isinstance(data["updated_by"], str)
-            else data["updated_by"]
+            UUID(data["updated_by"]) if isinstance(data["updated_by"], str) else data["updated_by"]
         )
         data["category"] = (
             FeedbackCategory(data["category"])
@@ -123,9 +119,7 @@ class DesignFeedback:
             else data["suggested_release"]
         )
         data["status"] = (
-            FeedbackStatus(data["status"])
-            if isinstance(data["status"], str)
-            else data["status"]
+            FeedbackStatus(data["status"]) if isinstance(data["status"], str) else data["status"]
         )
         data["similar_feedback_ids"] = [
             UUID(fid) if isinstance(fid, str) else fid

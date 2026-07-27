@@ -45,9 +45,7 @@ class Opportunity:
 
     # Security & compliance posture
     security_maturity: MaturityLevel = MaturityLevel.NONE
-    security_certifications: list[str] = field(
-        default_factory=list
-    )  # SOC2, ISO27001, etc.
+    security_certifications: list[str] = field(default_factory=list)  # SOC2, ISO27001, etc.
     compliance_needs: list[str] = field(default_factory=list)  # GDPR, HIPAA, etc.
 
     # Design partner readiness
@@ -112,9 +110,7 @@ class Opportunity:
 
         dp_points = self.design_partner_potential * 0.1
 
-        total = int(
-            min(100, max(0, icp_points + ai_points + security_points + dp_points))
-        )
+        total = int(min(100, max(0, icp_points + ai_points + security_points + dp_points)))
         return total
 
     def is_qualified_for_design_partner(self) -> bool:
@@ -145,19 +141,13 @@ class Opportunity:
         data = data.copy()
         data["id"] = UUID(data["id"]) if isinstance(data["id"], str) else data["id"]
         data["created_by"] = (
-            UUID(data["created_by"])
-            if isinstance(data["created_by"], str)
-            else data["created_by"]
+            UUID(data["created_by"]) if isinstance(data["created_by"], str) else data["created_by"]
         )
         data["updated_by"] = (
-            UUID(data["updated_by"])
-            if isinstance(data["updated_by"], str)
-            else data["updated_by"]
+            UUID(data["updated_by"]) if isinstance(data["updated_by"], str) else data["updated_by"]
         )
         data["status"] = (
-            OpportunityStatus(data["status"])
-            if isinstance(data["status"], str)
-            else data["status"]
+            OpportunityStatus(data["status"]) if isinstance(data["status"], str) else data["status"]
         )
         data["icp_alignment"] = (
             ICPAlignment(data["icp_alignment"])

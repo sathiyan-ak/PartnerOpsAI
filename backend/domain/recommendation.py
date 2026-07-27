@@ -1,7 +1,7 @@
 """Product recommendation domain model."""
 
 from dataclasses import asdict, dataclass, field
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Any
 from uuid import UUID, uuid4
 
@@ -87,9 +87,9 @@ class ProductRecommendation:
         """Record that a decision has been made on this recommendation."""
         self.decision_made = True
         self.decision_made_by = decision_by
-        self.decision_made_at = datetime.utcnow()
+        self.decision_made_at = datetime.now(UTC)
         self.decision_notes = notes
-        self.updated_at = datetime.utcnow()
+        self.updated_at = datetime.now(UTC)
 
     def calculate_confidence(self) -> float:
         """
@@ -117,9 +117,7 @@ class ProductRecommendation:
         }
         feasibility_factor = effort_to_feasibility.get(self.estimated_effort, 0.5) * 0.2
 
-        confidence = min(
-            1.0, max(0.0, customer_factor + priority_factor + feasibility_factor)
-        )
+        confidence = min(1.0, max(0.0, customer_factor + priority_factor + feasibility_factor))
         return round(confidence, 2)
 
     def calculate_business_score(self) -> int:
@@ -152,9 +150,7 @@ class ProductRecommendation:
         total = int(
             min(
                 100,
-                max(
-                    0, demand_score + strategic_score + feasibility_score + market_score
-                ),
+                max(0, demand_score + strategic_score + feasibility_score + market_score),
             )
         )
         return total
@@ -186,14 +182,10 @@ class ProductRecommendation:
             else data["feedback_cluster_id"]
         )
         data["created_by"] = (
-            UUID(data["created_by"])
-            if isinstance(data["created_by"], str)
-            else data["created_by"]
+            UUID(data["created_by"]) if isinstance(data["created_by"], str) else data["created_by"]
         )
         data["updated_by"] = (
-            UUID(data["updated_by"])
-            if isinstance(data["updated_by"], str)
-            else data["updated_by"]
+            UUID(data["updated_by"]) if isinstance(data["updated_by"], str) else data["updated_by"]
         )
         if data.get("decision_made_by") and isinstance(data["decision_made_by"], str):
             data["decision_made_by"] = UUID(data["decision_made_by"])

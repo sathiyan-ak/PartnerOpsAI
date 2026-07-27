@@ -57,9 +57,7 @@ class GenerateRecommendationUseCase:
         self.audit_repo = audit_repository
         self.actor_id = actor_id
 
-    def execute(
-        self, input_data: GenerateRecommendationInput
-    ) -> GenerateRecommendationOutput:
+    def execute(self, input_data: GenerateRecommendationInput) -> GenerateRecommendationOutput:
         """Execute recommendation generation."""
 
         # Load cluster

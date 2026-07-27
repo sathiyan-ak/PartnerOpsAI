@@ -62,9 +62,7 @@ class TestAuditSecurityEventUseCase:
         for i in range(3):
             input_data = AuditSecurityEventInput(
                 actor_role="user",
-                action=[AuditAction.CREATED, AuditAction.UPDATED, AuditAction.DELETED][
-                    i
-                ],
+                action=[AuditAction.CREATED, AuditAction.UPDATED, AuditAction.DELETED][i],
                 resource_type="design_partner",
             )
 

@@ -162,15 +162,11 @@ class SecurityAuditRepository(ABC):
         """Find audit record by ID."""
 
     @abstractmethod
-    def find_by_resource_id(
-        self, resource_id: UUID, limit: int = 100
-    ) -> list[SecurityAuditRecord]:
+    def find_by_resource_id(self, resource_id: UUID, limit: int = 100) -> list[SecurityAuditRecord]:
         """Find all audit records for a resource."""
 
     @abstractmethod
-    def find_by_actor_id(
-        self, actor_id: UUID, limit: int = 100
-    ) -> list[SecurityAuditRecord]:
+    def find_by_actor_id(self, actor_id: UUID, limit: int = 100) -> list[SecurityAuditRecord]:
         """Find all audit records by an actor."""
 
     @abstractmethod

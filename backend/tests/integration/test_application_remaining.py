@@ -1,6 +1,6 @@
 """Application layer tests: Remaining 6 use cases."""
 
-from datetime import datetime
+from datetime import UTC, datetime
 from uuid import UUID, uuid4
 
 import pytest
@@ -24,9 +24,7 @@ class TestConvertDesignPartnerUseCase:
     def repo(self, database_url) -> OpportunityRepositoryImpl:
         return OpportunityRepositoryImpl(database_url)
 
-    def test_convert_qualified_opportunity(
-        self, repo, test_user_id, postgres_connection
-    ):
+    def test_convert_qualified_opportunity(self, repo, test_user_id, postgres_connection):
         """Test: Convert qualified opportunity to design partner."""
         user_uuid = UUID(test_user_id)
 
@@ -49,8 +47,8 @@ class TestConvertDesignPartnerUseCase:
             has_product_team=True,
             product_owner_email="cto@candidate.com",
             technical_contact_email="tech@candidate.com",
-            created_at=datetime.utcnow(),
-            updated_at=datetime.utcnow(),
+            created_at=datetime.now(UTC),
+            updated_at=datetime.now(UTC),
         )
 
         opp_id = repo.save(opp)

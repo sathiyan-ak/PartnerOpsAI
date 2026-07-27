@@ -1,6 +1,6 @@
 """Application layer: GenerateRecommendationUseCase tests."""
 
-from datetime import datetime
+from datetime import UTC, datetime
 from uuid import UUID, uuid4
 
 import pytest
@@ -84,8 +84,8 @@ class TestGenerateRecommendationUseCase:
             impact_score=82,
             priority_score=80,
             status=FeedbackStatus.SUBMITTED,
-            created_at=datetime.utcnow(),
-            updated_at=datetime.utcnow(),
+            created_at=datetime.now(UTC),
+            updated_at=datetime.now(UTC),
         )
         primary_id = feedback_repo.save(primary_fb)
 
@@ -100,8 +100,8 @@ class TestGenerateRecommendationUseCase:
             theme="Dashboard Customization",
             total_feedback_count=3,
             average_impact_score=82.5,
-            created_at=datetime.utcnow(),
-            updated_at=datetime.utcnow(),
+            created_at=datetime.now(UTC),
+            updated_at=datetime.now(UTC),
         )
         cluster_id = cluster_repo.save(cluster)
 
@@ -167,8 +167,8 @@ class TestGenerateRecommendationUseCase:
             impact_score=35,
             priority_score=40,
             status=FeedbackStatus.SUBMITTED,
-            created_at=datetime.utcnow(),
-            updated_at=datetime.utcnow(),
+            created_at=datetime.now(UTC),
+            updated_at=datetime.now(UTC),
         )
         primary_id = feedback_repo.save(primary_fb)
 
@@ -182,8 +182,8 @@ class TestGenerateRecommendationUseCase:
             theme="Advanced Analytics",
             total_feedback_count=2,
             average_impact_score=35.0,
-            created_at=datetime.utcnow(),
-            updated_at=datetime.utcnow(),
+            created_at=datetime.now(UTC),
+            updated_at=datetime.now(UTC),
         )
         cluster_id = cluster_repo.save(cluster)
 
@@ -268,8 +268,8 @@ class TestGenerateRecommendationUseCase:
                 impact_score=75,
                 priority_score=80,
                 status=FeedbackStatus.SUBMITTED,
-                created_at=datetime.utcnow(),
-                updated_at=datetime.utcnow(),
+                created_at=datetime.now(UTC),
+                updated_at=datetime.now(UTC),
             )
             primary_id = feedback_repo.save(primary_fb)
 
@@ -283,8 +283,8 @@ class TestGenerateRecommendationUseCase:
                 theme="Test Feature",
                 total_feedback_count=2,
                 average_impact_score=75.0,
-                created_at=datetime.utcnow(),
-                updated_at=datetime.utcnow(),
+                created_at=datetime.now(UTC),
+                updated_at=datetime.now(UTC),
             )
             cluster_id = cluster_repo.save(cluster)
 

@@ -1,6 +1,6 @@
 """Application layer: ClusterFeedbackUseCase tests."""
 
-from datetime import datetime
+from datetime import UTC, datetime
 from uuid import UUID, uuid4
 
 import pytest
@@ -77,10 +77,10 @@ class TestClusterFeedbackUseCase:
             updated_by=user_uuid,
             converted_by=user_uuid,
             company_name="Cluster Test Co",
-            converted_at=datetime.utcnow(),
+            converted_at=datetime.now(UTC),
             onboarding_status=DesignPartnerStatus.ONBOARDING,
-            created_at=datetime.utcnow(),
-            updated_at=datetime.utcnow(),
+            created_at=datetime.now(UTC),
+            updated_at=datetime.now(UTC),
         )
         dp_id = partner_repo.save(dp)
 
@@ -99,8 +99,8 @@ class TestClusterFeedbackUseCase:
             impact_score=85,
             priority_score=90,
             status=FeedbackStatus.SUBMITTED,
-            created_at=datetime.utcnow(),
-            updated_at=datetime.utcnow(),
+            created_at=datetime.now(UTC),
+            updated_at=datetime.now(UTC),
         )
         primary_id = feedback_repo.save(primary_fb)
 
@@ -120,8 +120,8 @@ class TestClusterFeedbackUseCase:
                 impact_score=80 + i,
                 priority_score=85 + i,
                 status=FeedbackStatus.SUBMITTED,
-                created_at=datetime.utcnow(),
-                updated_at=datetime.utcnow(),
+                created_at=datetime.now(UTC),
+                updated_at=datetime.now(UTC),
             )
             related_ids.append(feedback_repo.save(related_fb))
 
@@ -179,10 +179,10 @@ class TestClusterFeedbackUseCase:
             updated_by=user_uuid,
             converted_by=user_uuid,
             company_name="Single Feedback Co",
-            converted_at=datetime.utcnow(),
+            converted_at=datetime.now(UTC),
             onboarding_status=DesignPartnerStatus.ONBOARDING,
-            created_at=datetime.utcnow(),
-            updated_at=datetime.utcnow(),
+            created_at=datetime.now(UTC),
+            updated_at=datetime.now(UTC),
         )
         dp_id = partner_repo.save(dp)
 
@@ -200,8 +200,8 @@ class TestClusterFeedbackUseCase:
             impact_score=50,
             priority_score=50,
             status=FeedbackStatus.SUBMITTED,
-            created_at=datetime.utcnow(),
-            updated_at=datetime.utcnow(),
+            created_at=datetime.now(UTC),
+            updated_at=datetime.now(UTC),
         )
         primary_id = feedback_repo.save(primary_fb)
 

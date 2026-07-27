@@ -1,6 +1,6 @@
 """Smoke test: Complete business journey (end-to-end)."""
 
-from datetime import datetime
+from datetime import UTC, datetime
 from uuid import UUID, uuid4
 
 import pytest
@@ -25,9 +25,7 @@ class TestBusinessJourney:
         """Get repository."""
         return OpportunityRepositoryImpl(database_url)
 
-    def test_complete_opportunity_lifecycle(
-        self, repo, test_user_id, postgres_connection
-    ):
+    def test_complete_opportunity_lifecycle(self, repo, test_user_id, postgres_connection):
         """
         Smoke test: Complete journey.
 
@@ -54,8 +52,8 @@ class TestBusinessJourney:
             security_maturity=MaturityLevel.BEGINNER,
             design_partner_potential=30,
             has_product_team=False,
-            created_at=datetime.utcnow(),
-            updated_at=datetime.utcnow(),
+            created_at=datetime.now(UTC),
+            updated_at=datetime.now(UTC),
         )
 
         # Save prospect

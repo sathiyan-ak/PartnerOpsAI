@@ -1,0 +1,15 @@
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+ignore = [
+    "B017",    # Do not assert blind exception in tests
+    "BLE001",  # Do not catch blind exception
+    "PYI034",  # `__new__` method return type issue
+    "S110",    # try-except-pass
+]
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]

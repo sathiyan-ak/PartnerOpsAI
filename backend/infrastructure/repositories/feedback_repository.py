@@ -15,7 +15,7 @@ from backend.domain import DesignFeedback, FeedbackCluster
 class DesignFeedbackRepositoryImpl(DesignFeedbackRepository):
     """PostgreSQL implementation of DesignFeedbackRepository."""
 
-    def __init__(self, db_url: str = None):
+    def __init__(self, db_url: str | None = None):
         """Initialize with database URL."""
         if db_url is None:
             import os
@@ -96,9 +96,7 @@ class DesignFeedbackRepositoryImpl(DesignFeedbackRepository):
             return feedback.id
         except psycopg2.Error as e:
             conn.rollback()
-            raise RuntimeError(
-                f"Database constraint violation: {str(e).split(chr(10))[0]}"
-            ) from e
+            raise RuntimeError(f"Database constraint violation: {str(e).split(chr(10))[0]}") from e
         finally:
             cursor.close()
             conn.close()
@@ -165,19 +163,13 @@ class DesignFeedbackRepositoryImpl(DesignFeedbackRepository):
 
         # Handle similar_feedback_ids array
         similar_ids = (
-            row[15]
-            if isinstance(row[15], list)
-            else (json.loads(row[15]) if row[15] else [])
+            row[15] if isinstance(row[15], list) else (json.loads(row[15]) if row[15] else [])
         )
-        similar_ids = [
-            UUID(sid) if isinstance(sid, str) else sid for sid in similar_ids
-        ]
+        similar_ids = [UUID(sid) if isinstance(sid, str) else sid for sid in similar_ids]
 
         # Handle affected_personas array
         affected = (
-            row[21]
-            if isinstance(row[21], list)
-            else (json.loads(row[21]) if row[21] else [])
+            row[21] if isinstance(row[21], list) else (json.loads(row[21]) if row[21] else [])
         )
 
         return DesignFeedback(
@@ -212,7 +204,7 @@ class DesignFeedbackRepositoryImpl(DesignFeedbackRepository):
 class FeedbackClusterRepositoryImpl(FeedbackClusterRepository):
     """PostgreSQL implementation of FeedbackClusterRepository."""
 
-    def __init__(self, db_url: str = None):
+    def __init__(self, db_url: str | None = None):
         """Initialize with database URL."""
         if db_url is None:
             import os
@@ -253,9 +245,7 @@ class FeedbackClusterRepositoryImpl(FeedbackClusterRepository):
                     average_priority_score=EXCLUDED.average_priority_score
             """
             # Format UUID array as PostgreSQL array literal: {uuid1,uuid2}
-            uuid_array_str = (
-                "{" + ",".join(str(fid) for fid in cluster.related_feedback_ids) + "}"
-            )
+            uuid_array_str = "{" + ",".join(str(fid) for fid in cluster.related_feedback_ids) + "}"
             cursor.execute(
                 sql,
                 (
@@ -276,9 +266,7 @@ class FeedbackClusterRepositoryImpl(FeedbackClusterRepository):
             return cluster.id
         except psycopg2.Error as e:
             conn.rollback()
-            raise RuntimeError(
-                f"Database constraint violation: {str(e).split(chr(10))[0]}"
-            ) from e
+            raise RuntimeError(f"Database constraint violation: {str(e).split(chr(10))[0]}") from e
         finally:
             cursor.close()
             conn.close()
@@ -337,17 +325,13 @@ class FeedbackClusterRepositoryImpl(FeedbackClusterRepository):
         elif isinstance(raw_ids, str):
             if raw_ids.startswith("{"):
                 # PostgreSQL array literal: {uuid1,uuid2}
-                related_ids = [
-                    x.strip() for x in raw_ids.strip("{}").split(",") if x.strip()
-                ]
+                related_ids = [x.strip() for x in raw_ids.strip("{}").split(",") if x.strip()]
             else:
                 # Try JSON
                 related_ids = json.loads(raw_ids) if raw_ids else []
         else:
             related_ids = []
-        related_ids = [
-            UUID(fid) if isinstance(fid, str) else fid for fid in related_ids
-        ]
+        related_ids = [UUID(fid) if isinstance(fid, str) else fid for fid in related_ids]
 
         return FeedbackCluster(
             id=UUID(row[0]),

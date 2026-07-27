@@ -11,7 +11,7 @@ from backend.domain import DesignPartner, DesignPartnerStatus
 class DesignPartnerRepositoryImpl(DesignPartnerRepository):
     """PostgreSQL implementation of DesignPartnerRepository."""
 
-    def __init__(self, db_url: str = None):
+    def __init__(self, db_url: str | None = None):
         """Initialize with database URL."""
         if db_url is None:
             import os
@@ -67,11 +67,7 @@ class DesignPartnerRepositoryImpl(DesignPartnerRepository):
                     str(design_partner.updated_by),
                     design_partner.version,
                     design_partner.converted_at,
-                    (
-                        str(design_partner.converted_by)
-                        if design_partner.converted_by
-                        else None
-                    ),
+                    (str(design_partner.converted_by) if design_partner.converted_by else None),
                     design_partner.company_name,
                     design_partner.product_owner_name,
                     design_partner.product_owner_email,
@@ -88,9 +84,7 @@ class DesignPartnerRepositoryImpl(DesignPartnerRepository):
             return design_partner.id
         except psycopg2.Error as e:
             conn.rollback()
-            raise RuntimeError(
-                f"Database constraint violation: {str(e).split(chr(10))[0]}"
-            ) from e
+            raise RuntimeError(f"Database constraint violation: {str(e).split(chr(10))[0]}") from e
         finally:
             cursor.close()
             conn.close()

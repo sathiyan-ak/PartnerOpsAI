@@ -80,9 +80,7 @@ class SecurityAuditRecord:
         data = data.copy()
         data["id"] = UUID(data["id"]) if isinstance(data["id"], str) else data["id"]
         data["actor_id"] = (
-            UUID(data["actor_id"])
-            if isinstance(data["actor_id"], str)
-            else data["actor_id"]
+            UUID(data["actor_id"]) if isinstance(data["actor_id"], str) else data["actor_id"]
         )
         data["resource_id"] = (
             UUID(data["resource_id"])
@@ -90,9 +88,7 @@ class SecurityAuditRecord:
             else data["resource_id"]
         )
         data["action"] = (
-            AuditAction(data["action"])
-            if isinstance(data["action"], str)
-            else data["action"]
+            AuditAction(data["action"]) if isinstance(data["action"], str) else data["action"]
         )
         data["policy_result"] = (
             PolicyResult(data["policy_result"])
@@ -171,9 +167,7 @@ class PolicyDecision:
         """
         effort_factor = 1.0 - (self.effort_score / 100.0)
         priority = (
-            (self.impact_score * 0.5)
-            + (self.urgency_score * 0.4)
-            + (effort_factor * 0.1 * 100)
+            (self.impact_score * 0.5) + (self.urgency_score * 0.4) + (effort_factor * 0.1 * 100)
         )
         return int(min(100, max(0, priority)))
 
@@ -203,14 +197,10 @@ class PolicyDecision:
             else data["opportunity_id"]
         )
         data["created_by"] = (
-            UUID(data["created_by"])
-            if isinstance(data["created_by"], str)
-            else data["created_by"]
+            UUID(data["created_by"]) if isinstance(data["created_by"], str) else data["created_by"]
         )
         data["updated_by"] = (
-            UUID(data["updated_by"])
-            if isinstance(data["updated_by"], str)
-            else data["updated_by"]
+            UUID(data["updated_by"]) if isinstance(data["updated_by"], str) else data["updated_by"]
         )
         if data.get("assigned_to_id") and isinstance(data["assigned_to_id"], str):
             data["assigned_to_id"] = UUID(data["assigned_to_id"])

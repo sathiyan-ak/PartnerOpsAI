@@ -1,6 +1,6 @@
 """Application layer: ConvertDesignPartnerUseCase tests."""
 
-from datetime import datetime
+from datetime import UTC, datetime
 from uuid import UUID, uuid4
 
 import pytest
@@ -77,8 +77,8 @@ class TestConvertDesignPartnerUseCase:
             has_product_team=True,
             product_owner_email="po@company.com",
             technical_contact_email="tech@company.com",
-            created_at=datetime.utcnow(),
-            updated_at=datetime.utcnow(),
+            created_at=datetime.now(UTC),
+            updated_at=datetime.now(UTC),
         )
         opp_id = opportunity_repo.save(opp)
 
@@ -132,8 +132,8 @@ class TestConvertDesignPartnerUseCase:
             security_maturity=MaturityLevel.NONE,
             design_partner_potential=10,
             has_product_team=False,
-            created_at=datetime.utcnow(),
-            updated_at=datetime.utcnow(),
+            created_at=datetime.now(UTC),
+            updated_at=datetime.now(UTC),
         )
         opp_id = opportunity_repo.save(opp)
 
@@ -165,9 +165,7 @@ class TestConvertDesignPartnerUseCase:
 
         assert "not found" in str(exc_info.value)
 
-    def test_audit_trail_created(
-        self, use_case, opportunity_repo, audit_repo, test_user_id
-    ):
+    def test_audit_trail_created(self, use_case, opportunity_repo, audit_repo, test_user_id):
         """Test: Audit record created for conversion."""
         user_uuid = UUID(test_user_id)
 
@@ -187,8 +185,8 @@ class TestConvertDesignPartnerUseCase:
             security_maturity=MaturityLevel.INTERMEDIATE,
             design_partner_potential=80,
             has_product_team=True,
-            created_at=datetime.utcnow(),
-            updated_at=datetime.utcnow(),
+            created_at=datetime.now(UTC),
+            updated_at=datetime.now(UTC),
         )
         opp_id = opportunity_repo.save(opp)
 

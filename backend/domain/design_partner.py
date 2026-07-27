@@ -1,7 +1,7 @@
 """Design partner domain model (bridge from Opportunity)."""
 
 from dataclasses import asdict, dataclass, field
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Any
 from uuid import UUID, uuid4
 
@@ -57,9 +57,7 @@ class DesignPartner:
     last_feedback_date: datetime | None = None
 
     # Product involvement
-    features_influenced: list[str] = field(
-        default_factory=list
-    )  # Features this partner influenced
+    features_influenced: list[str] = field(default_factory=list)  # Features this partner influenced
     roadmap_review_frequency: str = "monthly"  # monthly, quarterly, ad_hoc
     product_review_dates: list[datetime] = field(default_factory=list)
 
@@ -89,21 +87,21 @@ class DesignPartner:
         if feedback_count > 0:
             self.total_feedback_count += feedback_count
             self.feedback_count_this_quarter += feedback_count
-            self.last_engagement_at = datetime.utcnow()
-            self.last_feedback_date = datetime.utcnow()
-            self.updated_at = datetime.utcnow()
+            self.last_engagement_at = datetime.now(UTC)
+            self.last_feedback_date = datetime.now(UTC)
+            self.updated_at = datetime.now(UTC)
 
     def mark_onboarding_complete(self) -> None:
         """Mark onboarding phase as complete."""
         self.onboarding_status = DesignPartnerStatus.ACTIVE
-        self.onboarding_completed_at = datetime.utcnow()
-        self.updated_at = datetime.utcnow()
+        self.onboarding_completed_at = datetime.now(UTC)
+        self.updated_at = datetime.now(UTC)
 
     def mark_implementation_complete(self) -> None:
         """Mark implementation phase as complete."""
         self.implementation_status = DesignPartnerStatus.SHIPPED
-        self.implementation_completed_at = datetime.utcnow()
-        self.updated_at = datetime.utcnow()
+        self.implementation_completed_at = datetime.now(UTC)
+        self.updated_at = datetime.now(UTC)
 
     def to_dict(self) -> dict[str, Any]:
         """Serialize to dictionary."""
@@ -120,24 +118,16 @@ class DesignPartner:
         if data["onboarding_started_at"]:
             data["onboarding_started_at"] = data["onboarding_started_at"].isoformat()
         if data["onboarding_completed_at"]:
-            data["onboarding_completed_at"] = data[
-                "onboarding_completed_at"
-            ].isoformat()
+            data["onboarding_completed_at"] = data["onboarding_completed_at"].isoformat()
         if data["implementation_started_at"]:
-            data["implementation_started_at"] = data[
-                "implementation_started_at"
-            ].isoformat()
+            data["implementation_started_at"] = data["implementation_started_at"].isoformat()
         if data["implementation_completed_at"]:
-            data["implementation_completed_at"] = data[
-                "implementation_completed_at"
-            ].isoformat()
+            data["implementation_completed_at"] = data["implementation_completed_at"].isoformat()
         if data["last_engagement_at"]:
             data["last_engagement_at"] = data["last_engagement_at"].isoformat()
         if data["last_feedback_date"]:
             data["last_feedback_date"] = data["last_feedback_date"].isoformat()
-        data["product_review_dates"] = [
-            d.isoformat() for d in self.product_review_dates
-        ]
+        data["product_review_dates"] = [d.isoformat() for d in self.product_review_dates]
         data["created_at"] = self.created_at.isoformat()
         data["updated_at"] = self.updated_at.isoformat()
         return data
@@ -153,14 +143,10 @@ class DesignPartner:
             else data["opportunity_id"]
         )
         data["created_by"] = (
-            UUID(data["created_by"])
-            if isinstance(data["created_by"], str)
-            else data["created_by"]
+            UUID(data["created_by"]) if isinstance(data["created_by"], str) else data["created_by"]
         )
         data["updated_by"] = (
-            UUID(data["updated_by"])
-            if isinstance(data["updated_by"], str)
-            else data["updated_by"]
+            UUID(data["updated_by"]) if isinstance(data["updated_by"], str) else data["updated_by"]
         )
         data["converted_by"] = (
             UUID(data["converted_by"])
@@ -178,9 +164,7 @@ class DesignPartner:
             else data["implementation_status"]
         )
         data["health"] = (
-            PartnerHealth(data["health"])
-            if isinstance(data["health"], str)
-            else data["health"]
+            PartnerHealth(data["health"]) if isinstance(data["health"], str) else data["health"]
         )
 
         # Parse datetime fields

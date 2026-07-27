@@ -1,8 +1,9 @@
 """Integration test: Full opportunity qualification flow."""
 
+
 import pytest
-from uuid import uuid4
-from backend.domain import Opportunity, OpportunityStatus, MaturityLevel, ICPAlignment
+
+from backend.domain import ICPAlignment, MaturityLevel, Opportunity, OpportunityStatus
 
 
 @pytest.mark.integration

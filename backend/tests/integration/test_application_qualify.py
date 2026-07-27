@@ -1,21 +1,23 @@
 """Application layer tests: QualifyOpportunityUseCase."""
 
-import pytest
-from uuid import uuid4, UUID
-from datetime import datetime
+from uuid import UUID
 
-from backend.domain import (
-    Opportunity,
-    OpportunityStatus,
-    ICPAlignment,
-    MaturityLevel,
-)
+import pytest
+
 from backend.application.qualify_opportunity import (
-    QualifyOpportunityUseCase,
     QualifyOpportunityInput,
+    QualifyOpportunityUseCase,
 )
-from backend.infrastructure.repositories.opportunity_repository import OpportunityRepositoryImpl
-from backend.infrastructure.repositories.audit_repository import SecurityAuditRepositoryImpl
+from backend.domain import (
+    MaturityLevel,
+    OpportunityStatus,
+)
+from backend.infrastructure.repositories.audit_repository import (
+    SecurityAuditRepositoryImpl,
+)
+from backend.infrastructure.repositories.opportunity_repository import (
+    OpportunityRepositoryImpl,
+)
 
 
 @pytest.mark.integration
@@ -45,7 +47,6 @@ class TestQualifyOpportunityUseCase:
         """Test: Qualify a strong enterprise prospect → QUALIFIED."""
         # Note: The use case should infer icp_alignment from icp_score
         # For now, set it explicitly to STRONG for qualification
-        from backend.domain import ICPAlignment
 
         input_data = QualifyOpportunityInput(
             company_name="Fortune 500 Corp",

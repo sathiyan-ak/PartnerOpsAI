@@ -2,21 +2,21 @@
 
 from dataclasses import dataclass
 from uuid import UUID
-from typing import List
+
 from ..domain import FeedbackCluster
+from ..domain.audit import SecurityAuditRecord
+from ..domain.enums import AuditAction
 from .repositories import (
     DesignFeedbackRepository,
     FeedbackClusterRepository,
     SecurityAuditRepository,
 )
-from ..domain.audit import SecurityAuditRecord
-from ..domain.enums import AuditAction
 
 
 @dataclass
 class ClusterFeedbackInput:
     primary_feedback_id: UUID
-    related_feedback_ids: List[UUID]
+    related_feedback_ids: list[UUID]
     cluster_reason: str
     theme: str = ""
 

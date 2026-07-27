@@ -1,13 +1,12 @@
 """Mapper: Convert between domain models and database records."""
 
-from typing import Dict, Any
+from typing import Any
+
 from backend.domain import (
-    Opportunity,
-    DesignPartner,
     DesignFeedback,
-    FeedbackCluster,
+    DesignPartner,
+    Opportunity,
     ProductRecommendation,
-    PolicyDecision,
     SecurityAuditRecord,
 )
 
@@ -16,7 +15,7 @@ class DomainMapper:
     """Converts domain models ↔ database dictionaries."""
 
     @staticmethod
-    def opportunity_to_db(opp: Opportunity) -> Dict[str, Any]:
+    def opportunity_to_db(opp: Opportunity) -> dict[str, Any]:
         """Domain → Database."""
         return {
             "id": str(opp.id),
@@ -49,12 +48,12 @@ class DomainMapper:
         }
 
     @staticmethod
-    def db_to_opportunity(data: Dict[str, Any]) -> Opportunity:
+    def db_to_opportunity(data: dict[str, Any]) -> Opportunity:
         """Database → Domain."""
         return Opportunity.from_dict(data)
 
     @staticmethod
-    def design_partner_to_db(dp: DesignPartner) -> Dict[str, Any]:
+    def design_partner_to_db(dp: DesignPartner) -> dict[str, Any]:
         """Domain → Database."""
         return {
             "id": str(dp.id),
@@ -80,12 +79,12 @@ class DomainMapper:
         }
 
     @staticmethod
-    def db_to_design_partner(data: Dict[str, Any]) -> DesignPartner:
+    def db_to_design_partner(data: dict[str, Any]) -> DesignPartner:
         """Database → Domain."""
         return DesignPartner.from_dict(data)
 
     @staticmethod
-    def design_feedback_to_db(fb: DesignFeedback) -> Dict[str, Any]:
+    def design_feedback_to_db(fb: DesignFeedback) -> dict[str, Any]:
         """Domain → Database."""
         return {
             "id": str(fb.id),
@@ -114,12 +113,12 @@ class DomainMapper:
         }
 
     @staticmethod
-    def db_to_design_feedback(data: Dict[str, Any]) -> DesignFeedback:
+    def db_to_design_feedback(data: dict[str, Any]) -> DesignFeedback:
         """Database → Domain."""
         return DesignFeedback.from_dict(data)
 
     @staticmethod
-    def recommendation_to_db(rec: ProductRecommendation) -> Dict[str, Any]:
+    def recommendation_to_db(rec: ProductRecommendation) -> dict[str, Any]:
         """Domain → Database."""
         return {
             "id": str(rec.id),
@@ -155,12 +154,12 @@ class DomainMapper:
         }
 
     @staticmethod
-    def db_to_recommendation(data: Dict[str, Any]) -> ProductRecommendation:
+    def db_to_recommendation(data: dict[str, Any]) -> ProductRecommendation:
         """Database → Domain."""
         return ProductRecommendation.from_dict(data)
 
     @staticmethod
-    def audit_to_db(record: SecurityAuditRecord) -> Dict[str, Any]:
+    def audit_to_db(record: SecurityAuditRecord) -> dict[str, Any]:
         """Domain → Database."""
         return {
             "id": str(record.id),
@@ -184,6 +183,6 @@ class DomainMapper:
         }
 
     @staticmethod
-    def db_to_audit(data: Dict[str, Any]) -> SecurityAuditRecord:
+    def db_to_audit(data: dict[str, Any]) -> SecurityAuditRecord:
         """Database → Domain."""
         return SecurityAuditRecord.from_dict(data)

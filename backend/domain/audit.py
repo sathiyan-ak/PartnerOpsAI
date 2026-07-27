@@ -1,9 +1,10 @@
 """Security audit and governance domain models."""
 
-from dataclasses import dataclass, asdict, field
+from dataclasses import asdict, dataclass, field
 from datetime import datetime
-from typing import Optional, Dict, Any
+from typing import Any
 from uuid import UUID, uuid4
+
 from .enums import AuditAction, PolicyResult
 
 
@@ -44,9 +45,9 @@ class SecurityAuditRecord:
     previous_hash: str = ""  # Hash of previous record (chain)
 
     # Context
-    ip_address: Optional[str] = None
-    user_agent: Optional[str] = None
-    context_data: Dict[str, Any] = field(default_factory=dict)  # Additional context
+    ip_address: str | None = None
+    user_agent: str | None = None
+    context_data: dict[str, Any] = field(default_factory=dict)  # Additional context
 
     # Timestamp (immutable)
     created_at: datetime = field(default_factory=datetime.utcnow)
@@ -62,7 +63,7 @@ class SecurityAuditRecord:
             errors.append("resource_type: required")
         return errors
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Serialize to dictionary."""
         data = asdict(self)
         data["id"] = str(self.id)
@@ -74,7 +75,7 @@ class SecurityAuditRecord:
         return data
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "SecurityAuditRecord":
+    def from_dict(cls, data: dict[str, Any]) -> "SecurityAuditRecord":
         """Deserialize from dictionary."""
         data = data.copy()
         data["id"] = UUID(data["id"]) if isinstance(data["id"], str) else data["id"]
@@ -139,8 +140,8 @@ class PolicyDecision:
 
     # Status & ownership
     status: str = "open"  # open | in_review | resolved | deferred
-    assigned_to_id: Optional[UUID] = None
-    due_date: Optional[datetime] = None
+    assigned_to_id: UUID | None = None
+    due_date: datetime | None = None
 
     # Timestamps
     created_at: datetime = field(default_factory=datetime.utcnow)
@@ -176,7 +177,7 @@ class PolicyDecision:
         )
         return int(min(100, max(0, priority)))
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Serialize to dictionary."""
         data = asdict(self)
         data["id"] = str(self.id)
@@ -192,7 +193,7 @@ class PolicyDecision:
         return data
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "PolicyDecision":
+    def from_dict(cls, data: dict[str, Any]) -> "PolicyDecision":
         """Deserialize from dictionary."""
         data = data.copy()
         data["id"] = UUID(data["id"]) if isinstance(data["id"], str) else data["id"]

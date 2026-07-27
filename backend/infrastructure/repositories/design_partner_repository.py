@@ -1,13 +1,11 @@
 """Design Partner repository implementation (PostgreSQL)."""
 
-import json
-import psycopg2
-from typing import Optional, List
 from uuid import UUID
-from datetime import datetime
 
-from backend.domain import DesignPartner, DesignPartnerStatus
+import psycopg2
+
 from backend.application.repositories import DesignPartnerRepository
+from backend.domain import DesignPartner, DesignPartnerStatus
 
 
 class DesignPartnerRepositoryImpl(DesignPartnerRepository):
@@ -91,7 +89,7 @@ class DesignPartnerRepositoryImpl(DesignPartnerRepository):
             cursor.close()
             conn.close()
 
-    def find_by_id(self, design_partner_id: UUID) -> Optional[DesignPartner]:
+    def find_by_id(self, design_partner_id: UUID) -> DesignPartner | None:
         """Find design partner by ID."""
         conn = self._connect()
         cursor = conn.cursor()
@@ -107,7 +105,7 @@ class DesignPartnerRepositoryImpl(DesignPartnerRepository):
             cursor.close()
             conn.close()
 
-    def find_by_opportunity_id(self, opportunity_id: UUID) -> Optional[DesignPartner]:
+    def find_by_opportunity_id(self, opportunity_id: UUID) -> DesignPartner | None:
         """Find design partner by opportunity ID."""
         conn = self._connect()
         cursor = conn.cursor()
@@ -123,7 +121,7 @@ class DesignPartnerRepositoryImpl(DesignPartnerRepository):
             cursor.close()
             conn.close()
 
-    def list_all(self, limit: int = 100, offset: int = 0) -> List[DesignPartner]:
+    def list_all(self, limit: int = 100, offset: int = 0) -> list[DesignPartner]:
         """List all design partners."""
         conn = self._connect()
         cursor = conn.cursor()

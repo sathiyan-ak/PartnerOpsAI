@@ -5,27 +5,25 @@ Tests model instantiation, validation, serialization, and deterministic calculat
 Includes both happy path and negative tests.
 """
 
-from datetime import datetime
 from uuid import uuid4
+
 import pytest
 
-from .opportunity import Opportunity
+from .audit import PolicyDecision, SecurityAuditRecord
 from .design_partner import DesignPartner
-from .feedback import DesignFeedback, FeedbackCluster
-from .recommendation import ProductRecommendation
-from .audit import SecurityAuditRecord, PolicyDecision
 from .enums import (
-    OpportunityStatus,
-    ICPAlignment,
-    MaturityLevel,
+    AuditAction,
     DesignPartnerStatus,
-    PartnerHealth,
     FeedbackCategory,
     FeedbackStatus,
-    ReleaseTarget,
-    AuditAction,
-    PolicyResult,
+    ICPAlignment,
+    MaturityLevel,
+    OpportunityStatus,
+    PartnerHealth,
 )
+from .feedback import DesignFeedback, FeedbackCluster
+from .opportunity import Opportunity
+from .recommendation import ProductRecommendation
 
 
 class TestOpportunity:

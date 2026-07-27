@@ -1,10 +1,11 @@
 """Enterprise opportunity model focused on qualification, not CRM."""
 
-from dataclasses import dataclass, asdict, field
+from dataclasses import asdict, dataclass, field
 from datetime import datetime
-from typing import Optional, List, Dict, Any
+from typing import Any
 from uuid import UUID, uuid4
-from .enums import OpportunityStatus, ICPAlignment, MaturityLevel
+
+from .enums import ICPAlignment, MaturityLevel, OpportunityStatus
 
 
 @dataclass
@@ -44,10 +45,10 @@ class Opportunity:
 
     # Security & compliance posture
     security_maturity: MaturityLevel = MaturityLevel.NONE
-    security_certifications: List[str] = field(
+    security_certifications: list[str] = field(
         default_factory=list
     )  # SOC2, ISO27001, etc.
-    compliance_needs: List[str] = field(default_factory=list)  # GDPR, HIPAA, etc.
+    compliance_needs: list[str] = field(default_factory=list)  # GDPR, HIPAA, etc.
 
     # Design partner readiness
     design_partner_potential: int = 0  # 0-100: likelihood they'd be good design partner
@@ -68,7 +69,7 @@ class Opportunity:
     created_at: datetime = field(default_factory=datetime.utcnow)
     updated_at: datetime = field(default_factory=datetime.utcnow)
 
-    def validate(self) -> List[str]:
+    def validate(self) -> list[str]:
         """Validate opportunity data."""
         errors = []
         if not self.company_name.strip():
@@ -124,7 +125,7 @@ class Opportunity:
             and self.has_product_team
         )
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Serialize to dictionary."""
         data = asdict(self)
         data["id"] = str(self.id)
@@ -139,7 +140,7 @@ class Opportunity:
         return data
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "Opportunity":
+    def from_dict(cls, data: dict[str, Any]) -> "Opportunity":
         """Deserialize from dictionary."""
         data = data.copy()
         data["id"] = UUID(data["id"]) if isinstance(data["id"], str) else data["id"]

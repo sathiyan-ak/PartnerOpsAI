@@ -1,9 +1,10 @@
 """Demo seed data for PartnerOpsAI internship demo."""
 
 import os
-import psycopg2
-from uuid import uuid4
 from datetime import datetime
+from uuid import uuid4
+
+import psycopg2
 
 DB_URL = os.getenv(
     "DATABASE_URL",

@@ -1,9 +1,10 @@
 """Product recommendation domain model."""
 
-from dataclasses import dataclass, asdict, field
+from dataclasses import asdict, dataclass, field
 from datetime import datetime
-from typing import Optional, List, Dict, Any
+from typing import Any
 from uuid import UUID, uuid4
+
 from .enums import ReleaseTarget
 
 
@@ -51,21 +52,21 @@ class ProductRecommendation:
 
     # Implementation considerations
     estimated_effort: str = ""  # small | medium | large | xlarge
-    affected_personas: List[str] = field(default_factory=list)
-    dependencies: List[str] = field(default_factory=list)  # Other features needed?
-    risks: List[str] = field(default_factory=list)
+    affected_personas: list[str] = field(default_factory=list)
+    dependencies: list[str] = field(default_factory=list)  # Other features needed?
+    risks: list[str] = field(default_factory=list)
 
     # Status
     decision_made: bool = False
-    decision_made_by: Optional[UUID] = None
-    decision_made_at: Optional[datetime] = None
+    decision_made_by: UUID | None = None
+    decision_made_at: datetime | None = None
     decision_notes: str = ""
 
     # Timestamps
     created_at: datetime = field(default_factory=datetime.utcnow)
     updated_at: datetime = field(default_factory=datetime.utcnow)
 
-    def validate(self) -> List[str]:
+    def validate(self) -> list[str]:
         """Validate recommendation data."""
         errors = []
         if not self.title.strip():
@@ -158,7 +159,7 @@ class ProductRecommendation:
         )
         return total
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Serialize to dictionary."""
         data = asdict(self)
         data["id"] = str(self.id)
@@ -175,7 +176,7 @@ class ProductRecommendation:
         return data
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "ProductRecommendation":
+    def from_dict(cls, data: dict[str, Any]) -> "ProductRecommendation":
         """Deserialize from dictionary."""
         data = data.copy()
         data["id"] = UUID(data["id"]) if isinstance(data["id"], str) else data["id"]

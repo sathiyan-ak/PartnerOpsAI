@@ -1,10 +1,10 @@
 """Database connection and client for Supabase."""
 
-from typing import Optional
 import os
+from typing import Optional
 
 try:
-    from supabase import create_client, Client
+    from supabase import Client, create_client
 except ImportError:
     # Supabase optional for local testing
     Client = None
@@ -15,7 +15,7 @@ class DatabaseClient:
     """Singleton Supabase client."""
 
     _instance: Optional["DatabaseClient"] = None
-    _client: Optional[Client] = None
+    _client: Client | None = None
 
     def __new__(cls) -> "DatabaseClient":
         if cls._instance is None:
@@ -28,7 +28,7 @@ class DatabaseClient:
             self._client = self._create_client()
 
     @staticmethod
-    def _create_client() -> Optional[Client]:
+    def _create_client() -> Client | None:
         """Create Supabase client from environment variables."""
         if create_client is None:
             return None
@@ -55,7 +55,7 @@ class DatabaseClient:
     def execute_query(self, query: str):
         """Execute raw SQL query."""
         return self.client.postgrest.request(
-            "GET", f"/rpc/execute_query", json={"query": query}
+            "GET", "/rpc/execute_query", json={"query": query}
         )
 
 

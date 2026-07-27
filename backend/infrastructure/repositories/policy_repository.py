@@ -1,11 +1,11 @@
 """Policy Decision repository (PostgreSQL)."""
 
-import psycopg2
-from typing import Optional, List
 from uuid import UUID
 
-from backend.domain import PolicyDecision
+import psycopg2
+
 from backend.application.repositories import PolicyDecisionRepository
+from backend.domain import PolicyDecision
 
 
 class PolicyDecisionRepositoryImpl(PolicyDecisionRepository):
@@ -89,7 +89,7 @@ class PolicyDecisionRepositoryImpl(PolicyDecisionRepository):
             cursor.close()
             conn.close()
 
-    def find_by_id(self, policy_id: UUID) -> Optional[PolicyDecision]:
+    def find_by_id(self, policy_id: UUID) -> PolicyDecision | None:
         """Find policy by ID."""
         conn = self._connect()
         cursor = conn.cursor()
@@ -107,7 +107,7 @@ class PolicyDecisionRepositoryImpl(PolicyDecisionRepository):
 
     def find_by_opportunity_id(
         self, opportunity_id: UUID, limit: int = 100
-    ) -> List[PolicyDecision]:
+    ) -> list[PolicyDecision]:
         """Find policies by opportunity ID."""
         conn = self._connect()
         cursor = conn.cursor()
@@ -123,7 +123,7 @@ class PolicyDecisionRepositoryImpl(PolicyDecisionRepository):
             cursor.close()
             conn.close()
 
-    def find_open(self, limit: int = 100) -> List[PolicyDecision]:
+    def find_open(self, limit: int = 100) -> list[PolicyDecision]:
         """Find open policies."""
         conn = self._connect()
         cursor = conn.cursor()
@@ -139,7 +139,7 @@ class PolicyDecisionRepositoryImpl(PolicyDecisionRepository):
             cursor.close()
             conn.close()
 
-    def list_all(self, limit: int = 100) -> List[PolicyDecision]:
+    def list_all(self, limit: int = 100) -> list[PolicyDecision]:
         """List all policies."""
         conn = self._connect()
         cursor = conn.cursor()

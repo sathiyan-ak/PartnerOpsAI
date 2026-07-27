@@ -1,14 +1,14 @@
 """Security Audit repository (append-only)."""
 
 import json
-import psycopg2
-from typing import Optional, List
-from uuid import UUID
 from datetime import datetime
+from uuid import UUID
 
+import psycopg2
+
+from backend.application.repositories import SecurityAuditRepository
 from backend.domain import SecurityAuditRecord
 from backend.domain.enums import AuditAction, PolicyResult
-from backend.application.repositories import SecurityAuditRepository
 
 
 class SecurityAuditRepositoryImpl(SecurityAuditRepository):
@@ -77,7 +77,7 @@ class SecurityAuditRepositoryImpl(SecurityAuditRepository):
             cursor.close()
             conn.close()
 
-    def find_by_id(self, record_id: UUID) -> Optional[SecurityAuditRecord]:
+    def find_by_id(self, record_id: UUID) -> SecurityAuditRecord | None:
         """Find audit record by ID."""
         conn = self._connect()
         cursor = conn.cursor()
@@ -99,7 +99,7 @@ class SecurityAuditRepositoryImpl(SecurityAuditRepository):
 
     def find_by_resource_id(
         self, resource_id: UUID, limit: int = 100
-    ) -> List[SecurityAuditRecord]:
+    ) -> list[SecurityAuditRecord]:
         """Find audit records by resource ID."""
         conn = self._connect()
         cursor = conn.cursor()
@@ -119,7 +119,7 @@ class SecurityAuditRepositoryImpl(SecurityAuditRepository):
 
     def find_by_actor_id(
         self, actor_id: UUID, limit: int = 100
-    ) -> List[SecurityAuditRecord]:
+    ) -> list[SecurityAuditRecord]:
         """Find audit records by actor ID."""
         conn = self._connect()
         cursor = conn.cursor()
@@ -137,7 +137,7 @@ class SecurityAuditRepositoryImpl(SecurityAuditRepository):
             cursor.close()
             conn.close()
 
-    def list_all(self, limit: int = 100) -> List[SecurityAuditRecord]:
+    def list_all(self, limit: int = 100) -> list[SecurityAuditRecord]:
         """List all audit records."""
         conn = self._connect()
         cursor = conn.cursor()

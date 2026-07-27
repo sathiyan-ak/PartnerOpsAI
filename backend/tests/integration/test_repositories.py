@@ -1,11 +1,14 @@
 """Repository integration tests: CRUD + constraints + concurrency."""
 
-import pytest
-from uuid import uuid4, UUID
 from datetime import datetime
+from uuid import UUID, uuid4
 
-from backend.domain import Opportunity, OpportunityStatus, ICPAlignment, MaturityLevel
-from backend.infrastructure.repositories.opportunity_repository import OpportunityRepositoryImpl
+import pytest
+
+from backend.domain import ICPAlignment, MaturityLevel, Opportunity, OpportunityStatus
+from backend.infrastructure.repositories.opportunity_repository import (
+    OpportunityRepositoryImpl,
+)
 
 
 @pytest.mark.integration

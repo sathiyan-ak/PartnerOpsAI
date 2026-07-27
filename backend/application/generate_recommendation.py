@@ -2,14 +2,15 @@
 
 from dataclasses import dataclass
 from uuid import UUID
+
 from ..domain import ProductRecommendation, ReleaseTarget
+from ..domain.audit import SecurityAuditRecord
+from ..domain.enums import AuditAction, PolicyResult
 from .repositories import (
     FeedbackClusterRepository,
     ProductRecommendationRepository,
     SecurityAuditRepository,
 )
-from ..domain.audit import SecurityAuditRecord
-from ..domain.enums import AuditAction, PolicyResult
 
 
 @dataclass

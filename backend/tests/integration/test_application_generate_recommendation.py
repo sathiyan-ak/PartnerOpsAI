@@ -1,21 +1,31 @@
 """Application layer: GenerateRecommendationUseCase tests."""
 
-import pytest
-from uuid import uuid4, UUID
 from datetime import datetime
+from uuid import UUID, uuid4
 
-from backend.domain import (
-    ReleaseTarget, FeedbackCluster, DesignFeedback, FeedbackCategory, FeedbackStatus
-)
+import pytest
+
 from backend.application.generate_recommendation import (
-    GenerateRecommendationUseCase,
     GenerateRecommendationInput,
+    GenerateRecommendationUseCase,
+)
+from backend.domain import (
+    DesignFeedback,
+    FeedbackCategory,
+    FeedbackCluster,
+    FeedbackStatus,
+    ReleaseTarget,
+)
+from backend.infrastructure.repositories.audit_repository import (
+    SecurityAuditRepositoryImpl,
 )
 from backend.infrastructure.repositories.feedback_repository import (
-    FeedbackClusterRepositoryImpl, DesignFeedbackRepositoryImpl
+    DesignFeedbackRepositoryImpl,
+    FeedbackClusterRepositoryImpl,
 )
-from backend.infrastructure.repositories.recommendation_repository import ProductRecommendationRepositoryImpl
-from backend.infrastructure.repositories.audit_repository import SecurityAuditRepositoryImpl
+from backend.infrastructure.repositories.recommendation_repository import (
+    ProductRecommendationRepositoryImpl,
+)
 
 
 @pytest.mark.integration

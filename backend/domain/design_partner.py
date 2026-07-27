@@ -1,9 +1,10 @@
 """Design partner domain model (bridge from Opportunity)."""
 
-from dataclasses import dataclass, asdict, field
+from dataclasses import asdict, dataclass, field
 from datetime import datetime
-from typing import Optional, List, Dict, Any
+from typing import Any
 from uuid import UUID, uuid4
+
 from .enums import DesignPartnerStatus, PartnerHealth
 
 
@@ -38,29 +39,29 @@ class DesignPartner:
 
     # Onboarding & implementation
     onboarding_status: DesignPartnerStatus = DesignPartnerStatus.ONBOARDING
-    onboarding_started_at: Optional[datetime] = None
-    onboarding_completed_at: Optional[datetime] = None
+    onboarding_started_at: datetime | None = None
+    onboarding_completed_at: datetime | None = None
 
     implementation_status: DesignPartnerStatus = DesignPartnerStatus.ONBOARDING
-    implementation_started_at: Optional[datetime] = None
-    implementation_completed_at: Optional[datetime] = None
+    implementation_started_at: datetime | None = None
+    implementation_completed_at: datetime | None = None
 
     # Health & engagement
     health: PartnerHealth = PartnerHealth.GOOD
     health_notes: str = ""
-    last_engagement_at: Optional[datetime] = None
+    last_engagement_at: datetime | None = None
 
     # Feedback engagement
     total_feedback_count: int = 0
     feedback_count_this_quarter: int = 0
-    last_feedback_date: Optional[datetime] = None
+    last_feedback_date: datetime | None = None
 
     # Product involvement
-    features_influenced: List[str] = field(
+    features_influenced: list[str] = field(
         default_factory=list
     )  # Features this partner influenced
     roadmap_review_frequency: str = "monthly"  # monthly, quarterly, ad_hoc
-    product_review_dates: List[datetime] = field(default_factory=list)
+    product_review_dates: list[datetime] = field(default_factory=list)
 
     # Context & notes
     partnership_notes: str = ""
@@ -70,7 +71,7 @@ class DesignPartner:
     created_at: datetime = field(default_factory=datetime.utcnow)
     updated_at: datetime = field(default_factory=datetime.utcnow)
 
-    def validate(self) -> List[str]:
+    def validate(self) -> list[str]:
         """Validate design partner data."""
         errors = []
         if not self.company_name.strip():
@@ -104,7 +105,7 @@ class DesignPartner:
         self.implementation_completed_at = datetime.utcnow()
         self.updated_at = datetime.utcnow()
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Serialize to dictionary."""
         data = asdict(self)
         data["id"] = str(self.id)
@@ -142,7 +143,7 @@ class DesignPartner:
         return data
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "DesignPartner":
+    def from_dict(cls, data: dict[str, Any]) -> "DesignPartner":
         """Deserialize from dictionary."""
         data = data.copy()
         data["id"] = UUID(data["id"]) if isinstance(data["id"], str) else data["id"]

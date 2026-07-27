@@ -1,14 +1,17 @@
 """Application layer: AuditSecurityEventUseCase tests."""
 
-import pytest
-from uuid import uuid4, UUID
+from uuid import UUID, uuid4
 
-from backend.domain.enums import AuditAction, PolicyResult
+import pytest
+
 from backend.application.audit_security_event import (
-    AuditSecurityEventUseCase,
     AuditSecurityEventInput,
+    AuditSecurityEventUseCase,
 )
-from backend.infrastructure.repositories.audit_repository import SecurityAuditRepositoryImpl
+from backend.domain.enums import AuditAction, PolicyResult
+from backend.infrastructure.repositories.audit_repository import (
+    SecurityAuditRepositoryImpl,
+)
 
 
 @pytest.mark.integration

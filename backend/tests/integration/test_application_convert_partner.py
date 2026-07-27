@@ -1,23 +1,30 @@
 """Application layer: ConvertDesignPartnerUseCase tests."""
 
-import pytest
-from uuid import uuid4, UUID
 from datetime import datetime
+from uuid import UUID, uuid4
 
+import pytest
+
+from backend.application.convert_design_partner import (
+    ConvertDesignPartnerInput,
+    ConvertDesignPartnerUseCase,
+)
 from backend.domain import (
-    Opportunity,
-    OpportunityStatus,
+    DesignPartnerStatus,
     ICPAlignment,
     MaturityLevel,
-    DesignPartnerStatus,
+    Opportunity,
+    OpportunityStatus,
 )
-from backend.application.convert_design_partner import (
-    ConvertDesignPartnerUseCase,
-    ConvertDesignPartnerInput,
+from backend.infrastructure.repositories.audit_repository import (
+    SecurityAuditRepositoryImpl,
 )
-from backend.infrastructure.repositories.opportunity_repository import OpportunityRepositoryImpl
-from backend.infrastructure.repositories.design_partner_repository import DesignPartnerRepositoryImpl
-from backend.infrastructure.repositories.audit_repository import SecurityAuditRepositoryImpl
+from backend.infrastructure.repositories.design_partner_repository import (
+    DesignPartnerRepositoryImpl,
+)
+from backend.infrastructure.repositories.opportunity_repository import (
+    OpportunityRepositoryImpl,
+)
 
 
 @pytest.mark.integration

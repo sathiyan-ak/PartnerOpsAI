@@ -1,16 +1,19 @@
 """Smoke test: Complete business journey (end-to-end)."""
 
-import pytest
-from uuid import uuid4, UUID
 from datetime import datetime
+from uuid import UUID, uuid4
+
+import pytest
 
 from backend.domain import (
-    Opportunity,
-    OpportunityStatus,
     ICPAlignment,
     MaturityLevel,
+    Opportunity,
+    OpportunityStatus,
 )
-from backend.infrastructure.repositories.opportunity_repository import OpportunityRepositoryImpl
+from backend.infrastructure.repositories.opportunity_repository import (
+    OpportunityRepositoryImpl,
+)
 
 
 @pytest.mark.integration
@@ -83,4 +86,4 @@ class TestBusinessJourney:
         assert qualified_from_db.id == prospect.id
         assert qualified_from_db.company_name == "Acme Corp"
 
-        print(f"✓ Smoke test passed: Prospect created and retrieved from database")
+        print("✓ Smoke test passed: Prospect created and retrieved from database")

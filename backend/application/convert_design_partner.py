@@ -2,15 +2,15 @@
 
 from dataclasses import dataclass
 from uuid import UUID
-from typing import Optional
-from ..domain import Opportunity, DesignPartner, DesignPartnerStatus, OpportunityStatus
-from .repositories import (
-    OpportunityRepository,
-    DesignPartnerRepository,
-    SecurityAuditRepository,
-)
+
+from ..domain import DesignPartner, DesignPartnerStatus, OpportunityStatus
 from ..domain.audit import SecurityAuditRecord
 from ..domain.enums import AuditAction
+from .repositories import (
+    DesignPartnerRepository,
+    OpportunityRepository,
+    SecurityAuditRepository,
+)
 
 
 @dataclass

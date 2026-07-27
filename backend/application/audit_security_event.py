@@ -1,8 +1,9 @@
 """Audit Security Event use case."""
 
 from dataclasses import dataclass
+from typing import Any
 from uuid import UUID
-from typing import Optional, Dict, Any
+
 from ..domain.audit import SecurityAuditRecord
 from ..domain.enums import AuditAction, PolicyResult
 from .repositories import SecurityAuditRepository
@@ -13,12 +14,12 @@ class AuditSecurityEventInput:
     actor_role: str
     action: AuditAction
     resource_type: str
-    policy_name: Optional[str] = None
-    policy_result: Optional[PolicyResult] = None
-    policy_evaluation_reasoning: Optional[str] = None
-    ip_address: Optional[str] = None
-    user_agent: Optional[str] = None
-    context_data: Optional[Dict[str, Any]] = None
+    policy_name: str | None = None
+    policy_result: PolicyResult | None = None
+    policy_evaluation_reasoning: str | None = None
+    ip_address: str | None = None
+    user_agent: str | None = None
+    context_data: dict[str, Any] | None = None
 
 
 @dataclass

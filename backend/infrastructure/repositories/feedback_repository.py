@@ -1,15 +1,15 @@
 """Feedback repository implementations (PostgreSQL)."""
 
 import json
-import psycopg2
-from typing import Optional, List
 from uuid import UUID
 
-from backend.domain import DesignFeedback, FeedbackCluster
+import psycopg2
+
 from backend.application.repositories import (
     DesignFeedbackRepository,
     FeedbackClusterRepository,
 )
+from backend.domain import DesignFeedback, FeedbackCluster
 
 
 class DesignFeedbackRepositoryImpl(DesignFeedbackRepository):
@@ -101,7 +101,7 @@ class DesignFeedbackRepositoryImpl(DesignFeedbackRepository):
             cursor.close()
             conn.close()
 
-    def find_by_id(self, feedback_id: UUID) -> Optional[DesignFeedback]:
+    def find_by_id(self, feedback_id: UUID) -> DesignFeedback | None:
         """Find feedback by ID."""
         conn = self._connect()
         cursor = conn.cursor()
@@ -119,7 +119,7 @@ class DesignFeedbackRepositoryImpl(DesignFeedbackRepository):
 
     def find_by_design_partner_id(
         self, design_partner_id: UUID, limit: int = 100
-    ) -> List[DesignFeedback]:
+    ) -> list[DesignFeedback]:
         """Find feedback by design partner ID."""
         conn = self._connect()
         cursor = conn.cursor()
@@ -135,7 +135,7 @@ class DesignFeedbackRepositoryImpl(DesignFeedbackRepository):
             cursor.close()
             conn.close()
 
-    def list_all(self, limit: int = 100) -> List[DesignFeedback]:
+    def list_all(self, limit: int = 100) -> list[DesignFeedback]:
         """List all feedback items."""
         conn = self._connect()
         cursor = conn.cursor()
@@ -267,7 +267,7 @@ class FeedbackClusterRepositoryImpl(FeedbackClusterRepository):
             cursor.close()
             conn.close()
 
-    def find_by_id(self, cluster_id: UUID) -> Optional[FeedbackCluster]:
+    def find_by_id(self, cluster_id: UUID) -> FeedbackCluster | None:
         """Find cluster by ID."""
         conn = self._connect()
         cursor = conn.cursor()
@@ -285,7 +285,7 @@ class FeedbackClusterRepositoryImpl(FeedbackClusterRepository):
 
     def find_by_primary_feedback_id(
         self, feedback_id: UUID
-    ) -> Optional[FeedbackCluster]:
+    ) -> FeedbackCluster | None:
         """Find cluster by primary feedback ID."""
         conn = self._connect()
         cursor = conn.cursor()
@@ -301,7 +301,7 @@ class FeedbackClusterRepositoryImpl(FeedbackClusterRepository):
             cursor.close()
             conn.close()
 
-    def list_all(self, limit: int = 100) -> List[FeedbackCluster]:
+    def list_all(self, limit: int = 100) -> list[FeedbackCluster]:
         """List all clusters."""
         conn = self._connect()
         cursor = conn.cursor()

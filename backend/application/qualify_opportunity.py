@@ -6,16 +6,16 @@ enterprise qualification score and assessing fit.
 
 from dataclasses import dataclass
 from uuid import UUID
-from typing import List, Tuple
+
 from ..domain import (
+    ICPAlignment,
+    MaturityLevel,
     Opportunity,
     OpportunityStatus,
-    MaturityLevel,
-    ICPAlignment,
 )
-from .repositories import OpportunityRepository, SecurityAuditRepository
 from ..domain.audit import SecurityAuditRecord
 from ..domain.enums import AuditAction, PolicyResult
+from .repositories import OpportunityRepository, SecurityAuditRepository
 
 
 @dataclass
@@ -30,8 +30,8 @@ class QualifyOpportunityInput:
     ai_maturity_evidence: str
     ai_investment_usd: int
     security_maturity: MaturityLevel
-    security_certifications: List[str]
-    compliance_needs: List[str]
+    security_certifications: list[str]
+    compliance_needs: list[str]
     icp_score: int
     design_partner_potential: int
     has_product_team: bool
@@ -49,7 +49,7 @@ class QualifyOpportunityOutput:
     opportunity_id: UUID
     qualification_score: int  # 0-100
     is_qualified_for_design_partner: bool
-    reasons: List[str]  # Why qualified/not qualified?
+    reasons: list[str]  # Why qualified/not qualified?
 
 
 class QualifyOpportunityUseCase:
@@ -162,7 +162,7 @@ class QualifyOpportunityUseCase:
         opportunity: Opportunity,
         score: int,
         qualified: bool,
-    ) -> List[str]:
+    ) -> list[str]:
         """Build human-readable qualification reasoning."""
         reasons = []
 

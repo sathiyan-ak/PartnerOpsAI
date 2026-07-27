@@ -1,15 +1,19 @@
 """Application layer: EvaluatePolicyUseCase tests."""
 
+from uuid import UUID, uuid4
+
 import pytest
-from uuid import uuid4, UUID
-from datetime import datetime
 
 from backend.application.evaluate_policy import (
-    EvaluatePolicyUseCase,
     EvaluatePolicyInput,
+    EvaluatePolicyUseCase,
 )
-from backend.infrastructure.repositories.policy_repository import PolicyDecisionRepositoryImpl
-from backend.infrastructure.repositories.audit_repository import SecurityAuditRepositoryImpl
+from backend.infrastructure.repositories.audit_repository import (
+    SecurityAuditRepositoryImpl,
+)
+from backend.infrastructure.repositories.policy_repository import (
+    PolicyDecisionRepositoryImpl,
+)
 
 
 @pytest.mark.integration

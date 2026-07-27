@@ -5,15 +5,15 @@ Actual database/ORM code goes in infrastructure layer (Phase 3).
 """
 
 from abc import ABC, abstractmethod
-from typing import Optional, List
 from uuid import UUID
+
 from backend.domain import (
-    Opportunity,
-    DesignPartner,
     DesignFeedback,
+    DesignPartner,
     FeedbackCluster,
-    ProductRecommendation,
+    Opportunity,
     PolicyDecision,
+    ProductRecommendation,
     SecurityAuditRecord,
 )
 
@@ -24,22 +24,18 @@ class OpportunityRepository(ABC):
     @abstractmethod
     def save(self, opportunity: Opportunity) -> UUID:
         """Save opportunity. Returns ID."""
-        pass
 
     @abstractmethod
-    def find_by_id(self, opportunity_id: UUID) -> Optional[Opportunity]:
+    def find_by_id(self, opportunity_id: UUID) -> Opportunity | None:
         """Find opportunity by ID."""
-        pass
 
     @abstractmethod
-    def find_by_company_name(self, company_name: str) -> Optional[Opportunity]:
+    def find_by_company_name(self, company_name: str) -> Opportunity | None:
         """Find opportunity by company name."""
-        pass
 
     @abstractmethod
-    def list_all(self, limit: int = 100) -> List[Opportunity]:
+    def list_all(self, limit: int = 100) -> list[Opportunity]:
         """List all opportunities."""
-        pass
 
 
 class DesignPartnerRepository(ABC):
@@ -48,22 +44,18 @@ class DesignPartnerRepository(ABC):
     @abstractmethod
     def save(self, design_partner: DesignPartner) -> UUID:
         """Save design partner. Returns ID."""
-        pass
 
     @abstractmethod
-    def find_by_id(self, design_partner_id: UUID) -> Optional[DesignPartner]:
+    def find_by_id(self, design_partner_id: UUID) -> DesignPartner | None:
         """Find design partner by ID."""
-        pass
 
     @abstractmethod
-    def find_by_opportunity_id(self, opportunity_id: UUID) -> Optional[DesignPartner]:
+    def find_by_opportunity_id(self, opportunity_id: UUID) -> DesignPartner | None:
         """Find design partner by linked opportunity."""
-        pass
 
     @abstractmethod
-    def list_all(self, limit: int = 100) -> List[DesignPartner]:
+    def list_all(self, limit: int = 100) -> list[DesignPartner]:
         """List all design partners."""
-        pass
 
 
 class DesignFeedbackRepository(ABC):
@@ -72,24 +64,20 @@ class DesignFeedbackRepository(ABC):
     @abstractmethod
     def save(self, feedback: DesignFeedback) -> UUID:
         """Save feedback. Returns ID."""
-        pass
 
     @abstractmethod
-    def find_by_id(self, feedback_id: UUID) -> Optional[DesignFeedback]:
+    def find_by_id(self, feedback_id: UUID) -> DesignFeedback | None:
         """Find feedback by ID."""
-        pass
 
     @abstractmethod
     def find_by_design_partner_id(
         self, design_partner_id: UUID, limit: int = 100
-    ) -> List[DesignFeedback]:
+    ) -> list[DesignFeedback]:
         """Find all feedback from a design partner."""
-        pass
 
     @abstractmethod
-    def list_all(self, limit: int = 100) -> List[DesignFeedback]:
+    def list_all(self, limit: int = 100) -> list[DesignFeedback]:
         """List all feedback."""
-        pass
 
 
 class FeedbackClusterRepository(ABC):
@@ -98,24 +86,20 @@ class FeedbackClusterRepository(ABC):
     @abstractmethod
     def save(self, cluster: FeedbackCluster) -> UUID:
         """Save cluster. Returns ID."""
-        pass
 
     @abstractmethod
-    def find_by_id(self, cluster_id: UUID) -> Optional[FeedbackCluster]:
+    def find_by_id(self, cluster_id: UUID) -> FeedbackCluster | None:
         """Find cluster by ID."""
-        pass
 
     @abstractmethod
     def find_by_primary_feedback_id(
         self, feedback_id: UUID
-    ) -> Optional[FeedbackCluster]:
+    ) -> FeedbackCluster | None:
         """Find cluster by primary feedback ID."""
-        pass
 
     @abstractmethod
-    def list_all(self, limit: int = 100) -> List[FeedbackCluster]:
+    def list_all(self, limit: int = 100) -> list[FeedbackCluster]:
         """List all clusters."""
-        pass
 
 
 class ProductRecommendationRepository(ABC):
@@ -124,27 +108,22 @@ class ProductRecommendationRepository(ABC):
     @abstractmethod
     def save(self, recommendation: ProductRecommendation) -> UUID:
         """Save recommendation. Returns ID."""
-        pass
 
     @abstractmethod
-    def find_by_id(self, recommendation_id: UUID) -> Optional[ProductRecommendation]:
+    def find_by_id(self, recommendation_id: UUID) -> ProductRecommendation | None:
         """Find recommendation by ID."""
-        pass
 
     @abstractmethod
-    def find_by_cluster_id(self, cluster_id: UUID) -> Optional[ProductRecommendation]:
+    def find_by_cluster_id(self, cluster_id: UUID) -> ProductRecommendation | None:
         """Find recommendation by cluster ID."""
-        pass
 
     @abstractmethod
-    def find_undecided(self, limit: int = 50) -> List[ProductRecommendation]:
+    def find_undecided(self, limit: int = 50) -> list[ProductRecommendation]:
         """Find recommendations not yet decided."""
-        pass
 
     @abstractmethod
-    def list_all(self, limit: int = 100) -> List[ProductRecommendation]:
+    def list_all(self, limit: int = 100) -> list[ProductRecommendation]:
         """List all recommendations."""
-        pass
 
 
 class PolicyDecisionRepository(ABC):
@@ -153,29 +132,24 @@ class PolicyDecisionRepository(ABC):
     @abstractmethod
     def save(self, policy: PolicyDecision) -> UUID:
         """Save policy decision. Returns ID."""
-        pass
 
     @abstractmethod
-    def find_by_id(self, policy_id: UUID) -> Optional[PolicyDecision]:
+    def find_by_id(self, policy_id: UUID) -> PolicyDecision | None:
         """Find policy decision by ID."""
-        pass
 
     @abstractmethod
     def find_by_opportunity_id(
         self, opportunity_id: UUID, limit: int = 100
-    ) -> List[PolicyDecision]:
+    ) -> list[PolicyDecision]:
         """Find all policies for an opportunity."""
-        pass
 
     @abstractmethod
-    def find_open(self, limit: int = 100) -> List[PolicyDecision]:
+    def find_open(self, limit: int = 100) -> list[PolicyDecision]:
         """Find all open policy decisions."""
-        pass
 
     @abstractmethod
-    def list_all(self, limit: int = 100) -> List[PolicyDecision]:
+    def list_all(self, limit: int = 100) -> list[PolicyDecision]:
         """List all policy decisions."""
-        pass
 
 
 class SecurityAuditRepository(ABC):
@@ -184,28 +158,23 @@ class SecurityAuditRepository(ABC):
     @abstractmethod
     def append(self, record: SecurityAuditRecord) -> UUID:
         """Append audit record (write-only, immutable). Returns ID."""
-        pass
 
     @abstractmethod
-    def find_by_id(self, record_id: UUID) -> Optional[SecurityAuditRecord]:
+    def find_by_id(self, record_id: UUID) -> SecurityAuditRecord | None:
         """Find audit record by ID."""
-        pass
 
     @abstractmethod
     def find_by_resource_id(
         self, resource_id: UUID, limit: int = 100
-    ) -> List[SecurityAuditRecord]:
+    ) -> list[SecurityAuditRecord]:
         """Find all audit records for a resource."""
-        pass
 
     @abstractmethod
     def find_by_actor_id(
         self, actor_id: UUID, limit: int = 100
-    ) -> List[SecurityAuditRecord]:
+    ) -> list[SecurityAuditRecord]:
         """Find all audit records by an actor."""
-        pass
 
     @abstractmethod
-    def list_all(self, limit: int = 100) -> List[SecurityAuditRecord]:
+    def list_all(self, limit: int = 100) -> list[SecurityAuditRecord]:
         """List all audit records (most recent first)."""
-        pass

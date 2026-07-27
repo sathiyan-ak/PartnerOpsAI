@@ -1,12 +1,12 @@
 """Product Recommendation repository (PostgreSQL)."""
 
 import json
-import psycopg2
-from typing import Optional, List
 from uuid import UUID
 
-from backend.domain import ProductRecommendation, ReleaseTarget
+import psycopg2
+
 from backend.application.repositories import ProductRecommendationRepository
+from backend.domain import ProductRecommendation, ReleaseTarget
 
 
 class ProductRecommendationRepositoryImpl(ProductRecommendationRepository):
@@ -108,7 +108,7 @@ class ProductRecommendationRepositoryImpl(ProductRecommendationRepository):
             cursor.close()
             conn.close()
 
-    def find_by_id(self, recommendation_id: UUID) -> Optional[ProductRecommendation]:
+    def find_by_id(self, recommendation_id: UUID) -> ProductRecommendation | None:
         """Find recommendation by ID."""
         conn = self._connect()
         cursor = conn.cursor()
@@ -124,7 +124,7 @@ class ProductRecommendationRepositoryImpl(ProductRecommendationRepository):
             cursor.close()
             conn.close()
 
-    def find_by_cluster_id(self, cluster_id: UUID) -> Optional[ProductRecommendation]:
+    def find_by_cluster_id(self, cluster_id: UUID) -> ProductRecommendation | None:
         """Find recommendation by cluster ID."""
         conn = self._connect()
         cursor = conn.cursor()
@@ -140,7 +140,7 @@ class ProductRecommendationRepositoryImpl(ProductRecommendationRepository):
             cursor.close()
             conn.close()
 
-    def find_undecided(self, limit: int = 50) -> List[ProductRecommendation]:
+    def find_undecided(self, limit: int = 50) -> list[ProductRecommendation]:
         """Find undecided recommendations."""
         conn = self._connect()
         cursor = conn.cursor()
@@ -156,7 +156,7 @@ class ProductRecommendationRepositoryImpl(ProductRecommendationRepository):
             cursor.close()
             conn.close()
 
-    def list_all(self, limit: int = 100) -> List[ProductRecommendation]:
+    def list_all(self, limit: int = 100) -> list[ProductRecommendation]:
         """List all recommendations."""
         conn = self._connect()
         cursor = conn.cursor()

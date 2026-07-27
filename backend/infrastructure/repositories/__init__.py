@@ -1,21 +1,21 @@
 """Concrete repository implementations for Supabase."""
 
-from .opportunity_repository import OpportunityRepositoryImpl
+from .audit_repository import SecurityAuditRepositoryImpl
 from .design_partner_repository import DesignPartnerRepositoryImpl
 from .feedback_repository import (
     DesignFeedbackRepositoryImpl,
     FeedbackClusterRepositoryImpl,
 )
-from .recommendation_repository import ProductRecommendationRepositoryImpl
+from .opportunity_repository import OpportunityRepositoryImpl
 from .policy_repository import PolicyDecisionRepositoryImpl
-from .audit_repository import SecurityAuditRepositoryImpl
+from .recommendation_repository import ProductRecommendationRepositoryImpl
 
 __all__ = [
-    "OpportunityRepositoryImpl",
-    "DesignPartnerRepositoryImpl",
     "DesignFeedbackRepositoryImpl",
+    "DesignPartnerRepositoryImpl",
     "FeedbackClusterRepositoryImpl",
-    "ProductRecommendationRepositoryImpl",
+    "OpportunityRepositoryImpl",
     "PolicyDecisionRepositoryImpl",
+    "ProductRecommendationRepositoryImpl",
     "SecurityAuditRepositoryImpl",
 ]

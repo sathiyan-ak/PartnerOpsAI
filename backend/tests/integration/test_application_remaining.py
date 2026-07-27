@@ -1,21 +1,18 @@
 """Application layer tests: Remaining 6 use cases."""
 
-import pytest
-from uuid import uuid4, UUID
 from datetime import datetime
+from uuid import UUID, uuid4
+
+import pytest
 
 from backend.domain import (
-    Opportunity,
-    DesignPartner,
-    OpportunityStatus,
-    MaturityLevel,
     ICPAlignment,
+    MaturityLevel,
+    Opportunity,
+    OpportunityStatus,
 )
 from backend.infrastructure.repositories.opportunity_repository import (
     OpportunityRepositoryImpl,
-)
-from backend.infrastructure.repositories.audit_repository import (
-    SecurityAuditRepositoryImpl,
 )
 
 
@@ -62,7 +59,6 @@ class TestConvertDesignPartnerUseCase:
 
         # UNVERIFIED: ConvertDesignPartnerUseCase not implemented yet
         # Would convert here
-        pass
 
 
 @pytest.mark.integration

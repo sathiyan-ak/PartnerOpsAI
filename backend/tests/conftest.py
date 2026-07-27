@@ -1,15 +1,12 @@
 """Pytest configuration and fixtures for integration testing."""
 
 import os
-import subprocess
 from datetime import datetime, timezone
 from uuid import uuid4
-import pytest
-from typing import Generator
 
 import psycopg2
+import pytest
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
-import json
 
 
 @pytest.fixture(scope="session")
@@ -243,7 +240,7 @@ def reset_db_between_tests(postgres_connection):
         cursor.execute("TRUNCATE TABLE opportunities CASCADE")
         # Users should persist for the test_user_id fixture
         postgres_connection.commit()
-    except Exception as e:
+    except Exception:
         postgres_connection.rollback()
         raise
     finally:

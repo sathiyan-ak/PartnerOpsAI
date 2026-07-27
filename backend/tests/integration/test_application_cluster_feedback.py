@@ -1,19 +1,31 @@
 """Application layer: ClusterFeedbackUseCase tests."""
 
-import pytest
-from uuid import uuid4, UUID
 from datetime import datetime
+from uuid import UUID, uuid4
 
-from backend.domain import FeedbackCategory, FeedbackStatus, DesignPartner, DesignPartnerStatus
+import pytest
+
 from backend.application.cluster_feedback import (
-    ClusterFeedbackUseCase,
     ClusterFeedbackInput,
+    ClusterFeedbackUseCase,
+)
+from backend.domain import (
+    DesignPartner,
+    DesignPartnerStatus,
+    FeedbackCategory,
+    FeedbackStatus,
 )
 from backend.domain.feedback import DesignFeedback
-from backend.infrastructure.repositories.design_partner_repository import DesignPartnerRepositoryImpl
-from backend.infrastructure.repositories.feedback_repository import DesignFeedbackRepositoryImpl
-from backend.infrastructure.repositories.feedback_repository import FeedbackClusterRepositoryImpl
-from backend.infrastructure.repositories.audit_repository import SecurityAuditRepositoryImpl
+from backend.infrastructure.repositories.audit_repository import (
+    SecurityAuditRepositoryImpl,
+)
+from backend.infrastructure.repositories.design_partner_repository import (
+    DesignPartnerRepositoryImpl,
+)
+from backend.infrastructure.repositories.feedback_repository import (
+    DesignFeedbackRepositoryImpl,
+    FeedbackClusterRepositoryImpl,
+)
 
 
 @pytest.mark.integration

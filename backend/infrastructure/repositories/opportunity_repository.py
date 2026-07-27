@@ -1,13 +1,11 @@
 """Opportunity repository implementation (PostgreSQL)."""
 
-import json
-import psycopg2
-from typing import Optional, List
 from uuid import UUID
-from datetime import datetime
 
-from backend.domain import Opportunity, OpportunityStatus, ICPAlignment, MaturityLevel
+import psycopg2
+
 from backend.application.repositories import OpportunityRepository
+from backend.domain import ICPAlignment, MaturityLevel, Opportunity, OpportunityStatus
 
 
 class OpportunityRepositoryImpl(OpportunityRepository):
@@ -103,7 +101,7 @@ class OpportunityRepositoryImpl(OpportunityRepository):
             cursor.close()
             conn.close()
 
-    def find_by_id(self, opportunity_id: UUID) -> Optional[Opportunity]:
+    def find_by_id(self, opportunity_id: UUID) -> Opportunity | None:
         """Find opportunity by ID."""
         conn = self._connect()
         cursor = conn.cursor()
@@ -123,7 +121,7 @@ class OpportunityRepositoryImpl(OpportunityRepository):
             cursor.close()
             conn.close()
 
-    def find_by_company_name(self, company_name: str) -> Optional[Opportunity]:
+    def find_by_company_name(self, company_name: str) -> Opportunity | None:
         """Find opportunity by company name."""
         conn = self._connect()
         cursor = conn.cursor()
@@ -144,7 +142,7 @@ class OpportunityRepositoryImpl(OpportunityRepository):
             cursor.close()
             conn.close()
 
-    def list_all(self, limit: int = 100, offset: int = 0) -> List[Opportunity]:
+    def list_all(self, limit: int = 100, offset: int = 0) -> list[Opportunity]:
         """List all opportunities with pagination."""
         conn = self._connect()
         cursor = conn.cursor()

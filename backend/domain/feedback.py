@@ -1,9 +1,10 @@
 """Customer feedback and clustering models."""
 
-from dataclasses import dataclass, asdict, field
+from dataclasses import asdict, dataclass, field
 from datetime import datetime
-from typing import Optional, List, Dict, Any
+from typing import Any
 from uuid import UUID, uuid4
+
 from .enums import FeedbackCategory, FeedbackStatus, ReleaseTarget
 
 
@@ -39,7 +40,7 @@ class DesignFeedback:
     confidence: float = 0.0  # 0.0-1.0: how certain are we about the score?
 
     # AI-generated insights (with reasoning)
-    similar_feedback_ids: List[UUID] = field(default_factory=list)
+    similar_feedback_ids: list[UUID] = field(default_factory=list)
     similarity_explanation: str = ""  # Why are these similar?
 
     suggested_release: ReleaseTarget = ReleaseTarget.BACKLOG
@@ -48,7 +49,7 @@ class DesignFeedback:
     product_decision_summary: str = ""  # LLM-generated summary
     decision_evidence: str = ""  # Supporting facts
 
-    affected_personas: List[str] = field(default_factory=list)  # Who benefits?
+    affected_personas: list[str] = field(default_factory=list)  # Who benefits?
 
     # Status
     status: FeedbackStatus = FeedbackStatus.SUBMITTED
@@ -57,7 +58,7 @@ class DesignFeedback:
     created_at: datetime = field(default_factory=datetime.utcnow)
     updated_at: datetime = field(default_factory=datetime.utcnow)
 
-    def validate(self) -> List[str]:
+    def validate(self) -> list[str]:
         """Validate feedback data."""
         errors = []
         if not self.customer_name.strip():
@@ -76,7 +77,7 @@ class DesignFeedback:
             errors.append("category_confidence: must be 0.0-1.0")
         return errors
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Serialize to dictionary."""
         data = asdict(self)
         data["id"] = str(self.id)
@@ -92,7 +93,7 @@ class DesignFeedback:
         return data
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "DesignFeedback":
+    def from_dict(cls, data: dict[str, Any]) -> "DesignFeedback":
         """Deserialize from dictionary."""
         data = data.copy()
         data["id"] = UUID(data["id"]) if isinstance(data["id"], str) else data["id"]
@@ -158,7 +159,7 @@ class FeedbackCluster:
     version: int = 0
 
     primary_feedback_id: UUID = field(default_factory=uuid4)
-    related_feedback_ids: List[UUID] = field(default_factory=list)
+    related_feedback_ids: list[UUID] = field(default_factory=list)
 
     cluster_reason: str = ""  # Why grouped? e.g., "same keyword", "same workflow"
     theme: str = ""  # High-level theme: "Dark Mode", "API Performance", etc.
@@ -169,7 +170,7 @@ class FeedbackCluster:
     average_priority_score: float = 0.0
     unique_customers: int = 0
 
-    merged_at: Optional[datetime] = None
+    merged_at: datetime | None = None
 
     created_at: datetime = field(default_factory=datetime.utcnow)
     updated_at: datetime = field(default_factory=datetime.utcnow)
@@ -179,13 +180,13 @@ class FeedbackCluster:
         if feedback_id not in self.related_feedback_ids:
             self.related_feedback_ids.append(feedback_id)
 
-    def calculate_aggregate_impact(self, feedback_scores: List[int]) -> int:
+    def calculate_aggregate_impact(self, feedback_scores: list[int]) -> int:
         """Deterministic: Calculate aggregate impact from related feedback."""
         if not feedback_scores:
             return 0
         return int(sum(feedback_scores) / len(feedback_scores))
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Serialize to dictionary."""
         data = asdict(self)
         data["id"] = str(self.id)

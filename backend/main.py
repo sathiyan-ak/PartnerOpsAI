@@ -2,24 +2,28 @@
 
 import os
 import sys
-from uuid import uuid4, UUID
+from uuid import UUID
+
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
-from typing import List
 
 # Add project root to path
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, project_root)
 
-from backend.infrastructure.repositories.opportunity_repository import OpportunityRepositoryImpl
-from backend.infrastructure.repositories.audit_repository import SecurityAuditRepositoryImpl
 from backend.application.qualify_opportunity import (
-    QualifyOpportunityUseCase,
     QualifyOpportunityInput,
+    QualifyOpportunityUseCase,
 )
-from backend.domain import MaturityLevel, Opportunity
+from backend.domain import MaturityLevel
+from backend.infrastructure.repositories.audit_repository import (
+    SecurityAuditRepositoryImpl,
+)
+from backend.infrastructure.repositories.opportunity_repository import (
+    OpportunityRepositoryImpl,
+)
 
 app = FastAPI(
     title="PartnerOpsAI",
@@ -57,7 +61,7 @@ db_url = (
 
 # Log which database is being used
 if "localhost" in db_url:
-    print(f"⚠ Using localhost database (development mode)", file=sys.stderr)
+    print("⚠ Using localhost database (development mode)", file=sys.stderr)
 else:
     print(f"✓ Using remote database: {db_url.split('@')[1][:50] if '@' in db_url else '...'}", file=sys.stderr)
 
@@ -95,7 +99,7 @@ async def seed_demo_data():
         seed_func()
         return {"status": "ok", "message": "Demo data seeded successfully"}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Seed error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Seed error: {e!s}")
 
 
 class QualifyRequest(BaseModel):
@@ -114,7 +118,7 @@ class QualifyResponse(BaseModel):
     opportunity_id: str
     qualification_score: int
     is_qualified_for_design_partner: bool
-    reasons: List[str]
+    reasons: list[str]
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -499,7 +503,7 @@ async def qualify(request: QualifyRequest):
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Server error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Server error: {e!s}")
 
 
 @app.get("/api/status")
@@ -586,7 +590,7 @@ async def create_opportunity(request: QualifyRequest):
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Server error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Server error: {e!s}")
 
 
 @app.get("/api/opportunities/{opportunity_id}", response_model=OpportunityResponse)
@@ -612,7 +616,7 @@ async def get_opportunity(opportunity_id: str):
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Server error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Server error: {e!s}")
 
 
 @app.get("/api/audit/{resource_id}")
@@ -661,7 +665,7 @@ async def get_audit_trail(resource_id: str):
             "total_events": len(audit_entries),
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Server error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Server error: {e!s}")
 
 
 if __name__ == "__main__":

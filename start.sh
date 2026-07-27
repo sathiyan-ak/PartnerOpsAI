@@ -98,11 +98,11 @@ echo "  Swagger: http://$SERVER_HOST:$SERVER_PORT/docs"
 echo ""
 
 # Use PORT env var if set (Railway, Fly.io, Cloud Run)
-if [ -n "$PORT" ]; then
-    SERVER_PORT="$PORT"
+if [ -z "$PORT" ]; then
+    PORT="$SERVER_PORT"
 fi
 
 exec python -m uvicorn backend.main:app \
     --host "$SERVER_HOST" \
-    --port "$SERVER_PORT" \
+    --port "$PORT" \
     --log-level info

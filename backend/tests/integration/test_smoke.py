@@ -54,13 +54,11 @@ class TestBusinessJourney:
         )
 
         # Save prospect
-        saved_prospect = repo.save(prospect)
-        assert saved_prospect.id == prospect.id
-        assert saved_prospect.status == OpportunityStatus.PROSPECT
-        assert saved_prospect.icp_score == 40
+        saved_prospect_id = repo.save(prospect)
+        assert saved_prospect_id == prospect.id
 
         # Step 2: Verify in database via repository read
-        prospect_from_db = repo.find_by_id(prospect.id)
+        prospect_from_db = repo.find_by_id(saved_prospect_id)
         assert prospect_from_db is not None
         assert prospect_from_db.company_name == "Acme Corp"
         assert prospect_from_db.status == OpportunityStatus.PROSPECT

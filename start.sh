@@ -32,8 +32,7 @@ while [ $attempt -le $max_attempts ]; do
 done
 
 if [ $attempt -gt $max_attempts ]; then
-    echo "✗ Database failed to start"
-    exit 1
+    echo "⚠ Database not ready after $max_attempts attempts, but continuing startup..."
 fi
 
 # Apply migrations
@@ -42,25 +41,29 @@ echo "Applying database migrations..."
 python -c "
 import os
 import psycopg2
+import sys
 
 db_url = os.getenv('DATABASE_URL')
-conn = psycopg2.connect(db_url)
-conn.autocommit = True
-cursor = conn.cursor()
-
-# Read migration file
-with open('backend/infrastructure/migrations/001_init_schema.sql', 'r') as f:
-    schema = f.read()
-
-# Execute schema statements
 try:
-    cursor.execute(schema)
-    print('✓ Database schema initialized')
-except Exception as e:
-    print(f'Schema already exists or error: {e}')
+    conn = psycopg2.connect(db_url)
+    conn.autocommit = True
+    cursor = conn.cursor()
 
-cursor.close()
-conn.close()
+    # Read migration file
+    with open('backend/infrastructure/migrations/001_init_schema.sql', 'r') as f:
+        schema = f.read()
+
+    # Execute schema statements
+    try:
+        cursor.execute(schema)
+        print('✓ Database schema initialized')
+    except Exception as e:
+        print(f'⚠ Schema error (may already exist): {e}')
+
+    cursor.close()
+    conn.close()
+except Exception as e:
+    print(f'⚠ Database connection failed: {e}', file=sys.stderr)
 "
 
 # Initialize demo user
@@ -69,23 +72,26 @@ echo "Initializing demo user..."
 python -c "
 import os
 import psycopg2
-from uuid import UUID
+import sys
 
 db_url = os.getenv('DATABASE_URL')
 actor_id = '00000000-0000-0000-0000-000000000001'
 
-conn = psycopg2.connect(db_url)
-cursor = conn.cursor()
+try:
+    conn = psycopg2.connect(db_url)
+    cursor = conn.cursor()
 
-cursor.execute(
-    'INSERT INTO users (id, email) VALUES (%s, %s) ON CONFLICT (id) DO NOTHING',
-    (actor_id, 'demo@partneropsa.com')
-)
-conn.commit()
-cursor.close()
-conn.close()
+    cursor.execute(
+        'INSERT INTO users (id, email) VALUES (%s, %s) ON CONFLICT (id) DO NOTHING',
+        (actor_id, 'demo@partneropsa.com')
+    )
+    conn.commit()
+    cursor.close()
+    conn.close()
 
-print('✓ Demo user initialized')
+    print('✓ Demo user initialized')
+except Exception as e:
+    print(f'⚠ Could not initialize demo user: {e}', file=sys.stderr)
 "
 
 # Start FastAPI server

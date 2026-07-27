@@ -98,28 +98,61 @@ PartnerOpsAI/
 
 ---
 
-## Getting Started
+## Getting Started (Local Demo)
 
 ```bash
-cd ~/Developer/PartnerOpsAI
-git status
-git log
+# Setup database
+createdb partneropsa_test
+psql partneropsa_test < backend/infrastructure/migrations/001_init_schema.sql
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Copy environment
+cp .env.example .env.local
+
+# Run demo server
+python -m uvicorn backend.main:app --reload --port 8000
+
+# In another terminal, seed demo data
+python -m backend.seed
+
+# Visit
+open http://localhost:8000
 ```
 
-See `CLAUDE.md` for:
-- Tech stack
-- Coding standards
-- Review process
-- Definition of Done
+Try the API:
+```bash
+# Qualify a prospect
+curl -X POST http://localhost:8000/api/qualify \
+  -H "Content-Type: application/json" \
+  -d '{"company_name": "Acme Corp", "company_size_employees": 5000, "industry": "Technology", "location": "San Francisco", "ai_maturity": "advanced", "security_maturity": "advanced", "icp_score": 85, "design_partner_potential": 90, "has_product_team": true}'
+
+# View Swagger docs
+open http://localhost:8000/docs
+```
+
+## Documentation
+
+| Document | Purpose |
+|---|---|
+| [PORTFOLIO.md](PORTFOLIO.md) | Internship demo release (this is what to share) |
+| [DEPLOYMENT.md](DEPLOYMENT.md) | Quick start + architecture overview |
+| CLAUDE.md | Engineering manifesto + coding standards |
+| DECISIONS.md | Architectural decision log |
+| ARCHITECTURE.md | System design + data flow |
+| ROADMAP.md | Phase breakdown + timeline
 
 ---
 
 ## Current Status
 
-**Phase 0:** ✅ Repository bootstrap complete
-**Phase 1:** 🔒 Locked (Enterprise Prospect Intelligence)
-**Phase 2:** 🔒 Locked (AI Governance Pipeline)
-**Phase 3:** 🔒 Locked (Design Partner Portal)
+**Phase 3.6.0:** ✅ Integration test closure (54/55 tests passing, 71.51% coverage)
+**Phase 3.6.1:** ✅ Demo release candidate (FastAPI server + Swagger docs)
+**Phase 3.6.2:** ✅ Internship demo deployment (API routes + seed data + portfolio docs)
+
+**Next:**
+**Phase 3.7:** Design Partner Portal frontend (Next.js + real-time subscriptions)
 
 ---
 

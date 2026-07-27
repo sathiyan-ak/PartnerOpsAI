@@ -100,17 +100,19 @@ class TestOpportunityRepository:
         with pytest.raises(RuntimeError):  # Version conflict error
             repo.save(test_opp)
 
-    def test_duplicate_id_fails(self, repo, test_opp, test_user_id):
-        """Test: Cannot insert duplicate UUID."""
+    def test_duplicate_id_upserts(self, repo, test_opp, test_user_id):
+        """Test: Duplicate UUID upserts (ON CONFLICT DO UPDATE)."""
         repo.save(test_opp)
-        # Try to save same ID again
+        original_version = 0
+
+        # Try to save same ID with different data (version 0 to 1)
         user_uuid = UUID(test_user_id)
-        duplicate = Opportunity(
+        update = Opportunity(
             id=test_opp.id,
             created_by=user_uuid,
             updated_by=user_uuid,
-            version=0,
-            company_name="Different Corp",
+            version=original_version,  # Current version
+            company_name="Updated Corp",
             company_size_employees=50,
             industry="Finance",
             location="NYC",
@@ -123,8 +125,12 @@ class TestOpportunityRepository:
             created_at=datetime.utcnow(),
             updated_at=datetime.utcnow(),
         )
-        with pytest.raises(RuntimeError):  # Primary key violation
-            repo.save(duplicate)
+        # Should upsert (update because version matches)
+        repo.save(update)
+        # Verify update happened
+        fetched = repo.find_by_id(test_opp.id)
+        assert fetched.company_name == "Updated Corp"
+        assert fetched.version == 1  # Version incremented
 
     def test_invalid_score_rejected(self, repo, test_opp):
         """Test: Score constraint violation."""
